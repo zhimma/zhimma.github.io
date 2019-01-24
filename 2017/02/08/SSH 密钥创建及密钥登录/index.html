@@ -12,6 +12,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #CC3366; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
 
 
 
@@ -108,7 +124,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="CentOS,">
 
 
 
@@ -121,17 +137,18 @@
 
 
 
-<meta name="description" content="[TOC] 基于Docker容器的MySQL主从配置我本机的镜像 1234docker imagesREPOSITORY                                     TAG                 IMAGE ID           ssh_network_vim_lnmp_redis_swoole_supervisor   latest">
+<meta name="description" content="SSH 密钥创建及密钥登录本文基本引自这里：https://blog.csdn.net/nahancy/article/details/79059135 在我们平时使用Linux系统时候，通常使用的Linux SSH登录方式是用户名加密码的登录方式，今天来探讨另外的一种相对安全的登录方式——密钥登录 我们知道SSH登录是用的RSA非对称加密的，所以我们在SSH登录的时候就可以使用RSA密钥登录，S">
+<meta name="keywords" content="CentOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="zhimma">
-<meta property="og:url" content="http://yoursite.com/2018/09/29/基于Docker容器的MySQL主从配置/index.html">
+<meta property="og:title" content="SSH 密钥创建及密钥登录">
+<meta property="og:url" content="http://yoursite.com/2017/02/08/SSH 密钥创建及密钥登录/index.html">
 <meta property="og:site_name" content="zhimma">
-<meta property="og:description" content="[TOC] 基于Docker容器的MySQL主从配置我本机的镜像 1234docker imagesREPOSITORY                                     TAG                 IMAGE ID           ssh_network_vim_lnmp_redis_swoole_supervisor   latest">
+<meta property="og:description" content="SSH 密钥创建及密钥登录本文基本引自这里：https://blog.csdn.net/nahancy/article/details/79059135 在我们平时使用Linux系统时候，通常使用的Linux SSH登录方式是用户名加密码的登录方式，今天来探讨另外的一种相对安全的登录方式——密钥登录 我们知道SSH登录是用的RSA非对称加密的，所以我们在SSH登录的时候就可以使用RSA密钥登录，S">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-29T11:08:49.330Z">
+<meta property="og:updated_time" content="2019-01-24T08:41:43.584Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zhimma">
-<meta name="twitter:description" content="[TOC] 基于Docker容器的MySQL主从配置我本机的镜像 1234docker imagesREPOSITORY                                     TAG                 IMAGE ID           ssh_network_vim_lnmp_redis_swoole_supervisor   latest">
+<meta name="twitter:title" content="SSH 密钥创建及密钥登录">
+<meta name="twitter:description" content="SSH 密钥创建及密钥登录本文基本引自这里：https://blog.csdn.net/nahancy/article/details/79059135 在我们平时使用Linux系统时候，通常使用的Linux SSH登录方式是用户名加密码的登录方式，今天来探讨另外的一种相对安全的登录方式——密钥登录 我们知道SSH登录是用的RSA非对称加密的，所以我们在SSH登录的时候就可以使用RSA密钥登录，S">
 
 
 
@@ -161,13 +178,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/29/基于Docker容器的MySQL主从配置/">
+  <link rel="canonical" href="http://yoursite.com/2017/02/08/SSH 密钥创建及密钥登录/">
 
 
 
 
 
-  <title> | zhimma</title>
+  <title>SSH 密钥创建及密钥登录 | zhimma</title>
   
 
 
@@ -370,7 +387,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/29/基于Docker容器的MySQL主从配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/08/SSH 密钥创建及密钥登录/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhimma">
@@ -387,7 +404,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">SSH 密钥创建及密钥登录</h1>
         
 
         <div class="post-meta">
@@ -399,8 +416,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-29T19:08:49+08:00">
-                2018-09-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-08T15:37:45+08:00">
+                2017-02-08
               </time>
             
 
@@ -410,6 +427,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/" itemprop="url" rel="index">
+                    <span itemprop="name">CentOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -418,8 +457,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/29/基于Docker容器的MySQL主从配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/09/29/基于Docker容器的MySQL主从配置/" itemprop="commentCount"></span>
+                <a href="/2017/02/08/SSH 密钥创建及密钥登录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/02/08/SSH 密钥创建及密钥登录/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -441,7 +480,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  742
+                  1.7k
                 </span>
               
 
@@ -457,7 +496,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  7
                 </span>
               
             </div>
@@ -478,55 +517,39 @@
       
 
       
-        <p>[TOC]</p>
-<h1 id="基于Docker容器的MySQL主从配置"><a href="#基于Docker容器的MySQL主从配置" class="headerlink" title="基于Docker容器的MySQL主从配置"></a>基于Docker容器的MySQL主从配置</h1><p>我本机的镜像</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line"></span><br><span class="line">REPOSITORY                                     TAG                 IMAGE ID           </span><br><span class="line">ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da5efb40932</span><br></pre></td></tr></table></figure>
-<p>环境搭建及MySQL安装步骤省略，根据已有的镜像创建容器</p>
-<ol>
-<li><p>master数据库</p>
-<p><code>docker run -it -d --privileged=true --name master -p 33060:3306 -p 220:22 -p 8080:80 -p 1024:1024 -p 16379:6379 -p 9001:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-</li>
-<li><p>slave1数据库</p>
-<p><code>docker run -it -d --privileged=true --name slave1 -p 33061:3306 -p 221:22 -p 8081:80 -p 2024:1024 -p 26379:6379 -p 9002:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-</li>
-<li><p>slave2数据库</p>
-<p><code>docker run -it -d --privileged=true --name slave2 -p 33062:3306 -p 222:22 -p 8082:80 -p 3024:1024 -p 36379:6379 -p 9003:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-<p>​</p>
-<p>……  slaveN</p>
-</li>
-</ol>
-<h2 id="binlog方式"><a href="#binlog方式" class="headerlink" title="binlog方式"></a>binlog方式</h2><h3 id="master数据库"><a href="#master数据库" class="headerlink" title="master数据库"></a>master数据库</h3><p>真实机IP：192.168.2.107   容器IP:172.17.0.2</p>
-<h4 id="修改MySQL配置文件-my-cnf"><a href="#修改MySQL配置文件-my-cnf" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin=mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id=1			 #服务器ID</span><br></pre></td></tr></table></figure>
-<p>附一份全一点的配置,指定需要同步的数据库和不需要同步的数据库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server-id=1</span><br><span class="line">log-bin=mysql-bin</span><br><span class="line">log-bin-index=master-bin.index</span><br><span class="line">binlog_format=mixed  // binlog 日志文件格式</span><br><span class="line">sync-binlog=1		//</span><br><span class="line">binlog-ignore-db=mysql</span><br><span class="line">binlog-ignore-db=product</span><br><span class="line">binlog-do-db=test</span><br><span class="line">binlog-do-db=local</span><br></pre></td></tr></table></figure>
-<p>重启MySQL；</p>
-<h4 id="创建复制用户"><a href="#创建复制用户" class="headerlink" title="创建复制用户"></a>创建复制用户</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.	<span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'zhimma'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'123456'</span>;</span><br><span class="line">	<span class="keyword">GRANT</span> <span class="keyword">REPLICATION</span> <span class="keyword">SLAVE</span> <span class="keyword">ON</span> . <span class="keyword">TO</span> <span class="string">'zhimma'</span>@<span class="string">'%'</span>;</span><br><span class="line">	或者</span><br><span class="line">2.  <span class="keyword">grant</span> <span class="keyword">replication</span> <span class="keyword">slave</span> <span class="keyword">on</span> *.* <span class="keyword">to</span> <span class="string">'zhimma'</span>@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'123456'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">MASTER</span> <span class="keyword">STATUS</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="查看MySQL"><a href="#查看MySQL" class="headerlink" title="查看MySQL"></a>查看MySQL</h4><figure class="highlight plain"><figcaption><span>master status```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```mysql</span><br><span class="line">mysql&gt; show master status;</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000001 |      998 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>如果是项目中途使用主从复制，可以使用下面方法迁移数据</p>
-<ol>
-<li><p>锁定所有表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; FLUSH TABLES WITH READ LOCK;</span><br><span class="line">Query OK, 0 rows affected (2.59 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>备份表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac ~]# mysqldump -uroot -p123456 --all-databases -l -F &gt;/tmp/all_db.sql</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解锁</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; UNLOCK TABLES; </span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>传输数据到从库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -P 221/222 /tmp/all_db.sql root@192.168.2.107:/tmp</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="slave数据库"><a href="#slave数据库" class="headerlink" title="slave数据库"></a>slave数据库</h3><h4 id="修改server-uuid"><a href="#修改server-uuid" class="headerlink" title="修改server-uuid"></a>修改server-uuid</h4><p>将<code>/var/lib/mysql/auto.conf</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[auto]</span><br><span class="line">server-uuid=f781e2b4-28e1-11e8-a1c0-0242ac110001</span><br></pre></td></tr></table></figure>
-<h4 id="修改MySQL配置文件-my-cnf-1"><a href="#修改MySQL配置文件-my-cnf-1" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin=mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id=101			 #服务器ID</span><br></pre></td></tr></table></figure>
-<p>重启MySQL；</p>
-<h4 id="导入主备份文件"><a href="#导入主备份文件" class="headerlink" title="导入主备份文件"></a>导入主备份文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@9ae039d46474 tmp]# mysql -uroot -p123456 &lt; /tmp/all_db.sql</span><br></pre></td></tr></table></figure>
-<h4 id="开启slave同步"><a href="#开启slave同步" class="headerlink" title="开启slave同步"></a>开启slave同步</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CHANGE MASTER TO MASTER_HOST=&apos;192.168.2.107&apos;,MASTER_PORT=33060, MASTER_USER=&apos;zhimma&apos;, MASTER_PASSWORD=&apos;123456&apos;, MASTER_LOG_FILE=&apos;mysql-bin.000001&apos;, MASTER_LOG_POS=998;</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">CHANGE MASTER TO MASTER_HOST=&apos;172.17.0.2&apos;, MASTER_USER=&apos;zhimma&apos;, MASTER_PASSWORD=&apos;123456&apos;, MASTER_LOG_FILE=&apos;mysql-bin.000001&apos;, MASTER_LOG_POS=998;</span><br><span class="line"></span><br><span class="line">start slave</span><br></pre></td></tr></table></figure>
-<h4 id="查看是否同步成功slave连接master成功"><a href="#查看是否同步成功slave连接master成功" class="headerlink" title="查看是否同步成功slave连接master成功"></a>查看是否同步成功slave连接master成功</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; start slave;</span><br><span class="line"></span><br><span class="line">Query OK, 0 rows affected (0.43 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show slave status\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Queueing master event to the relay log</span><br><span class="line">                  Master_Host: 192.168.2.107</span><br><span class="line">                  Master_User: zhimma</span><br><span class="line">                  Master_Port: 33060</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: mysql-bin.000003</span><br><span class="line">          Read_Master_Log_Pos: 4</span><br><span class="line">               Relay_Log_File: 06e5a050e74b-relay-bin.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: mysql-bin.000001</span><br><span class="line">              Slave_IO_Running: Yes</span><br><span class="line">              Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 998</span><br><span class="line">              Relay_Log_Space: 1483</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">                  Master_UUID: f781e2b4-28e1-11e8-a1c0-0242ac110002</span><br><span class="line">             Master_Info_File: /var/lib/mysql/master.info</span><br><span class="line">                    SQL_Delay: 0</span><br><span class="line">          SQL_Remaining_Delay: NULL</span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates</span><br><span class="line">           Master_Retry_Count: 86400</span><br><span class="line">                  Master_Bind: </span><br><span class="line">      Last_IO_Error_Timestamp: </span><br><span class="line">     Last_SQL_Error_Timestamp: </span><br><span class="line">               Master_SSL_Crl: </span><br><span class="line">           Master_SSL_Crlpath: </span><br><span class="line">           Retrieved_Gtid_Set: </span><br><span class="line">            Executed_Gtid_Set: </span><br><span class="line">                Auto_Position: 0</span><br><span class="line">         Replicate_Rewrite_DB: </span><br><span class="line">                 Channel_Name: </span><br><span class="line">           Master_TLS_Version: </span><br><span class="line">1 row in set (0.20 sec)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Slave_IO_Running: Yes</span><br><span class="line">Slave_SQL_Running: Yes</span><br></pre></td></tr></table></figure>
-<p>同步成功</p>
-<p><a href="http://www.cnblogs.com/clsn/p/8150036.html" target="_blank" rel="noopener">http://www.cnblogs.com/clsn/p/8150036.html</a></p>
+        <h1 id="SSH-密钥创建及密钥登录"><a href="#SSH-密钥创建及密钥登录" class="headerlink" title="SSH 密钥创建及密钥登录"></a>SSH 密钥创建及密钥登录</h1><p>本文基本引自这里：<a href="https://blog.csdn.net/nahancy/article/details/79059135" target="_blank" rel="noopener">https://blog.csdn.net/nahancy/article/details/79059135</a></p>
+<p>在我们平时使用Linux系统时候，通常使用的Linux SSH登录方式是用户名加密码的登录方式，今天来探讨另外的一种相对安全的登录方式——密钥登录</p>
+<p>我们知道SSH登录是用的RSA非对称加密的，所以我们在SSH登录的时候就可以使用RSA密钥登录，SSH有专门创建SSH密钥的工具ssh-keygen，下面就来一睹风采。</p>
+<p>首先进入Linux系统的用户目录下的.ssh目录下，root用户是/root/.ssh，普通用户是/home/您的用户名/.ssh，我们以root用户为例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# cd /root/.ssh/</span><br><span class="line">[root@b04f945297ac .ssh]# ls</span><br><span class="line">known_hosts</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面是没有创建过ssh秘钥的样子</p>
+</blockquote>
+<p> 执行ssh-keygen命令创建密钥对：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# ssh-keygen -t rsa -b 4096</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa): /root/.ssh/zhimma_id_rsa</span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /root/.ssh/zhimma_id_rsa.</span><br><span class="line">Your public key has been saved in /root/.ssh/zhimma_id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:WrIN4U/dk+1KdTxv0t5zFeXCeWWpvaNtFFMxbkDY2Cw root@b04f945297ac</span><br><span class="line">The key&apos;s randomart image is:</span><br><span class="line">+---[RSA 4096]----+</span><br><span class="line">|            Bo oo|</span><br><span class="line">|           E +o.*|</span><br><span class="line">|      .     ..o*+|</span><br><span class="line">|     . . . . +=*o|</span><br><span class="line">|      + S . + o+B|</span><br><span class="line">|       X     + *+|</span><br><span class="line">|      o o   . * *|</span><br><span class="line">|           . o Bo|</span><br><span class="line">|            . . =|</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-b 参数，指定了长度，也可以不加-b参数，直接使用ssh-keygen -t rsa</p>
+<p>这里我重新命名了下秘钥文件名 zhimma_id_rsa</p>
+</blockquote>
+<p>密钥生成后会在当前目录下多出两个文件，zhimma_id_rsa和zhimma_id_rsa.pub，其中zhimma_id_rsa是私钥（敲黑板：这个很重要，不能外泄），zhimma_id_rsa.pub这个是公钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# ls</span><br><span class="line">known_hosts  zhimma_id_rsa  zhimma_id_rsa.pub</span><br><span class="line">[root@b04f945297ac .ssh]#</span><br></pre></td></tr></table></figure>
+<h2 id="放置公钥"><a href="#放置公钥" class="headerlink" title="放置公钥"></a>放置公钥</h2><h3 id="ssh-copy-id"><a href="#ssh-copy-id" class="headerlink" title="ssh-copy-id"></a>ssh-copy-id</h3><p>把公钥拷贝到需要登录的远程服务器或Linux系统上，这里可以使用<code>ssh-copy-id</code></p>
+<blockquote>
+<p>ssh-copy-id默认端口是22，如果要重新指定端口，则使用<code>-p 端口号</code>命令</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# ssh-copy-id -i /root/.ssh/zhimma_id_rsa.pub -p 203 root@192.168.2.107  </span><br><span class="line">/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: &quot;/root/.ssh/zhimma_id_rsa.pub&quot;</span><br><span class="line">/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed</span><br><span class="line">/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys</span><br><span class="line">root@192.168.2.107&apos;s password: </span><br><span class="line"></span><br><span class="line">Number of key(s) added: 1</span><br><span class="line"></span><br><span class="line">Now try logging into the machine, with:   &quot;ssh -p &apos;203&apos; &apos;root@192.168.2.107&apos;&quot;</span><br><span class="line">and check to make sure that only the key(s) you wanted were added.</span><br></pre></td></tr></table></figure>
+<p>这样就把公钥加的指定的服务器上了</p>
+<p>尝试登陆下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# ssh -i /root/.ssh/zhimma_id_rsa -p 203 root@192.168.2.107</span><br><span class="line">Last login: Wed Jun  6 04:16:09 2018 from 172.17.0.1</span><br><span class="line">[root@e91b4a662023 ~]#</span><br></pre></td></tr></table></figure>
+<p>登陆成功！</p>
+<h3 id="手动放置"><a href="#手动放置" class="headerlink" title="手动放置"></a>手动放置</h3><p>进入远程服务器.ssh目录，创建authorized_keys 文件，赋权限600</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@01bb4850cc8c .ssh]# touch authorized_keys</span><br><span class="line">[root@01bb4850cc8c .ssh]# chmod -R 600 authorized_keys </span><br><span class="line">[root@01bb4850cc8c .ssh]# ls -al</span><br><span class="line">total 16</span><br><span class="line">drwx------ 1 root root 4096 Jun  6 07:02 .</span><br><span class="line">dr-xr-x--- 1 root root 4096 Apr 27 08:15 ..</span><br><span class="line">-rw------- 1 root root    0 Jun  6 07:02 authorized_keys</span><br><span class="line">drwxr-xr-x 2 root root 4096 Jun  6 07:02 dd</span><br><span class="line">-rw-r--r-- 1 root root  824 Mar 16 08:59 known_hosts</span><br></pre></td></tr></table></figure>
+<p>复制<code>zhimma_id_rsa.pub</code>的内容进入这个文件</p>
+<p>尝试登陆</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac .ssh]# ssh -i /root/.ssh/zhimma_id_rsa -p 204 root@192.168.2.107</span><br><span class="line">Last login: Wed Jun  6 04:18:46 2018 from 172.17.0.1</span><br><span class="line">[root@01bb4850cc8c ~]#</span><br></pre></td></tr></table></figure>
+<p>登陆成功！</p>
+<h2 id="ssh-keygen可用的参数"><a href="#ssh-keygen可用的参数" class="headerlink" title="ssh-keygen可用的参数"></a>ssh-keygen可用的参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen可用的参数选项有：</span><br><span class="line">     -a trials  在使用 -T 对 DH-GEX 候选素数进行安全筛选时需要执行的基本测试数量。</span><br><span class="line">     -B      	显示指定的公钥/私钥文件的 bubblebabble 摘要。</span><br><span class="line">     -b bits 	指定密钥长度。对于RSA密钥，最小要求768位，默认是2048位。DSA密钥必须恰好是1024位(FIPS 186-2 标准的要求)。</span><br><span class="line">     -C comment 提供一个新注释</span><br><span class="line">     -c      	要求修改私钥和公钥文件中的注释。本选项只支持 RSA1 密钥。</span><br><span class="line">             	程序将提示输入私钥文件名、密语(如果存在)、新注释。</span><br><span class="line">     -D reader	下载存储在智能卡 reader 里的 RSA 公钥。</span><br><span class="line"></span><br><span class="line">     -e      	</span><br><span class="line">     		    读取OpenSSH的私钥或公钥文件，并以 RFC 4716 SSH 公钥文件格式在 stdout 上显示出来。</span><br><span class="line">             	 该选项能够为多种商业版本的 SSH 输出密钥。</span><br><span class="line">     -F hostname</span><br><span class="line">             	在 known_hosts 文件中搜索指定的 hostname ，并列出所有的匹配项。</span><br><span class="line">             	这个选项主要用于查找散列过的主机名/ip地址，还可以和 -H 选项联用打印找到的公钥的散列值。</span><br><span class="line">     -f filename</span><br><span class="line">             	指定密钥文件名。</span><br><span class="line">     -G output_file</span><br><span class="line">             	为 DH-GEX 产生候选素数。这些素数必须在使用之前使用 -T 选项进行安全筛选。</span><br><span class="line">     -g      	在使用 -r 打印指纹资源记录的时候使用通用的 DNS 格式。</span><br><span class="line">     -H      	对 known_hosts 文件进行散列计算。这将把文件中的所有主机名/ip地址替换为相应的散列值。</span><br><span class="line">             	原来文件的内容将会添加一个&quot;.old&quot;后缀后保存。这些散列值只能被 ssh 和 sshd 使用。</span><br><span class="line">             	这个选项不会修改已经经过散列的主机名/ip地址，因此可以在部分公钥已经散列过的文件上安全使用。</span><br><span class="line">     -i      	读取未加密的SSH-2兼容的私钥/公钥文件，然后在 stdout 显示OpenSSH兼容的私钥/公钥。</span><br><span class="line">             	该选项主要用于从多种商业版本的SSH中导入密钥。</span><br><span class="line">     -l      	显示公钥文件的指纹数据。它也支持 RSA1 的私钥。</span><br><span class="line">             	对于RSA和DSA密钥，将会寻找对应的公钥文件，然后显示其指纹数据。</span><br><span class="line">     -M memory</span><br><span class="line">             	指定在生成 DH-GEXS 候选素数的时候最大内存用量(MB)。</span><br><span class="line"></span><br><span class="line">     -N new_passphrase</span><br><span class="line">             	提供一个新的密语。</span><br><span class="line"></span><br><span class="line">     -P passphrase</span><br><span class="line">             	提供(旧)密语。</span><br><span class="line">     -p      	要求改变某私钥文件的密语而不重建私钥。程序将提示输入私钥文件名、原来的密语、以及两次输入新密语。</span><br><span class="line">     -q      	安静模式。用于在 /etc/rc 中创建新密钥的时候。</span><br><span class="line">     -R hostname</span><br><span class="line">             	从 known_hosts 文件中删除所有属于 hostname 的密钥。</span><br><span class="line">             	这个选项主要用于删除经过散列的主机(参见 -H 选项)的密钥。</span><br><span class="line">     -r hostname</span><br><span class="line">             	打印名为 hostname 的公钥文件的 SSHFP 指纹资源记录。</span><br><span class="line">     -S start</span><br><span class="line">             	指定在生成 DH-GEX 候选模数时的起始点(16进制)。</span><br><span class="line">     -T output_file</span><br><span class="line">             	测试 Diffie-Hellman group exchange 候选素数(由 -G 选项生成)的安全性。</span><br><span class="line">     -t type</span><br><span class="line">             	指定要创建的密钥类型。可以使用：&quot;rsa1&quot;(SSH-1) &quot;rsa&quot;(SSH-2) &quot;dsa&quot;(SSH-2)</span><br><span class="line">     -U reader</span><br><span class="line">             	把现存的RSA私钥上传到智能卡 reader</span><br><span class="line">     -v      	详细模式。ssh-keygen 将会输出处理过程的详细调试信息。常用于调试模数的产生过程。</span><br><span class="line">             	重复使用多个 -v 选项将会增加信息的详细程度(最大3次)。</span><br><span class="line">     -W generator</span><br><span class="line">             	指定在为 DH-GEX 测试候选模数时想要使用的 generator</span><br><span class="line">     -y      	读取OpenSSH专有格式的公钥文件，并将OpenSSH公钥显示在 stdout 上。</span><br></pre></td></tr></table></figure>
+<p>### </p>
 
       
     </div>
@@ -542,6 +565,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+          
+        </div>
+      
 
       
       
@@ -551,8 +580,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/29/redis安装与配置/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2017/02/08/sea.js中加载layer，缺少css文件解决/" rel="next" title="sea.js中加载layer，缺少css文件解决">
+                <i class="fa fa-chevron-left"></i> sea.js中加载layer，缺少css文件解决
               </a>
             
           </div>
@@ -561,8 +590,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/24/Mac重启php-fpm失败/" rel="prev" title="Mac重启php-fpm失败">
-                Mac重启php-fpm失败 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/02/23/mysql中按照姓名或者中文首字母区间查询排序/" rel="prev" title="MySQL中按照姓名或者中文首字母区间查询排序">
+                MySQL中按照姓名或者中文首字母区间查询排序 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -656,7 +685,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -667,7 +696,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -717,7 +746,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于Docker容器的MySQL主从配置"><span class="nav-number">1.</span> <span class="nav-text">基于Docker容器的MySQL主从配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#binlog方式"><span class="nav-number">1.1.</span> <span class="nav-text">binlog方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#master数据库"><span class="nav-number">1.1.1.</span> <span class="nav-text">master数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改MySQL配置文件-my-cnf"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">修改MySQL配置文件(my.cnf)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建复制用户"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">创建复制用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看MySQL"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">查看MySQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slave数据库"><span class="nav-number">1.1.2.</span> <span class="nav-text">slave数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改server-uuid"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">修改server-uuid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改MySQL配置文件-my-cnf-1"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">修改MySQL配置文件(my.cnf)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#导入主备份文件"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">导入主备份文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启slave同步"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">开启slave同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看是否同步成功slave连接master成功"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">查看是否同步成功slave连接master成功</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH-密钥创建及密钥登录"><span class="nav-number">1.</span> <span class="nav-text">SSH 密钥创建及密钥登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#放置公钥"><span class="nav-number">1.1.</span> <span class="nav-text">放置公钥</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-copy-id"><span class="nav-number">1.1.1.</span> <span class="nav-text">ssh-copy-id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动放置"><span class="nav-number">1.1.2.</span> <span class="nav-text">手动放置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh-keygen可用的参数"><span class="nav-number">1.2.</span> <span class="nav-text">ssh-keygen可用的参数</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -803,8 +832,6 @@
   
 
 
-  
-
 
 
 
@@ -843,11 +870,6 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
@@ -1269,6 +1291,6 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
 </html>
 
