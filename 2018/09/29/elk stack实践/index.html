@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="erfQ9KeJU7rRVjesZ1jK_-rNuqbyXcHX4CwTG3DpJkw">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhimma" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="[TOC] 环境说明：真实机IP：192.168.1.198，其中    服务器 IP 说明     Redis-server 172.17.0.3 nginx服务器1   Project1(logstash) 172.17.0.2 nginx服务器2   Project2(logstash) 172.17.0.3 服务器1   Elk 172.17.0.6 服务器2    1234567dock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zhimma">
+<meta property="og:url" content="http://yoursite.com/2018/09/29/elk stack实践/index.html">
+<meta property="og:site_name" content="zhimma">
+<meta property="og:description" content="[TOC] 环境说明：真实机IP：192.168.1.198，其中    服务器 IP 说明     Redis-server 172.17.0.3 nginx服务器1   Project1(logstash) 172.17.0.2 nginx服务器2   Project2(logstash) 172.17.0.3 服务器1   Elk 172.17.0.6 服务器2    1234567dock">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png">
+<meta property="og:updated_time" content="2018-10-05T15:16:45.081Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zhimma">
+<meta name="twitter:description" content="[TOC] 环境说明：真实机IP：192.168.1.198，其中    服务器 IP 说明     Redis-server 172.17.0.3 nginx服务器1   Project1(logstash) 172.17.0.2 nginx服务器2   Project2(logstash) 172.17.0.3 服务器1   Elk 172.17.0.6 服务器2    1234567dock">
+<meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/29/elk stack实践/">
+
+
+
+
+
+  <title> | zhimma</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '89559901-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?211f1fd7bc9184e4e0a426ade9e51581";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 1px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhimma</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/29/elk stack实践/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-29T19:08:49+08:00">
+                2018-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/29/elk stack实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/09/29/elk stack实践/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><p>真实机IP：192.168.1.198，其中</p>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>IP</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis-server</td>
+<td>172.17.0.3</td>
+<td>nginx服务器1</td>
+</tr>
+<tr>
+<td>Project1(logstash)</td>
+<td>172.17.0.2</td>
+<td>nginx服务器2</td>
+</tr>
+<tr>
+<td>Project2(logstash)</td>
+<td>172.17.0.3</td>
+<td>服务器1</td>
+</tr>
+<tr>
+<td>Elk</td>
+<td>172.17.0.6</td>
+<td>服务器2</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d --privileged=true --name redis-master -p 63791:6379 -p 221:22 -v /Users/zhimma/Data/www/:/data/www/ 67793c412ed1 /usr/sbin/init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged=true --name project1 -p 50441:5044 -p 8081:80 -p 10241:1024 -p 222:22  -v /Users/zhimma/Data/www/:/data/www/ 67793c412ed1 /usr/sbin/init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged=true --name project2 -p 50442:5044 -p 8082:80 -p 10242:1024 -p 223:22  -v /Users/zhimma/Data/www/:/data/www/ 67793c412ed1 /usr/sbin/init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged=true --name elk -p 50443:5044 -p 15602:5601 -p 224:22  -p 8083:80 -p 10243:1024 -v /Users/zhimma/Data/www/:/data/www/ 67793c412ed1 /usr/sbin/init</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line">CONTAINER ID              PORTS                       	NAMES</span><br><span class="line"><span class="number">3</span>f139b00a661              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">224</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8083</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">10243</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">50443</span>-&gt;<span class="number">5044</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">15602</span>-&gt;<span class="number">5601</span>/tcp   </span><br><span class="line">														elk</span><br><span class="line">e08ca55e124d              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">223</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8082</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">10242</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">50442</span>-&gt;<span class="number">5044</span>/tcp                            </span><br><span class="line">														project2</span><br><span class="line"><span class="number">3</span>b670e7a9ad1              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">222</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8081</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">10241</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">50441</span>-&gt;<span class="number">5044</span>/tcp                            </span><br><span class="line">														project1</span><br><span class="line">dbefa01b3393              <span class="number">80</span>/tcp, <span class="number">3306</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">221</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">63791</span>-&gt;<span class="number">6379</span>/tcp</span><br><span class="line">														redis-master</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>所有服务器关闭防火墙</p>
+<p>将软件和配置文件放在宿主机目录，各个容器就可以共享使用了</p>
+</blockquote>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png" alt="elk-stach"></p>
+<h2 id="redis-master安装logstash"><a href="#redis-master安装logstash" class="headerlink" title="redis-master安装logstash"></a>redis-master安装logstash</h2><p>服务器安装redis,进行配置,开机启动</p>
+<h2 id="project服务器安装logstash"><a href="#project服务器安装logstash" class="headerlink" title="project服务器安装logstash"></a>project服务器安装logstash</h2><h3 id="安装java环境"><a href="#安装java环境" class="headerlink" title="安装java环境"></a>安装java环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java</span><br></pre></td></tr></table></figure>
+<p>###下载logstash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/downloads</span><br><span class="line">mkdir /opt/soft</span><br><span class="line">cd /opt/downloads</span><br><span class="line">wget https://artifacts.elastic.co/downloads/logstash/logstash-6.4.1.tar.gz</span><br><span class="line">tar -zxvf logstash-6.4.1.tar.gz -C /opt/soft/</span><br></pre></td></tr></table></figure>
+<h3 id="配置logstash"><a href="#配置logstash" class="headerlink" title="配置logstash"></a>配置logstash</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/soft/logstash-6.4.0/config/jvm.options</span><br><span class="line"></span><br><span class="line">-Xms2g</span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+<h3 id="安装配置supervisor"><a href="#安装配置supervisor" class="headerlink" title="安装配置supervisor"></a>安装配置supervisor</h3><blockquote>
+<p>参考：<a href="https://blog.csdn.net/donggege214/article/details/80264811" target="_blank" rel="noopener">https://blog.csdn.net/donggege214/article/details/80264811</a></p>
+</blockquote>
+<ul>
+<li><code>vi /etc/supervisord.conf</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/<span class="keyword">var</span>/run/supervisor/supervisor.sock </span><br><span class="line">chmod=<span class="number">0700</span></span><br><span class="line">chown=root:root</span><br><span class="line">[<span class="keyword">include</span>]</span><br><span class="line">files = supervisord.d<span class="comment">/*.conf</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vi /etc/supervisord/l.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:elk-l]</span><br><span class="line">command=/opt/soft/logstash-6.4.0/bin/logstash -r -f /data/www/elk/conf/project/*.conf</span><br><span class="line">autostart=true</span><br><span class="line">autorestart=true</span><br><span class="line">user=root</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/var/log/elk/l.log</span><br><span class="line">priority=10</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vi /data/www/elk/conf/project/project.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    path =&gt; [ &quot;/data/www/project-mdl/trunk/Common/Runtime/Apps/*.log&quot; ]</span><br><span class="line">    start_position =&gt; &quot;beginning&quot;</span><br><span class="line">    ignore_older =&gt; 0</span><br><span class="line">    sincedb_path =&gt; &quot;/dev/null&quot;</span><br><span class="line">    type =&gt; &quot;Api&quot;</span><br><span class="line">    codec =&gt; multiline &#123;</span><br><span class="line">      pattern =&gt; &quot;^\[&quot;</span><br><span class="line">      negate =&gt; true</span><br><span class="line">      what =&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123; </span><br><span class="line">  if [type] == &quot;Api&quot; &#123;</span><br><span class="line">    redis &#123;</span><br><span class="line">        host =&gt; &apos;192.168.1.198&apos;</span><br><span class="line">        port =&gt; &apos;63791&apos;</span><br><span class="line">        db =&gt; &apos;1&apos;</span><br><span class="line">        data_type =&gt; &quot;list&quot;</span><br><span class="line">        key =&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启supervisor，如果数据写入redis-master服务器，那么就代表项目日志收集成功</p>
+<h2 id="ELK服务器"><a href="#ELK服务器" class="headerlink" title="ELK服务器"></a>ELK服务器</h2><h3 id="安装java环境-1"><a href="#安装java环境-1" class="headerlink" title="安装java环境"></a>安装java环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java</span><br></pre></td></tr></table></figure>
+<h3 id="安装elk"><a href="#安装elk" class="headerlink" title="安装elk"></a>安装elk</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/downloads</span><br><span class="line">mkdir /opt/soft</span><br><span class="line">cd /opt/downloads</span><br><span class="line">wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.1.tar.gz</span><br><span class="line">wget https://artifacts.elastic.co/downloads/kibana/kibana-6.4.1-linux-x86_64.tar.gz</span><br><span class="line">wget https://artifacts.elastic.co/downloads/logstash/logstash-6.4.1.tar.gz</span><br><span class="line">tar -zxvf logstash-6.4.1.tar.gz -C /opt/soft/</span><br><span class="line">tar -zxvf elasticsearch-6.4.1.tar.gz -C /opt/soft/</span><br><span class="line">tar -zxvf kibana-6.4.1-linux-x86_64.tar.gz -C /opt/soft/</span><br></pre></td></tr></table></figure>
+<h3 id="配置elk"><a href="#配置elk" class="headerlink" title="配置elk"></a>配置elk</h3><h4 id="创建elastic用户"><a href="#创建elastic用户" class="headerlink" title="创建elastic用户"></a>创建elastic用户</h4><p>由于 Elasticsearch <code>不允许也不推荐使用 root 用户来运行</code>，因此需要新建一个用户来启动 Elasticsearch。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adduser elastic    #创建elastic用户</span><br><span class="line">passwd elastic     #修改elastic密码</span><br></pre></td></tr></table></figure>
+<h4 id="创建ES数据日志文件夹"><a href="#创建ES数据日志文件夹" class="headerlink" title="创建ES数据日志文件夹"></a>创建ES数据日志文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /data/www/elk</span><br><span class="line">mkdir data          #创建数据目录</span><br><span class="line">mkdir log           #创建日志目录</span><br><span class="line">mkdir bak           #创建备份目录</span><br><span class="line">chown -R elatic /data/www/elk/  #修改目录拥有者为 elastic</span><br></pre></td></tr></table></figure>
+<h4 id="优化文件句柄数以及用户可用进程数"><a href="#优化文件句柄数以及用户可用进程数" class="headerlink" title="优化文件句柄数以及用户可用进程数"></a>优化文件句柄数以及用户可用进程数</h4><p>新版 Elasticsearch 要求其可用的文件句柄至少为 65536，同时要求其进程数限制至少为 2048，可用按照下面的指令进行修改。</p>
+<p>分别对应以下两个报错信息：</p>
+<ol>
+<li>max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]；</li>
+<li>max number of threads [1024] for user [es] is too low, increase to at least [2048]。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/security/limits.conf</span><br><span class="line"></span><br><span class="line">*     soft   nofile  655350</span><br><span class="line">*     hard   nofile  655350</span><br><span class="line">*     soft   nproc   4096</span><br><span class="line">*     hard   nproc   8192</span><br><span class="line">elastic soft memlock unlimited</span><br><span class="line">elastic hard memlock unlimited</span><br></pre></td></tr></table></figure>
+<h4 id="修改内核交换"><a href="#修改内核交换" class="headerlink" title="修改内核交换"></a>修改内核交换</h4><p>为了避免不必要的磁盘和内存交换，影响效率，需要将 <code>vm.swappiness</code> 修改为 1。</p>
+<p>此外需要修改最大虚拟内存 <code>vm.max_map_count</code> 防止启动时报错：<code>max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">vm.swappiness = 1</span><br><span class="line">vm.max_map_count = 655360</span><br><span class="line"></span><br><span class="line">sysctl -p   # 立即生效</span><br></pre></td></tr></table></figure>
+<h4 id="关闭swap并且重启"><a href="#关闭swap并且重启" class="headerlink" title="关闭swap并且重启"></a>关闭swap并且重启</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="配置-Elasticsearch-内存占用"><a href="#配置-Elasticsearch-内存占用" class="headerlink" title="配置 Elasticsearch 内存占用"></a>配置 Elasticsearch 内存占用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/soft/elasticsearch-6.4.1/config/</span><br><span class="line">vim jvm.options </span><br><span class="line"></span><br><span class="line">-Xms2g</span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+<h4 id="配置-Elasticsearch配置文件"><a href="#配置-Elasticsearch配置文件" class="headerlink" title="配置 Elasticsearch配置文件"></a>配置 Elasticsearch配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@3f139b00a661 ~]# grep -n &apos;^[a-z]&apos; /opt/soft/elasticsearch-6.4.0/config/elasticsearch.yml</span><br><span class="line"></span><br><span class="line">17:cluster.name: elk-demo</span><br><span class="line">33:path.data: /data/www/elk/data</span><br><span class="line">37:path.logs: /data/www/logs</span><br><span class="line">43:bootstrap.memory_lock: false</span><br><span class="line">55:network.host: 0.0.0.0</span><br><span class="line">59:http.port: 9200</span><br></pre></td></tr></table></figure>
+<h3 id="安装配置supervisor-1"><a href="#安装配置supervisor-1" class="headerlink" title="安装配置supervisor"></a>安装配置supervisor</h3><ul>
+<li><code>grep -n &#39;^[a-z]&#39; /etc/supervisord.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">4:file=/var/run/supervisor/supervisor.sock   ; (the path to the socket file)</span><br><span class="line">5:chmod=0700                 ; sockef file mode (default 0700)</span><br><span class="line">6:chown=root:root            ; socket file uid:gid owner</span><br><span class="line">16:logfile=/var/log/supervisor/supervisord.log  ; (main log file;default $CWD/supervisord.log)</span><br><span class="line">17:logfile_maxbytes=50MB       ; (max main logfile bytes b4 rotation;default 50MB)</span><br><span class="line">18:logfile_backups=10          ; (num of main logfile rotation backups;default 10)</span><br><span class="line">19:loglevel=info               ; (log level;default info; others: debug,warn,trace)</span><br><span class="line">20:pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)</span><br><span class="line">21:nodaemon=false              ; (start in foreground if true;default false)</span><br><span class="line">22:minfds=1024                 ; (min. avail startup file descriptors;default 1024)</span><br><span class="line">23:minprocs=200                ; (min. avail process descriptors;default 200)</span><br><span class="line">37:supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line">40:serverurl=unix:///var/run/supervisor/supervisor.sock ; use a unix:// URL  for a unix socket</span><br><span class="line">129:files = /etc/supervisord.d/elk.conf</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>grep &#39;^[a-z]&#39; /etc/supervisord.d/elk.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">command=/opt/soft/elasticsearch-6.4.0/bin/elasticsearch</span><br><span class="line">autostart=true</span><br><span class="line">autorestart=true</span><br><span class="line">user=elastic</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/var/log/elk/e.log</span><br><span class="line">priority=1</span><br><span class="line">command=/opt/soft/logstash-6.4.0/bin/logstash -r -f /data/www/elk/conf/elk/*.conf</span><br><span class="line">autostart=true</span><br><span class="line">autorestart=true</span><br><span class="line">user=elastic</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/var/log/elk/l.log</span><br><span class="line">priority=10</span><br><span class="line">command=/opt/soft/kibana-6.4.0-linux-x86_64/bin/kibana</span><br><span class="line">autostart=true</span><br><span class="line">autorestart=true</span><br><span class="line">user=elastic</span><br><span class="line">redirect_stderr=true</span><br><span class="line">stdout_logfile=/var/log/elk/k.log</span><br><span class="line">priority=20</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>cat /data/www/elk/conf/elk/elk.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  redis &#123;</span><br><span class="line">        host =&gt; &apos;192.168.1.198&apos;</span><br><span class="line">        port =&gt;  63791</span><br><span class="line">        db =&gt; 1</span><br><span class="line">        data_type =&gt; &quot;list&quot;</span><br><span class="line">        key =&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  stdin &#123;</span><br><span class="line">    codec =&gt; multiline &#123;</span><br><span class="line">      pattern =&gt; &quot;^\[&quot;</span><br><span class="line">      negate =&gt; true</span><br><span class="line">      what =&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">output &#123; </span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">      hosts =&gt; [ &quot;127.0.0.1:9200&quot; ] </span><br><span class="line">      index =&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/29/Nginx配置整理/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/29/SSH 密钥创建及密钥登录/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/head.png" alt="zhimma">
+            
+              <p class="site-author-name" itemprop="name">zhimma</p>
+              <p class="site-description motion-element" itemprop="description">zhimma's 技术blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/zhimma" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境说明："><span class="nav-number">1.</span> <span class="nav-text">环境说明：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-master安装logstash"><span class="nav-number">2.</span> <span class="nav-text">redis-master安装logstash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#project服务器安装logstash"><span class="nav-number">3.</span> <span class="nav-text">project服务器安装logstash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装java环境"><span class="nav-number">3.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置logstash"><span class="nav-number">3.2.</span> <span class="nav-text">配置logstash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装配置supervisor"><span class="nav-number">3.3.</span> <span class="nav-text">安装配置supervisor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK服务器"><span class="nav-number">4.</span> <span class="nav-text">ELK服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装java环境-1"><span class="nav-number">4.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装elk"><span class="nav-number">4.2.</span> <span class="nav-text">安装elk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置elk"><span class="nav-number">4.3.</span> <span class="nav-text">配置elk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建elastic用户"><span class="nav-number">4.3.1.</span> <span class="nav-text">创建elastic用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建ES数据日志文件夹"><span class="nav-number">4.3.2.</span> <span class="nav-text">创建ES数据日志文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化文件句柄数以及用户可用进程数"><span class="nav-number">4.3.3.</span> <span class="nav-text">优化文件句柄数以及用户可用进程数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改内核交换"><span class="nav-number">4.3.4.</span> <span class="nav-text">修改内核交换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭swap并且重启"><span class="nav-number">4.3.5.</span> <span class="nav-text">关闭swap并且重启</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-Elasticsearch-内存占用"><span class="nav-number">4.3.6.</span> <span class="nav-text">配置 Elasticsearch 内存占用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-Elasticsearch配置文件"><span class="nav-number">4.3.7.</span> <span class="nav-text">配置 Elasticsearch配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装配置supervisor-1"><span class="nav-number">4.4.</span> <span class="nav-text">安装配置supervisor</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-heartbeat" aria-hidden="true"></i>
+  </span>
+
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'NSw4ELzlEODzwPlopsqjtDvU-gzGzoHsz',
+        appKey: 'HLLJvT2T5BsCiMimW2HbqDTU',
+        placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>
+
