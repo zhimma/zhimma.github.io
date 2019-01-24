@@ -53,8 +53,8 @@
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>PHP</tag>
         <tag>CentOS</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -101,8 +101,8 @@
         <category>PHP</category>
       </categories>
       <tags>
-        <tag>Mac</tag>
         <tag>PHP</tag>
+        <tag>Mac</tag>
       </tags>
   </entry>
   <entry>
@@ -279,6 +279,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[搞懂JWT]]></title>
+    <url>%2F2018%2F11%2F30%2F%E6%90%9E%E6%87%82JWT%2F</url>
+    <content type="text"><![CDATA[搞懂JWT本文基本一字不差的转载至这里 JSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息 让我们来假想一下一个场景。在A用户关注了B用户的时候，系统发邮件给B用户，并且附有一个链接“点此关注A用户”。链接的地址可以是这样的https://your.awesome-app.com/make-friend/?from_user=B&amp;target_user=A上面的URL主要通过URL来描述这个当然这样做有一个弊端，那就是要求用户B用户是一定要先登录的。可不可以简化这个流程，让B用户不用登录就可以完成这个操作。JWT就允许我们做到这点。 JWT的组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名 载荷（Payload）我们先将上面的添加好友的操作描述成一个JSON对象。其中添加了一些其他的信息，帮助今后收到这个JWT的服务器理解这个JWT。1234567891011121314151617&#123; "iss": "John Wu JWT", "iat": 1441593502, "exp": 1441594722, "aud": "www.example.com", "sub": "jrocket@example.com", "from_user": "B", "target_user": "A"&#125; 这里面的前五个字段都是由JWT的标准所定义的。 iss: 该JWT的签发者 sub: 该JWT所面向的用户 aud: 接收该JWT的一方 exp(expires): 什么时候过期，这里是一个Unix时间戳 iat(issued at): 在什么时候签发的 这些定义都可以在标准中找到。将上面的JSON对象进行[base64编码]可以得到下面的字符串。这个字符串我们将它称作JWT的Payload（载荷）。 eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9 如果你使用Node.js，可以用Node.js的包base64url来得到这个字符串1234567var base64url = require('base64url')var header = &#123; "from_user": "B", "target_user": "A"&#125;console.log(base64url(JSON.stringify(header)))// 输出：eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9 小知识：Base64是一种编码，也就是说，它是可以被翻译回原来的样子来的。它并不是一种加密过程。 头部（Header）JWT还需要一个头部，头部用于描述关于该JWT的最基本的信息，例如其类型以及签名所用的算法等。这也可以被表示成一个JSON对象。1234567&#123; "typ": "JWT", "alg": "HS256"&#125; 在这里，我们说明了这是一个JWT，并且我们所用的签名算法（后面会提到）是HS256算法。对它也要进行Base64编码，之后的字符串就成了JWT的Header（头部）。eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9 签名（签名）将上面的两个编码后的字符串都用句号.连接在一起（头部在前），就形成了yJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0这一部分的过程在node-jws的源码中有体现 最后，我们将上面拼接完的字符串用HS256算法进行加密。在加密的时候，我们还需要提供一个密钥（secret）。如果我们用mystar作为密钥的话，那么就可以得到我们加密后的内容rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM这一部分又叫做签名。 最后将这一部分签名也拼接在被签名的字符串后面，我们就得到了完整的JWTeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM 于是，我们就可以将邮件中的URL改成https://your.awesome-app.com/make-friend/?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM这样就可以安全地完成添加好友的操作了！且慢，我们一定会有一些问题： 签名的目的是什么？ Base64是一种编码，是可逆的，那么我的信息不就被暴露了吗？让我逐一为你说明。 签名的目的最后一步签名的过程，实际上是对头部以及载荷内容进行签名。一般而言，加密算法对于不同的输入产生的输出总是不一样的。对于两个不同的输入，产生同样的输出的概率极其地小（有可能比我成世界首富的概率还小）。所以，我们就把“不一样的输入产生不一样的输出”当做必然事件来看待吧。 所以，如果有人对头部以及载荷的内容解码之后进行修改，再进行编码的话，那么新的头部和载荷的签名和之前的签名就将是不一样的。而且，如果不知道服务器加密的时候用的密钥的话，得出来的签名也一定会是不一样的。 服务器应用在接受到JWT后，会首先对头部和载荷的内容用同一算法再次签名。那么服务器应用是怎么知道我们用的是哪一种算法呢？别忘了，我们在JWT的头部中已经用alg字段指明了我们的加密算法了。 如果服务器应用对头部和载荷再次以同样方法签名之后发现，自己计算出来的签名和接受到的签名不一样，那么就说明这个Token的内容被别人动过的，我们应该拒绝这个Token，返回一个HTTP 401 Unauthorized响应。 信息会暴露？是的。 所以，在JWT中，不应该在载荷里面加入任何敏感的数据。在上面的例子中，我们传输的是用户的User ID。这个值实际上不是什么敏感内容，一般情况下被知道也是安全的。 但是像密码这样的内容就不能被放在JWT中了。如果将用户的密码放在了JWT中，那么怀有恶意的第三方通过Base64解码就能很快地知道你的密码了。 JWT的适用场景我们可以看到，JWT适合用于向Web应用传递一些非敏感信息。例如在上面提到的完成加好友的操作，还有诸如下订单的操作等等。 其实JWT还经常用于设计用户认证和授权系统，甚至实现Web应用的单点登录。]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>JWT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[搬瓦工CentOs7 实现BBR加速以及SS安装]]></title>
     <url>%2F2018%2F11%2F30%2F%E6%90%AC%E7%93%A6%E5%B7%A5Cenots7%20%E5%AE%9E%E7%8E%B0BBR%E5%8A%A0%E9%80%9F%E4%BB%A5%E5%8F%8ASS%E5%AE%89%E8%A3%85%2F</url>
     <content type="text"><![CDATA[准备环境: centos7 64位1、一键安装Shadowsock 下载脚本 wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev.sh 增加执行权限 chmod +x shadowsocks-libev.sh 运行 ./shadowsocks-libev.sh 2&gt;&amp;1 | tee shadowsocks-libev.log 安装过程中会提示配置端口、密码、加密方式。 卸载: ./shadowsocks-libev.sh uninstall ss控制 1234启动：/etc/init.d/shadowsocks start 停止：/etc/init.d/shadowsocks stop 重启：/etc/init.d/shadowsocks restart 查看状态：/etc/init.d/shadowsocks status 2、安装BBR加速 目前支持的Linux系统包括：Ubuntu 14.04 x64、Ubuntu 16.04 x64、CentOS 6 x64、CentOS 7 x64 只支持 64 位系统，要求 glibc 版本 2.14 以上。 关闭防火墙 121、systemctl disable firewalld2、systemctl stop firewalld BBR安装脚本 1231、wget https://raw.githubusercontent.com/kuoruan/shell-scripts/master/ovz-bbr/ovz-bbr-installer.sh2、chmod +x ovz-bbr-installer.sh3、./ovz-bbr-installer.sh 安装过程中，会提示加速端口(可以更改) 判断BBR是否正常工作 ping 10.0.0.2 如果能通，则代表启动成功 控制bbr 1systemctl &#123;start|stop|restart|status&#125; haproxy-lkl 配置bbr加速端口 1vi /usr/local/haproxy-lkl/etc/port-rules 一行一个端口，可写范围 ​ 卸载BBR ​ 作者：我是你的nobita 链接：https://www.jianshu.com/p/9f27d4cabd40 來源：简书 简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。]]></content>
@@ -287,6 +298,17 @@
       </categories>
       <tags>
         <tag>搬瓦工</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[数据库之主键、外键、索引]]></title>
+    <url>%2F2018%2F11%2F30%2F%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B%E4%B8%BB%E9%94%AE%E3%80%81%E5%A4%96%E9%94%AE%E3%80%81%E7%B4%A2%E5%BC%95%2F</url>
+    <content type="text"><![CDATA[主键 主键用来标志唯一的某一行,主键也是数据表中唯一索引,比如用户表中有id,name,但是id是唯一的,你要找出一个用户,就只能根据id去找,才能找出唯一一个,另外主键必须非空且唯一,一个表最多只能有一个主键,主键是可选的,但是为每个表指定主键通常会更好.MySQL中使用PRIMARY KEY来指定主键, 创建表时指定主键demo1 1234CREATE TABLE user ( id INT PRIMARY KEY auto_increment, username VARCHAR (255)); demo2 12345CREATE TABLE user ( id INT auto_increment, username VARCHAR (255), PRIMARY KEY (id)); 为已存在的表创建主键例如已存在表user(id,username),现在将字段id指定为主键并且自增 12ALTER TABLE USER ADD PRIMARY KEY (id), MODIFY id INT AUTO_INCREMENT; 删除主键12ALTER TABLE USER DROP PRIMARY KEY, MODIFY id INT; 外键 外键是用来指定参照完整性约束,举个例子： 假如某个电脑生产商,它的数据库中保存着整机和配件的产品信息.用来保存整机产品信息的表叫做 Pc;用来保存配件供货信息的表叫做Parts. 在Pc表中有一个字段,用来描述这款电脑所使用的CPU型号; 在Parts 表中相应有一个字段,描述的正是CPU的型号,我们可以把它想成是全部CPU的型号列表. 很显然,这个厂家生产的电脑,其使用的CPU一定是供货信息表(parts)中存在的型号.这时,两个表中就存在一种约束关系(constraint)——Pc表中的CPU型号受到Parts 表中型号的约束.被指定为外键的列必须要有索引,外键参考列必须为令一个表的主键; 创建表时指定外键例如user(id,username)和表article(id,uid,title),其中article.uid时外键指向user.id主键 123456CREATE TABLE article ( id INT auto_increment, uid INT, PRIMARY KEY (id), CONSTRAINT fk_user_article_uid FOREIGN KEY (uid) REFERENCES USER (id)); 注意：如果外键列没有索引,则MySQL会自动为其添加一个和外键同名的索引 修改表时添加外键约束1ALTER TABLE article ADD CONSTRAINT fk_user_article_uid FOREIGN KEY (uid) REFERENCES USER (id); 删除外键1ALTER TABLE article DROP FOREIGN KEY fk_user_article_uid; 注意：删除外键时,该外键对应的所索引并不会被删除 索引 普通索引这是最基本的索引类型,而且它没有唯一性之类的限制.普通索引可以通过以下几种方式创建： 建表时创建索引12CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表);CREATE INDEX name ON user (username); 修改表时添加索引12ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表);ALTER TABLE USER ADD INDEX username (username); 唯一性索引这种索引和前面的”普通索引”基本相同,但有一个区别：索引列的所有值都只能出现一次,即必须唯一.唯一性索引可以用以下几种方式创建: 建表时创建索引12CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表);CREATE UNIQUE INDEX name ON user (username); 修改表时添加索引12ALTER TABLE tablename ADD UNIQUE INDEX [索引的名字] (列的列表);ALTER TABLE USER ADD UNIQUE INDEX username (username); 主键索引上文介绍过,此处略 全文索引MySQL从3.23.23版开始支持全文索引和全文检索.在MySQL中,全文索引的索引类型为FULLTEXT.全文索引可以在VARCHAR或者TEXT类型的列上创建.它可以通过CREATE TABLE命令创建,也可以通过ALTER TABLE或CREATE INDEX命令创建.对于大规模的数据集,通过ALTER TABLE（或者CREATE INDEX）命令创建全文索引要比把记录插入带有全文索引的空表更快 索引的其他说明 单列索引与多列索引索引可以是单列索引,也可以是多列索引. 添加索引1create INDEX 索引名称 ON tablename (row1,row2,row3); 修改索引1ALTER TABLE tablename ADD INDEX 索引名称 (row1,row2,row3); 最左前缀多列索引还有另外一个优点,它通过称为最左前缀（Leftmost Prefixing）的概念体现出来,我们举个列子： 现在我们有一个name、age、phone列上的多列索引,我们称这个索引为indexs.当搜索条件是以下各种列的组合时,MySQL将使用indexs索引： 1234name,age,phonename,agename 从另一方面理解,它相当于我们创建了(name、age、phone)、(name,age)以及(name)这些列组合上的索引.下面这些查询都能够使用这个indexs索引： 1234SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;18&apos; AND phone=&apos;117&apos;; SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;19&apos;; SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;20&apos;; 如何选择索引列在性能优化过程中,选择在哪些列上创建索引是最重要的步骤之一.可以考虑使用索引的主要有两种类型的列：在WHERE子句中出现的列,在join子句中出现的列.请看下面这个查询： 1234567SELECT age ## 不使用索引 FROM user WHERE name =&apos;Mike&apos; ## 考虑使用索引 AND age=&apos;18&apos; ## 考虑使用索引SELECT article.title, ##不使用索引 user.name ##不使用索引 FROM user LEFT JOIN article ON user.id=article.uid ##考虑使用索引 WHERE user.phone=&apos;229&apos; ##考虑使用索引 AND nickname=&apos;mma&apos; ##考虑使用索引]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -299,28 +321,6 @@
       </categories>
       <tags>
         <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[搞懂JWT]]></title>
-    <url>%2F2018%2F11%2F30%2F%E6%90%9E%E6%87%82JWT%2F</url>
-    <content type="text"><![CDATA[搞懂JWT本文基本一字不差的转载至这里 JSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息 让我们来假想一下一个场景。在A用户关注了B用户的时候，系统发邮件给B用户，并且附有一个链接“点此关注A用户”。链接的地址可以是这样的https://your.awesome-app.com/make-friend/?from_user=B&amp;target_user=A上面的URL主要通过URL来描述这个当然这样做有一个弊端，那就是要求用户B用户是一定要先登录的。可不可以简化这个流程，让B用户不用登录就可以完成这个操作。JWT就允许我们做到这点。 JWT的组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名 载荷（Payload）我们先将上面的添加好友的操作描述成一个JSON对象。其中添加了一些其他的信息，帮助今后收到这个JWT的服务器理解这个JWT。1234567891011121314151617&#123; "iss": "John Wu JWT", "iat": 1441593502, "exp": 1441594722, "aud": "www.example.com", "sub": "jrocket@example.com", "from_user": "B", "target_user": "A"&#125; 这里面的前五个字段都是由JWT的标准所定义的。 iss: 该JWT的签发者 sub: 该JWT所面向的用户 aud: 接收该JWT的一方 exp(expires): 什么时候过期，这里是一个Unix时间戳 iat(issued at): 在什么时候签发的 这些定义都可以在标准中找到。将上面的JSON对象进行[base64编码]可以得到下面的字符串。这个字符串我们将它称作JWT的Payload（载荷）。 eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9 如果你使用Node.js，可以用Node.js的包base64url来得到这个字符串1234567var base64url = require('base64url')var header = &#123; "from_user": "B", "target_user": "A"&#125;console.log(base64url(JSON.stringify(header)))// 输出：eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9 小知识：Base64是一种编码，也就是说，它是可以被翻译回原来的样子来的。它并不是一种加密过程。 头部（Header）JWT还需要一个头部，头部用于描述关于该JWT的最基本的信息，例如其类型以及签名所用的算法等。这也可以被表示成一个JSON对象。1234567&#123; "typ": "JWT", "alg": "HS256"&#125; 在这里，我们说明了这是一个JWT，并且我们所用的签名算法（后面会提到）是HS256算法。对它也要进行Base64编码，之后的字符串就成了JWT的Header（头部）。eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9 签名（签名）将上面的两个编码后的字符串都用句号.连接在一起（头部在前），就形成了yJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0这一部分的过程在node-jws的源码中有体现 最后，我们将上面拼接完的字符串用HS256算法进行加密。在加密的时候，我们还需要提供一个密钥（secret）。如果我们用mystar作为密钥的话，那么就可以得到我们加密后的内容rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM这一部分又叫做签名。 最后将这一部分签名也拼接在被签名的字符串后面，我们就得到了完整的JWTeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM 于是，我们就可以将邮件中的URL改成https://your.awesome-app.com/make-friend/?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM这样就可以安全地完成添加好友的操作了！且慢，我们一定会有一些问题： 签名的目的是什么？ Base64是一种编码，是可逆的，那么我的信息不就被暴露了吗？让我逐一为你说明。 签名的目的最后一步签名的过程，实际上是对头部以及载荷内容进行签名。一般而言，加密算法对于不同的输入产生的输出总是不一样的。对于两个不同的输入，产生同样的输出的概率极其地小（有可能比我成世界首富的概率还小）。所以，我们就把“不一样的输入产生不一样的输出”当做必然事件来看待吧。 所以，如果有人对头部以及载荷的内容解码之后进行修改，再进行编码的话，那么新的头部和载荷的签名和之前的签名就将是不一样的。而且，如果不知道服务器加密的时候用的密钥的话，得出来的签名也一定会是不一样的。 服务器应用在接受到JWT后，会首先对头部和载荷的内容用同一算法再次签名。那么服务器应用是怎么知道我们用的是哪一种算法呢？别忘了，我们在JWT的头部中已经用alg字段指明了我们的加密算法了。 如果服务器应用对头部和载荷再次以同样方法签名之后发现，自己计算出来的签名和接受到的签名不一样，那么就说明这个Token的内容被别人动过的，我们应该拒绝这个Token，返回一个HTTP 401 Unauthorized响应。 信息会暴露？是的。 所以，在JWT中，不应该在载荷里面加入任何敏感的数据。在上面的例子中，我们传输的是用户的User ID。这个值实际上不是什么敏感内容，一般情况下被知道也是安全的。 但是像密码这样的内容就不能被放在JWT中了。如果将用户的密码放在了JWT中，那么怀有恶意的第三方通过Base64解码就能很快地知道你的密码了。 JWT的适用场景我们可以看到，JWT适合用于向Web应用传递一些非敏感信息。例如在上面提到的完成加好友的操作，还有诸如下订单的操作等等。 其实JWT还经常用于设计用户认证和授权系统，甚至实现Web应用的单点登录。]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>JWT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[数据库之主键、外键、索引]]></title>
-    <url>%2F2018%2F11%2F30%2F%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B%E4%B8%BB%E9%94%AE%E3%80%81%E5%A4%96%E9%94%AE%E3%80%81%E7%B4%A2%E5%BC%95%2F</url>
-    <content type="text"><![CDATA[主键 主键用来标志唯一的某一行,主键也是数据表中唯一索引,比如用户表中有id,name,但是id是唯一的,你要找出一个用户,就只能根据id去找,才能找出唯一一个,另外主键必须非空且唯一,一个表最多只能有一个主键,主键是可选的,但是为每个表指定主键通常会更好.MySQL中使用PRIMARY KEY来指定主键, 创建表时指定主键demo1 1234CREATE TABLE user ( id INT PRIMARY KEY auto_increment, username VARCHAR (255)); demo2 12345CREATE TABLE user ( id INT auto_increment, username VARCHAR (255), PRIMARY KEY (id)); 为已存在的表创建主键例如已存在表user(id,username),现在将字段id指定为主键并且自增 12ALTER TABLE USER ADD PRIMARY KEY (id), MODIFY id INT AUTO_INCREMENT; 删除主键12ALTER TABLE USER DROP PRIMARY KEY, MODIFY id INT; 外键 外键是用来指定参照完整性约束,举个例子： 假如某个电脑生产商,它的数据库中保存着整机和配件的产品信息.用来保存整机产品信息的表叫做 Pc;用来保存配件供货信息的表叫做Parts. 在Pc表中有一个字段,用来描述这款电脑所使用的CPU型号; 在Parts 表中相应有一个字段,描述的正是CPU的型号,我们可以把它想成是全部CPU的型号列表. 很显然,这个厂家生产的电脑,其使用的CPU一定是供货信息表(parts)中存在的型号.这时,两个表中就存在一种约束关系(constraint)——Pc表中的CPU型号受到Parts 表中型号的约束.被指定为外键的列必须要有索引,外键参考列必须为令一个表的主键; 创建表时指定外键例如user(id,username)和表article(id,uid,title),其中article.uid时外键指向user.id主键 123456CREATE TABLE article ( id INT auto_increment, uid INT, PRIMARY KEY (id), CONSTRAINT fk_user_article_uid FOREIGN KEY (uid) REFERENCES USER (id)); 注意：如果外键列没有索引,则MySQL会自动为其添加一个和外键同名的索引 修改表时添加外键约束1ALTER TABLE article ADD CONSTRAINT fk_user_article_uid FOREIGN KEY (uid) REFERENCES USER (id); 删除外键1ALTER TABLE article DROP FOREIGN KEY fk_user_article_uid; 注意：删除外键时,该外键对应的所索引并不会被删除 索引 普通索引这是最基本的索引类型,而且它没有唯一性之类的限制.普通索引可以通过以下几种方式创建： 建表时创建索引12CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表);CREATE INDEX name ON user (username); 修改表时添加索引12ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表);ALTER TABLE USER ADD INDEX username (username); 唯一性索引这种索引和前面的”普通索引”基本相同,但有一个区别：索引列的所有值都只能出现一次,即必须唯一.唯一性索引可以用以下几种方式创建: 建表时创建索引12CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表);CREATE UNIQUE INDEX name ON user (username); 修改表时添加索引12ALTER TABLE tablename ADD UNIQUE INDEX [索引的名字] (列的列表);ALTER TABLE USER ADD UNIQUE INDEX username (username); 主键索引上文介绍过,此处略 全文索引MySQL从3.23.23版开始支持全文索引和全文检索.在MySQL中,全文索引的索引类型为FULLTEXT.全文索引可以在VARCHAR或者TEXT类型的列上创建.它可以通过CREATE TABLE命令创建,也可以通过ALTER TABLE或CREATE INDEX命令创建.对于大规模的数据集,通过ALTER TABLE（或者CREATE INDEX）命令创建全文索引要比把记录插入带有全文索引的空表更快 索引的其他说明 单列索引与多列索引索引可以是单列索引,也可以是多列索引. 添加索引1create INDEX 索引名称 ON tablename (row1,row2,row3); 修改索引1ALTER TABLE tablename ADD INDEX 索引名称 (row1,row2,row3); 最左前缀多列索引还有另外一个优点,它通过称为最左前缀（Leftmost Prefixing）的概念体现出来,我们举个列子： 现在我们有一个name、age、phone列上的多列索引,我们称这个索引为indexs.当搜索条件是以下各种列的组合时,MySQL将使用indexs索引： 1234name,age,phonename,agename 从另一方面理解,它相当于我们创建了(name、age、phone)、(name,age)以及(name)这些列组合上的索引.下面这些查询都能够使用这个indexs索引： 1234SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;18&apos; AND phone=&apos;117&apos;; SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;19&apos;; SELECT * FROM user WHERE user=&apos;Mike&apos; AND age=&apos;20&apos;; 如何选择索引列在性能优化过程中,选择在哪些列上创建索引是最重要的步骤之一.可以考虑使用索引的主要有两种类型的列：在WHERE子句中出现的列,在join子句中出现的列.请看下面这个查询： 1234567SELECT age ## 不使用索引 FROM user WHERE name =&apos;Mike&apos; ## 考虑使用索引 AND age=&apos;18&apos; ## 考虑使用索引SELECT article.title, ##不使用索引 user.name ##不使用索引 FROM user LEFT JOIN article ON user.id=article.uid ##考虑使用索引 WHERE user.phone=&apos;229&apos; ##考虑使用索引 AND nickname=&apos;mma&apos; ##考虑使用索引]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -365,8 +365,8 @@
         <category>Nginx</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>PHP</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
