@@ -124,7 +124,7 @@
 
 
 
-  <meta name="keywords" content="CentOS,PHP,">
+  <meta name="keywords" content="PHP,CentOS,">
 
 
 
@@ -138,7 +138,7 @@
 
 
 <meta name="description" content="CentOS 下，PHP有多种方式来安装拓展， 主要有 包管理式的 yum 安装、pecl 安装， 以及源码编译安装。包管理式的安装卸载尤为方便，而源码编译式的安装则方便参数调优。一般搭建本机开发环境推荐包管理式的安装，节约时间。而线上部署环境则推荐编译安装， 方便调优。   环境和准备  环境 ： windows10 PHP版本：7.0.13 Nginx: 1.10.3 Centos: doc">
-<meta name="keywords" content="CentOS,PHP">
+<meta name="keywords" content="PHP,CentOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Centos7中，PHP7下，扩展的安装">
 <meta property="og:url" content="https://blog.zhimma.com/2018/11/30/Centos7中，PHP7下，扩展的安装/index.html">
@@ -150,7 +150,7 @@
 <meta property="og:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/gopear.png">
 <meta property="og:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/redis.png">
 <meta property="og:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/seaslog.png">
-<meta property="og:updated_time" content="2019-01-24T09:09:58.379Z">
+<meta property="og:updated_time" content="2019-02-01T07:34:13.763Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos7中，PHP7下，扩展的安装">
 <meta name="twitter:description" content="CentOS 下，PHP有多种方式来安装拓展， 主要有 包管理式的 yum 安装、pecl 安装， 以及源码编译安装。包管理式的安装卸载尤为方便，而源码编译式的安装则方便参数调优。一般搭建本机开发环境推荐包管理式的安装，节约时间。而线上部署环境则推荐编译安装， 方便调优。   环境和准备  环境 ： windows10 PHP版本：7.0.13 Nginx: 1.10.3 Centos: doc">
@@ -547,18 +547,16 @@
 <h3 id="查找php-config的位置"><a href="#查找php-config的位置" class="headerlink" title="查找php-config的位置"></a><strong>查找php-config的位置</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@9e2c60482bdc conf.d]# whereis php-config</span><br><span class="line">php-config:[root@9e2c60482bdc conf.d]#</span><br></pre></td></tr></table></figure>
 <p>发现没有php-config，先测试运行下phpize  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php-config:[root@9e2c60482bdc conf.d]# phpize</span><br><span class="line">Can t find PHP headers in /usr/include/php</span><br><span class="line">The php-devel package is required for use of this command.</span><br></pre></td></tr></table></figure>
-<p>直接报错，接下来安装php-devel解决上面报错<code>yum install php70w-devel</code> </p>
-<p>再次运行phpize,没有报找不到的错误，出现了下面的报错：   </p>
+<p>直接报错，接下来安装php-devel解决上面报错<code>yum install php70w-devel</code><br>​<br>再次运行phpize,没有报找不到的错误，出现了下面的报错：<br>​     </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@9e2c60482bdc bin]# phpize</span><br><span class="line">Cannot find config.m4. </span><br><span class="line">Make sure that you run /usr/bin/phpize in the top level source directory of the module</span><br></pre></td></tr></table></figure>
 <p>先不管他，进行下一步的操作</p>
-<h3 id="更新-pear（非必须）"><a href="#更新-pear（非必须）" class="headerlink" title="更新 pear（非必须）"></a><strong>更新 pear（非必须）</strong></h3><p>我们需要先从pear官网下载 go-pear 工具,这个工具将帮我们同时安装 pecl包管理器(管理php的C拓展) pear包管理器(管理php类库)；</p>
-<p><code>wget http://pear.php.net/go-pear.phar</code></p>
-<p>下载完成后安装工具，运行下面命令：<code>php go-pear.phar</code>，<img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/gopear.png" alt="go-pear"></p>
+<h3 id="更新-pear（非必须）"><a href="#更新-pear（非必须）" class="headerlink" title="更新 pear（非必须）"></a><strong>更新 pear（非必须）</strong></h3><p>我们需要先从pear官网下载 go-pear 工具,这个工具将帮我们同时安装 pecl包管理器(管理php的C拓展) pear包管理器(管理php类库)；<br>​<br><code>wget http://pear.php.net/go-pear.phar</code><br>​<br>下载完成后安装工具，运行下面命令：<code>php go-pear.phar</code>，<img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/gopear.png" alt="go-pear"></p>
 <p>然后默认回车即可，暂时没搞懂这些参数的意思，估计是配置路经相关吧，先回车再说；</p>
 <p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/gopear.png" alt="go-pear"></p>
 <h3 id="安装扩展（1）"><a href="#安装扩展（1）" class="headerlink" title="安装扩展（1）"></a><strong>安装扩展（1）</strong></h3><p>搜索扩展包：<code>pecl search redis</code></p>
+<p>​    </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@9e2c60482bdc test]# pecl search redis</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in /usr/share/pear/PEAR/Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in /usr/share/pear/PEAR/Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in /usr/share/pear/PEAR/Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in /usr/share/pear/PEAR/Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in Command.php on line 249</span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">Warning: Invalid argument supplied for foreach() in PEAR/Command.php on line 249</span><br><span class="line"></span><br><span class="line">Warning: Invalid argument supplied for foreach() in /usr/share/pear/PEAR/Command.php on line 249</span><br><span class="line">XML Extension not found</span><br></pre></td></tr></table></figure>
-<p>刷刷的报错了，查询错误后贴出解决方法：</p>
+<p>​<br>刷刷的报错了，查询错误后贴出解决方法：</p>
 <p><a href="http://serverfault.com/questions/589877/pecl-command-produces-long-list-of-errors" target="_blank" rel="noopener">解决方法</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/bin/pecl  //文件最后一行去掉 -n 参数</span><br></pre></td></tr></table></figure>
 <p>再次搜索，  </p>
@@ -569,7 +567,7 @@
 <h3 id="安装扩展（2）"><a href="#安装扩展（2）" class="headerlink" title="安装扩展（2）"></a><strong>安装扩展（2）</strong></h3><p>执行：<code>pecl install monodb</code> </p>
 <p>等待自动安装完成后，显示如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Build process completed successfully</span><br><span class="line">Installing &apos;/usr/lib64/php/modules/redis.so&apos;</span><br><span class="line">install ok: channel://pecl.php.net/redis-3.1.2</span><br><span class="line">configuration option &quot;php_ini&quot; is not set to php.ini location</span><br><span class="line">You should add &quot;extension=redis.so&quot; to php.ini</span><br></pre></td></tr></table></figure>
-<p>然后在php配置文件中稍作修改，将extension=redis.so添加到php.ini中,重启PHP,查看phpinfo</p>
+<p>​<br>然后在php配置文件中稍作修改，将extension=redis.so添加到php.ini中,重启PHP,查看phpinfo</p>
 <p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/PHP7/redis.png" alt="redis"></p>
 <p>到此 pecl 安装扩展方法介绍完毕</p>
 <h2 id="源码编译安装（Seaslog）"><a href="#源码编译安装（Seaslog）" class="headerlink" title="源码编译安装（Seaslog）"></a>源码编译安装（Seaslog）</h2><hr>
@@ -610,9 +608,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
-          
             <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          
+            <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
           
         </div>
       
@@ -625,8 +623,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/30/Git生成多个ssh-key/" rel="next" title="Git生成多个ssh key">
-                <i class="fa fa-chevron-left"></i> Git生成多个ssh key
+              <a href="/2018/11/30/CentOS7☞lnmp环境搭建/" rel="next" title="CentOS7☞lnmp环境搭建">
+                <i class="fa fa-chevron-left"></i> CentOS7☞lnmp环境搭建
               </a>
             
           </div>
@@ -719,7 +717,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -730,7 +728,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -741,7 +739,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -832,7 +830,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共59.5k字</span>
+  <span class="post-count">博客全站共62.2k字</span>
 </div>
 
         
