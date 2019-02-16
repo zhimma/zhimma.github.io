@@ -146,9 +146,9 @@
 <meta property="og:description" content="[TOC] 通常我们软件开发流程大概是下面所示： 本地开发-&amp;gt;本地自测-&amp;gt;提交代码-&amp;gt;编译发布-&amp;gt;测试人员测试-&amp;gt;提交至生产 在发布阶段，  有的项目是采用版本控制工具在Linux服务器上拉取对应分支的最新代码 有的是在本地对比Git版本的差异，生成差异的文件，打包上传至服务器，进行覆盖原来的代码文件完成发布  上面2种方法是我工作中遇到的，下面我们来学习一种新的发布">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zhimma.oss-cn-beijing.aliyuncs.com/init.gif">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/installPlugin.gif">
 <meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/ssh.gif">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/ssh.gif">
-<meta property="og:updated_time" content="2019-02-16T15:27:43.845Z">
+<meta property="og:updated_time" content="2019-02-16T15:31:23.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Jenkins的Pipeline发布代码至远程服务器">
 <meta name="twitter:description" content="[TOC] 通常我们软件开发流程大概是下面所示： 本地开发-&amp;gt;本地自测-&amp;gt;提交代码-&amp;gt;编译发布-&amp;gt;测试人员测试-&amp;gt;提交至生产 在发布阶段，  有的项目是采用版本控制工具在Linux服务器上拉取对应分支的最新代码 有的是在本地对比Git版本的差异，生成差异的文件，打包上传至服务器，进行覆盖原来的代码文件完成发布  上面2种方法是我工作中遇到的，下面我们来学习一种新的发布">
@@ -567,7 +567,7 @@
 <li>Gitlab Hook Plugin</li>
 <li>AnsiColor（可选）这个插件可以让Jenkins的控制台输出的log带有颜色（就和linux控制台那样）</li>
 </ul>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/ssh.gif" alt="安装插件"></p>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/installPlugin.gif" alt="安装插件"></p>
 <h3 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h3><p>本机生成SSH：<code>ssh-keygen -t rsa -C &quot;Your email&quot;</code>，最终生成id_rsa和id_rsa.pub(公钥)</p>
 <p>Gitlab上添加公钥：复制id_rsa.pub里面的公钥添加到Gitlab</p>
 <p>Jenkins上配置密钥到SSH：复制id_rsa里面的公钥添加到Jenkins（private key选项）</p>
