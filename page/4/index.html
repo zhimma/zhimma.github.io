@@ -386,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/搬瓦工Cenots7 实现BBR加速以及SS安装/">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/没有可用软件包nginx/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhimma">
@@ -405,7 +405,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/30/搬瓦工Cenots7 实现BBR加速以及SS安装/" itemprop="url">搬瓦工CentOs7 实现BBR加速以及SS安装</a></h1>
+                <a class="post-title-link" href="/2018/11/30/没有可用软件包nginx/" itemprop="url">没有可用软件包nginx</a></h1>
         
 
         <div class="post-meta">
@@ -440,8 +440,19 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/CentOs/" itemprop="url" rel="index">
-                    <span itemprop="name">CentOs</span>
+                  <a href="/categories/Nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">Nginx</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/" itemprop="url" rel="index">
+                    <span itemprop="name">CentOS</span>
                   </a>
                 </span>
 
@@ -458,8 +469,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/30/搬瓦工Cenots7 实现BBR加速以及SS安装/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/搬瓦工Cenots7 实现BBR加速以及SS安装/" itemprop="commentCount"></span>
+                <a href="/2018/11/30/没有可用软件包nginx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/没有可用软件包nginx/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -481,7 +492,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  333
+                  110
                 </span>
               
 
@@ -520,204 +531,15 @@
       
         
           
-          准备环境:   centos7 64位1、一键安装Shadowsock
-下载脚本 wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks
+          今天安装Nginx时候使用：yum install nginx，报出了没有可用软件包 nginx，我的环境是CentOS7,在网上查询后，贴出解决方法
+ngixn官方解决方法
+
+先创建yum的一个repository文件：/etc/yum.repos.d/nginx.repo；
+将下面配置粘贴保存进
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/11/30/搬瓦工Cenots7 实现BBR加速以及SS安装/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-    <div>
-      
-    </div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/JSON和JSONP/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zhimma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zhimma's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/30/JSON和JSONP/" itemprop="url">JSON和JSONP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">
-                2018-11-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Cors/" itemprop="url" rel="index">
-                    <span itemprop="name">Cors</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/30/JSON和JSONP/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/JSON和JSONP/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  13
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          有一篇文章介绍了跨域问题的几种解决方法,其中有一种是使用jsonP方式解决,那么今天来详细说说Json和JsonP
-前言说到AJAX就会不可避免的面临两个问题,第一个是AJAX以何种格式来交换数据?第二个是跨域的需求如何解决?,目前为止最被推崇或者说首选的方案还是用JSON来传数据,靠JSONP来跨
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/11/30/JSON和JSONP/#more" rel="contents">
+            <a class="btn" href="/2018/11/30/没有可用软件包nginx/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -962,7 +784,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Nginx与PHP的交互机制/">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/JSON和JSONP/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhimma">
@@ -981,7 +803,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/30/Nginx与PHP的交互机制/" itemprop="url">Nginx与PHP的交互机制(1)</a></h1>
+                <a class="post-title-link" href="/2018/11/30/JSON和JSONP/" itemprop="url">JSON和JSONP</a></h1>
         
 
         <div class="post-meta">
@@ -1016,8 +838,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">Nginx</span>
+                  <a href="/categories/Cors/" itemprop="url" rel="index">
+                    <span itemprop="name">Cors</span>
                   </a>
                 </span>
 
@@ -1034,8 +856,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/30/Nginx与PHP的交互机制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/Nginx与PHP的交互机制/" itemprop="commentCount"></span>
+                <a href="/2018/11/30/JSON和JSONP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/JSON和JSONP/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1057,7 +879,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.3k
+                  3.4k
                 </span>
               
 
@@ -1073,7 +895,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8
+                  13
                 </span>
               
             </div>
@@ -1096,12 +918,12 @@
       
         
           
-          Nginx与PHP的交互机制(1)from there https://www.awaimai.com/371.html
-在搭建 LAMP/LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这
+          有一篇文章介绍了跨域问题的几种解决方法,其中有一种是使用jsonP方式解决,那么今天来详细说说Json和JsonP
+前言说到AJAX就会不可避免的面临两个问题,第一个是AJAX以何种格式来交换数据?第二个是跨域的需求如何解决?,目前为止最被推崇或者说首选的方案还是用JSON来传数据,靠JSONP来跨
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/11/30/Nginx与PHP的交互机制/#more" rel="contents">
+            <a class="btn" href="/2018/11/30/JSON和JSONP/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1298,6 +1120,198 @@ https://www.cnblogs.com/joylee/p/7513038.html
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/11/30/Mycat实践/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+    <div>
+      
+    </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Nginx与PHP的交互机制/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/30/Nginx与PHP的交互机制/" itemprop="url">Nginx与PHP的交互机制(1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">Nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/30/Nginx与PHP的交互机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/30/Nginx与PHP的交互机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Nginx与PHP的交互机制(1)from there https://www.awaimai.com/371.html
+在搭建 LAMP/LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/30/Nginx与PHP的交互机制/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
