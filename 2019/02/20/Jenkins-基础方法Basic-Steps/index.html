@@ -124,7 +124,7 @@
 
 
 
-  <meta name="keywords" content="zhimma">
+  <meta name="keywords" content="Jenkins,">
 
 
 
@@ -137,16 +137,21 @@
 
 
 
-<meta name="description" content="zhimma&apos;s 技术blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zhimma&#39;s blog">
-<meta property="og:url" content="https://blog.zhimma.com/tags/k8s/index.html">
+<meta name="description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
+<meta name="keywords" content="Jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins-基础方法Basic Steps">
+<meta property="og:url" content="https://blog.zhimma.com/2019/02/20/Jenkins-基础方法Basic-Steps/index.html">
 <meta property="og:site_name" content="zhimma&#39;s blog">
-<meta property="og:description" content="zhimma&apos;s 技术blog">
+<meta property="og:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/dir.png">
+<meta property="og:updated_time" content="2019-02-20T10:45:25.344Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zhimma&#39;s blog">
-<meta name="twitter:description" content="zhimma&apos;s 技术blog">
+<meta name="twitter:title" content="Jenkins-基础方法Basic Steps">
+<meta name="twitter:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
+<meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png">
 
 
 
@@ -176,13 +181,13 @@
 
 
 
-  <link rel="canonical" href="https://blog.zhimma.com/tags/k8s/">
+  <link rel="canonical" href="https://blog.zhimma.com/2019/02/20/Jenkins-基础方法Basic-Steps/">
 
 
 
 
 
-  <title>标签: k8s | zhimma's blog</title>
+  <title>Jenkins-基础方法Basic Steps | zhimma's blog</title>
   
 
 
@@ -220,7 +225,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
@@ -371,52 +376,238 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>k8s<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/02/20/Jenkins-基础方法Basic-Steps/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/25/1-Mac-Docker-Kubernetes-Rancher-环境初始化/" itemprop="url">
-              
-                <span itemprop="name">1-Mac-Docker-Kubernetes-Rancher-环境初始化</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Jenkins-基础方法Basic Steps</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-25T12:01:43+08:00" content="2019-01-25">
-          01-25
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T14:38:25+08:00">
+                2019-02-20
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/容器化服务/" itemprop="url" rel="index">
+                    <span itemprop="name">容器化服务</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
+                    <span itemprop="name">Jenkins</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/20/Jenkins-基础方法Basic-Steps/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/20/Jenkins-基础方法Basic-Steps/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  273
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<p>这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是<a href="https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Basic+Steps+Plugin" target="_blank" rel="noopener">Pipeline: Basic Steps</a>,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件</p>
+<p>下面具体介绍下该插件包含的各个方法    </p>
+<h3 id="deleteDir"><a href="#deleteDir" class="headerlink" title="deleteDir()"></a>deleteDir()</h3><p>默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，也不需要参数</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent any</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage (<span class="string">'input-test'</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                script&#123;</span><br><span class="line">					sh(<span class="string">"ls -al $&#123;env.WORKSPACE&#125;"</span>)</span><br><span class="line">					deleteDir()  <span class="comment">// clean up current work directory</span></span><br><span class="line">					sh(<span class="string">"ls -al $&#123;env.WORKSPACE&#125;"</span>)</span><br><span class="line">				&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png" alt=""></p>
+<h3 id="dir"><a href="#dir" class="headerlink" title="dir()"></a>dir()</h3><p>如果使用了dir语句块，这个方法就是改变当前的工作目录</p>
+<p>在dir语句块里执行的其他路径或者相对路径，都是和dir里面设置的文件路径相关，这个和WORKSPACE相对文件路径已经没有关系了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(&quot;dir&quot;) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    println env.WORKSPACE</span><br><span class="line">			    dir(&quot;$&#123;env.WORKSPACE&#125;/testdata&quot;)&#123;</span><br><span class="line">				    sh &quot;pwd&quot;</span><br><span class="line">			    &#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/dir.png" alt=""></p>
 
       
     </div>
+    
+    
+    
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>有收获吗？-------------</div>
+    
+</div>
+      
+    </div>
+    
 
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Jenkins/" rel="tag"><i class="fa fa-tag"></i> Jenkins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/18/Jenkins-Pipeline语法入门/" rel="next" title="Jenkins-Pipeline语法入门">
+                <i class="fa fa-chevron-left"></i> Jenkins-Pipeline语法入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -424,6 +615,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -444,8 +642,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -524,6 +731,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteDir"><span class="nav-number">1.</span> <span class="nav-text">deleteDir()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dir"><span class="nav-number">2.</span> <span class="nav-text">dir()</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -658,6 +881,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
