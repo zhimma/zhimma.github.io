@@ -137,20 +137,24 @@
 
 
 
-<meta name="description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
+<meta name="description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()方法默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参">
 <meta name="keywords" content="Jenkins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jenkins-基础方法Basic Steps">
 <meta property="og:url" content="https://blog.zhimma.com/2019/02/20/Jenkins-基础方法Basic-Steps/index.html">
 <meta property="og:site_name" content="zhimma&#39;s blog">
-<meta property="og:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
+<meta property="og:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()方法默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png">
 <meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/dir.png">
-<meta property="og:updated_time" content="2019-02-20T10:45:25.344Z">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/error.png">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/fileExists.png">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/pwd.png">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/isUnix.png">
+<meta property="og:updated_time" content="2019-02-21T03:16:37.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins-基础方法Basic Steps">
-<meta name="twitter:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，">
+<meta name="twitter:description" content="[TOC] 这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是Pipeline: Basic Steps,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件 下面具体介绍下该插件包含的各个方法     deleteDir()方法默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参">
 <meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png">
 
 
@@ -494,7 +498,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  273
+                  621
                 </span>
               
 
@@ -510,7 +514,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -534,13 +538,29 @@
         <p>[TOC]</p>
 <p>这篇开始来学习一个最基础的pipeline组件，这个也是一个独立的插件，在安装pipeline的时候默认会自动安装，插件的名称是<a href="https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Basic+Steps+Plugin" target="_blank" rel="noopener">Pipeline: Basic Steps</a>,你可以去你自己jenkins环境，插件管理下的installed下面找到这个插件</p>
 <p>下面具体介绍下该插件包含的各个方法    </p>
-<h3 id="deleteDir"><a href="#deleteDir" class="headerlink" title="deleteDir()"></a>deleteDir()</h3><p>默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，也不需要参数</p>
+<h3 id="deleteDir-方法"><a href="#deleteDir-方法" class="headerlink" title="deleteDir()方法"></a>deleteDir()方法</h3><p>默认递归删除WORKSPACE下的文件和文件夹,这个方法是没有参数，也不需要参数</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent any</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage (<span class="string">'input-test'</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                script&#123;</span><br><span class="line">					sh(<span class="string">"ls -al $&#123;env.WORKSPACE&#125;"</span>)</span><br><span class="line">					deleteDir()  <span class="comment">// clean up current work directory</span></span><br><span class="line">					sh(<span class="string">"ls -al $&#123;env.WORKSPACE&#125;"</span>)</span><br><span class="line">				&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/deleteDir.png" alt=""></p>
-<h3 id="dir"><a href="#dir" class="headerlink" title="dir()"></a>dir()</h3><p>如果使用了dir语句块，这个方法就是改变当前的工作目录</p>
+<h3 id="dir-方法"><a href="#dir-方法" class="headerlink" title="dir()方法"></a>dir()方法</h3><p>如果使用了dir语句块，这个方法就是改变当前的工作目录</p>
 <p>在dir语句块里执行的其他路径或者相对路径，都是和dir里面设置的文件路径相关，这个和WORKSPACE相对文件路径已经没有关系了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(&quot;dir&quot;) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    println env.WORKSPACE</span><br><span class="line">			    dir(&quot;$&#123;env.WORKSPACE&#125;/testdata&quot;)&#123;</span><br><span class="line">				    sh &quot;pwd&quot;</span><br><span class="line">			    &#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(<span class="string">"dir"</span>) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    println env.WORKSPACE</span><br><span class="line">			    dir(<span class="string">"$&#123;env.WORKSPACE&#125;/testdata"</span>)&#123;</span><br><span class="line">				    sh <span class="string">"pwd"</span></span><br><span class="line">			    &#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/dir.png" alt=""></p>
+<h3 id="echo-和-error-方法"><a href="#echo-和-error-方法" class="headerlink" title="echo() 和 error()方法"></a>echo() 和 error()方法</h3><p>echo就是和groovy中的println没有任何区别,如果看打印的效果。一般来说使用echo就是打印info debug级别的日志输出用</p>
+<p>如果遇到错误，就可以使用error(‘error message’)    ，如果出现执行到error方法，jenkins job会退出并显示失败效果。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(<span class="string">"dir"</span>) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    echo(<span class="string">"this is echo info"</span>)</span><br><span class="line">			    error(<span class="string">"this is error info"</span>)</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/error.png" alt=""></p>
+<h3 id="fileExists-方法"><a href="#fileExists-方法" class="headerlink" title="fileExists()方法"></a>fileExists()方法</h3><p>这是判断一个文件是否存在，返回值是布尔类型，true就表示文件存在，false表示文件不存在</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(<span class="string">"Demo"</span>) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    script &#123;</span><br><span class="line">					json_file = <span class="string">"$&#123;env.WORKSPACE&#125;/testdata/test_json.json"</span></span><br><span class="line">					<span class="keyword">if</span>(fileExists(json_file) == <span class="literal">true</span>) &#123;</span><br><span class="line">						echo(<span class="string">"json file is exists"</span>)</span><br><span class="line">					&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">						error(<span class="string">"here haven't find json file"</span>)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/fileExists.png" alt=""></p>
+<h3 id="pwd-方法"><a href="#pwd-方法" class="headerlink" title="pwd()方法"></a>pwd()方法</h3><p>其实这个方法和linux下的shell命令pwd是一样的。由于jenkins支持windows和linux，但是linux是pwd，windows上是dir,所以这个插件就干脆支持一个方法，统称为pwd()</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(<span class="string">"Demo"</span>) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    script &#123;</span><br><span class="line">					sh(<span class="string">"pwd"</span>)</span><br><span class="line">					println <span class="string">"==========="</span></span><br><span class="line">					println pwd()</span><br><span class="line">			    &#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/pwd.png" alt=""></p>
+<h3 id="isUnix-方法"><a href="#isUnix-方法" class="headerlink" title="isUnix()方法"></a>isUnix()方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">pipeline&#123;</span><br><span class="line">	</span><br><span class="line">	agent any</span><br><span class="line">	stages&#123;</span><br><span class="line">		stage(&quot;Demo&quot;) &#123;</span><br><span class="line">			steps&#123;</span><br><span class="line">			    script &#123;</span><br><span class="line">					if(isUnix() == true) &#123;</span><br><span class="line">						echo(&quot;this jenkins job running on a linux-like system&quot;)</span><br><span class="line">					&#125;else &#123;</span><br><span class="line">						error(&quot;the jenkins job running on a windows system&quot;)</span><br><span class="line">					&#125;</span><br><span class="line">			    &#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/isUnix.png" alt=""></p>
+<h3 id="mail指令"><a href="#mail指令" class="headerlink" title="mail指令"></a>mail指令</h3><h4 id="Jenkins服务器上配置smtp服务"><a href="#Jenkins服务器上配置smtp服务" class="headerlink" title="Jenkins服务器上配置smtp服务"></a>Jenkins服务器上配置smtp服务</h4><p><strong>subject</strong></p>
+<p>必填，邮件标题主题，Type: <code>String</code></p>
+<p><strong>body</strong></p>
+<p>必填，邮件正文，Type: <code>String</code></p>
 
       
     </div>
@@ -741,7 +761,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteDir"><span class="nav-number">1.</span> <span class="nav-text">deleteDir()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dir"><span class="nav-number">2.</span> <span class="nav-text">dir()</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteDir-方法"><span class="nav-number">1.</span> <span class="nav-text">deleteDir()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dir-方法"><span class="nav-number">2.</span> <span class="nav-text">dir()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#echo-和-error-方法"><span class="nav-number">3.</span> <span class="nav-text">echo() 和 error()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fileExists-方法"><span class="nav-number">4.</span> <span class="nav-text">fileExists()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwd-方法"><span class="nav-number">5.</span> <span class="nav-text">pwd()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isUnix-方法"><span class="nav-number">6.</span> <span class="nav-text">isUnix()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mail指令"><span class="nav-number">7.</span> <span class="nav-text">mail指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Jenkins服务器上配置smtp服务"><span class="nav-number">7.1.</span> <span class="nav-text">Jenkins服务器上配置smtp服务</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -782,7 +802,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.2k字</span>
+  <span class="post-count">博客全站共70.5k字</span>
 </div>
 
         
