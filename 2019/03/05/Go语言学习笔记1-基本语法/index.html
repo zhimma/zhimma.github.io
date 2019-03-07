@@ -145,7 +145,7 @@
 <meta property="og:site_name" content="zhimma&#39;s blog">
 <meta property="og:description" content="[TOC] 变量声明(使用var关键字) 变量（Variable）的功能是存储用户的数据,不同的逻辑有不同的对象类型，也就有不同的变量类型  Go语言使用var关键字进行变量的声明 1234567var a intvar b stringvar c []float32var d func() boolvar e struct&amp;#123;    x int&amp;#125;  第一行，声明一个整形类型的变">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-06T06:03:02.911Z">
+<meta property="og:updated_time" content="2019-03-07T07:55:34.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go语言学习笔记1-基本语法">
 <meta name="twitter:description" content="[TOC] 变量声明(使用var关键字) 变量（Variable）的功能是存储用户的数据,不同的逻辑有不同的对象类型，也就有不同的变量类型  Go语言使用var关键字进行变量的声明 1234567var a intvar b stringvar c []float32var d func() boolvar e struct&amp;#123;    x int&amp;#125;  第一行，声明一个整形类型的变">
@@ -480,7 +480,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.7k
+                  3.8k
                 </span>
               
 
@@ -496,7 +496,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  13
+                  14
                 </span>
               
             </div>
@@ -559,6 +559,12 @@
 <p>匿名变量的表现是一个下划线<code>_</code>,使用匿名变量时，只需要在变量声明的地方使用下画线替换即可</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetData</span><span class="params">()</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span>, <span class="number">200</span></span><br><span class="line">&#125;</span><br><span class="line">a, _ := GetData()</span><br><span class="line">_, b := GetData()</span><br><span class="line">fmt.Println(a, b)<span class="comment">// 100 200</span></span><br></pre></td></tr></table></figure>
 <p><strong>匿名变量不占用命名空间，不会分配内存。匿名变量与匿名变量之间也不会因为多次声明而无法使用。</strong></p>
+<p>匿名变量：</p>
+<ul>
+<li>可以理解为一种占位符。</li>
+<li>本身这种变量不会进行空间分配，也不会占用一个变量的名字。</li>
+<li>在<code>for range</code> 可以对 key 使用匿名变量，也可以对 value 使用匿名变量。</li>
+</ul>
 <h2 id="Go语言类型"><a href="#Go语言类型" class="headerlink" title="Go语言类型"></a>Go语言类型</h2><p>Go语言 中有丰富的数据类型，除了基本的整型、浮点型、布尔型、字符串外，还有切片、结构体、函数、map、通道（channel）等。Go 语言的基本类型和其他语言大同小异，切片类型有着指针的便利性，但比指针更为安全，很多高级语言都配有切片进行安全和高效率的内存操作。</p>
 <h3 id="整数类型"><a href="#整数类型" class="headerlink" title="整数类型"></a>整数类型</h3><p>整型分为以下两个大类：</p>
 <ul>
@@ -834,7 +840,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -947,7 +953,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共79.9k字</span>
+  <span class="post-count">博客全站共82.7k字</span>
 </div>
 
         
