@@ -137,18 +137,18 @@
 
 
 
-<meta name="description" content="openssl/ssl.h&amp;#39; file not found/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbrew s">
+<meta name="description" content="[TOC] openssl/ssl.h’ file not found`/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbre">
 <meta name="keywords" content="Mac,Swoole">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mac安装Swoole扩展问题记录">
 <meta property="og:url" content="https://blog.zhimma.com/2018/11/30/mac安装swoole扩展问题记录/index.html">
 <meta property="og:site_name" content="zhimma&#39;s blog">
-<meta property="og:description" content="openssl/ssl.h&amp;#39; file not found/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbrew s">
+<meta property="og:description" content="[TOC] openssl/ssl.h’ file not found`/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbre">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-01T07:34:44.327Z">
+<meta property="og:updated_time" content="2019-10-22T02:06:14.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac安装Swoole扩展问题记录">
-<meta name="twitter:description" content="openssl/ssl.h&amp;#39; file not found/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbrew s">
+<meta name="twitter:description" content="[TOC] openssl/ssl.h’ file not found`/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &amp;#39;openssl/ssl.h&amp;#39; file not found 原因：openssl 未安装或 openssl 库不在标准位置中解决方案：  确认是否安装了 opensslbre">
 
 
 
@@ -491,7 +491,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.2k
+                  1.3k
                 </span>
               
 
@@ -507,7 +507,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  6
                 </span>
               
             </div>
@@ -528,7 +528,8 @@
       
 
       
-        <h2 id="openssl-ssl-h-39-file-not-found"><a href="#openssl-ssl-h-39-file-not-found" class="headerlink" title="openssl/ssl.h&#39; file not found"></a><code>openssl/ssl.h&#39; file not found</code></h2><p><code>/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &#39;openssl/ssl.h&#39; file not found</code></p>
+        <p>[TOC]</p>
+<h2 id="openssl-ssl-h’-file-not-found"><a href="#openssl-ssl-h’-file-not-found" class="headerlink" title="openssl/ssl.h’ file not found`"></a>openssl/ssl.h’ file not found`</h2><p><code>/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &#39;openssl/ssl.h&#39; file not found</code></p>
 <p><strong>原因：</strong><br>openssl 未安装或 openssl 库不在标准位置中<br><strong>解决方案：</strong></p>
 <ol>
 <li><p>确认是否安装了 openssl<br><code>brew search openssl</code><br>若未安装则执行命令<code>brew install openssl</code>进行安装</p>
@@ -561,6 +562,14 @@
 <p><strong>解决方案：</strong></p>
 <p><code>brew install hiredis</code></p>
 <h2 id="编译参数"><a href="#编译参数" class="headerlink" title="编译参数"></a>编译参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">--disable-option-checking  ignore unrecognized --enable/--with options</span><br><span class="line">  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)</span><br><span class="line">  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]</span><br><span class="line">  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]</span><br><span class="line">  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)</span><br><span class="line">  --with-libdir=NAME      Look for libraries in .../NAME rather than .../lib</span><br><span class="line">  --with-php-config=PATH  Path to php-config php-config</span><br><span class="line">  --enable-swoole-debug   Enable swoole debug</span><br><span class="line">  启用swoole的调试日志。不要在生产环境中启用此配置。</span><br><span class="line">  --enable-trace-log   Enable swoole trace log</span><br><span class="line">  --enable-sockets        Do you have sockets extension?</span><br><span class="line">  启用对 sockets 的支持。依赖 sockets</span><br><span class="line">  --enable-async-redis    Do you have hiredis?</span><br><span class="line">  启用对异步Redis客户端的支持。依赖 hiredis</span><br><span class="line">  --enable-coroutine-postgresql    Do you install postgresql?</span><br><span class="line">  启用协程 Postgresql 客户端，依赖 libpq</span><br><span class="line">  --enable-openssl        Use openssl?</span><br><span class="line">  启用openssl支持。依赖 libssl.so</span><br><span class="line">  --enable-http2          Use http2.0?</span><br><span class="line">  启用HTTP2的支持。依赖 nghttp2</span><br><span class="line">  --enable-thread         Experimental: Use thread?</span><br><span class="line">  启用线程支持 //实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-hugepage       Experimental: Use hugepage?</span><br><span class="line">  启用 hugepage //使用大内存页优化性能，具体鸟哥在他的博客中讲到。</span><br><span class="line">  如果已经开启了 jemalloc，再开启hugepage 印象性能</span><br><span class="line">  https://blog.digitalocean.com/transparent-huge-pages-and-alternative-memory-allocators/</span><br><span class="line">  实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-swoole         Enable swoole support</span><br><span class="line">  --enable-swoole-static    Enable swoole static compile support</span><br><span class="line">  --with-swoole           With swoole support</span><br><span class="line">  --with-libpq-dir=DIR    Include libpq support (requires libpq &gt;= 9.5)</span><br><span class="line">  --with-openssl-dir=DIR    Include OpenSSL support (requires OpenSSL &gt;= 0.9.6)</span><br><span class="line">  设置openssl库的路径，例如：--with-openssl-dir=/opt/openssl/.</span><br><span class="line">  --with-jemalloc-dir=DIR    Include jemalloc support</span><br><span class="line">  使用 jemalloc 进行内存优化支持</span><br><span class="line">  --enable-mysqlnd       Do you have mysqlnd?</span><br><span class="line">  启用对 mysqlnd 的支持，依赖 mysqlnd</span><br><span class="line">  --enable-coroutine      Enable coroutine (requires PHP &gt;= 5.5)</span><br><span class="line">  启用协程</span><br><span class="line">  --enable-asan      Enable asan</span><br><span class="line">  启用 Address-Sanitizier 内存检测工具 //只有开启debug才有效</span><br><span class="line">  --enable-picohttpparser     Experimental: Do you have picohttpparser?</span><br><span class="line">  启用 picohttpparser 支持 //这是一个超高性能的http解析器，实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-timewheel     Experimental: Enable timewheel heartbeat?</span><br><span class="line">  启用时间轮算法并优化心跳算法 //实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-debug,  compile with debug symbols</span><br><span class="line">  编译时加入符号表 //使用gdb调试时有用</span><br><span class="line">  --enable-shared=PKGS    Build shared libraries default=yes</span><br><span class="line">  --enable-static=PKGS    Build static libraries default=yes</span><br><span class="line">  --enable-fast-install=PKGS</span><br><span class="line">                          Optimize for fast installation default=yes</span><br><span class="line">  --with-gnu-ld           Assume the C compiler uses GNU ld default=no</span><br><span class="line">  --disable-libtool-lock  Avoid locking (might break parallel builds)</span><br><span class="line">  --with-pic              Try to use only PIC/non-PIC objects default=use both</span><br><span class="line">  --with-tags=TAGS        Include additional configurations automatic</span><br></pre></td></tr></table></figure>
+<h2 id="centos-安装swoole-扩展"><a href="#centos-安装swoole-扩展" class="headerlink" title="centos 安装swoole 扩展"></a>centos 安装swoole 扩展</h2><h3 id="builtin-saddl-overflow"><a href="#builtin-saddl-overflow" class="headerlink" title="__builtin_saddl_overflow"></a>__builtin_saddl_overflow</h3><blockquote>
+<p>__builtin_saddl_overflow’ was not declared in this scope<br>这是一个已知的问题 - 问题是 CentOS 上的默认 gcc 缺少必需的定义，即使在升级 gcc 之后，PECL 也会找到旧的编译器。要安装驱动程序，必须首先通过安装 devtoolset 集合来升级 gcc，如下所示：</p>
+</blockquote>
+<ul>
+<li>sudo yum install centos-release-scl</li>
+<li>sudo yum install devtoolset-7</li>
+<li>scl enable devtoolset-7 bash</li>
+</ul>
 
       
     </div>
@@ -611,8 +620,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/30/mysql中按照姓名或者中文首字母区间查询排序/" rel="prev" title="MySQL中按照姓名或者中文首字母区间查询排序">
-                MySQL中按照姓名或者中文首字母区间查询排序 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/30/SSH 密钥创建及密钥登录/" rel="prev" title="SSH 密钥创建及密钥登录">
+                SSH 密钥创建及密钥登录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -695,7 +704,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -706,7 +715,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -767,7 +776,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#openssl-ssl-h-39-file-not-found"><span class="nav-number">1.</span> <span class="nav-text">openssl/ssl.h&#39; file not found</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-openssl-support-require-openssl-library"><span class="nav-number">2.</span> <span class="nav-text">Enable openssl support, require openssl library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-http2-support-require-nghttp2-library"><span class="nav-number">3.</span> <span class="nav-text">Enable http2 support, require nghttp2 library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hiredis-hiredis-h-39-file-not-found"><span class="nav-number">4.</span> <span class="nav-text">hiredis/hiredis.h&#39; file not found</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译参数"><span class="nav-number">5.</span> <span class="nav-text">编译参数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#openssl-ssl-h’-file-not-found"><span class="nav-number">1.</span> <span class="nav-text">openssl/ssl.h’ file not found`</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-openssl-support-require-openssl-library"><span class="nav-number">2.</span> <span class="nav-text">Enable openssl support, require openssl library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-http2-support-require-nghttp2-library"><span class="nav-number">3.</span> <span class="nav-text">Enable http2 support, require nghttp2 library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hiredis-hiredis-h-39-file-not-found"><span class="nav-number">4.</span> <span class="nav-text">hiredis/hiredis.h&#39; file not found</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译参数"><span class="nav-number">5.</span> <span class="nav-text">编译参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#centos-安装swoole-扩展"><span class="nav-number">6.</span> <span class="nav-text">centos 安装swoole 扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#builtin-saddl-overflow"><span class="nav-number">6.1.</span> <span class="nav-text">__builtin_saddl_overflow</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -808,7 +817,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共104k字</span>
+  <span class="post-count">博客全站共111.2k字</span>
 </div>
 
         
