@@ -124,7 +124,7 @@
 
 
 
-  <meta name="keywords" content="Jenkins,">
+  <meta name="keywords" content="Consul,">
 
 
 
@@ -137,25 +137,22 @@
 
 
 
-<meta name="description" content="[TOC] 错误异常处理1. Failed to connect to repository : Error performing command: git ls-remote -h产生原因:  Jenkins服务器没有安装git 解决方式： 1. Jenkins服务器上查看git是否已安装及安装位置 1234567[root@ci ~]# git version-bash: git: comma">
-<meta name="keywords" content="Jenkins">
+<meta name="description" content="[TOC] 12345678910111213docker-machine create -d xhyve nginxdocker-machine create -d xhyve consuldocker-machine create -d xhyve work1docker-machine create -d xhyve work2docker-machine lsdocker-machine">
+<meta name="keywords" content="Consul">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins初始化及常见问题整理">
-<meta property="og:url" content="https://blog.zhimma.com/2019/06/19/Jenkins初始化及常见问题整理/index.html">
+<meta property="og:title" content="Consul初体验">
+<meta property="og:url" content="https://blog.zhimma.com/2020/03/20/Consul初体验/index.html">
 <meta property="og:site_name" content="zhimma&#39;s blog">
-<meta property="og:description" content="[TOC] 错误异常处理1. Failed to connect to repository : Error performing command: git ls-remote -h产生原因:  Jenkins服务器没有安装git 解决方式： 1. Jenkins服务器上查看git是否已安装及安装位置 1234567[root@ci ~]# git version-bash: git: comma">
+<meta property="og:description" content="[TOC] 12345678910111213docker-machine create -d xhyve nginxdocker-machine create -d xhyve consuldocker-machine create -d xhyve work1docker-machine create -d xhyve work2docker-machine lsdocker-machine">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/qs1.gif">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic3.png">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/qs2.gif">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic4.gif">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic5.png">
-<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic6.png">
-<meta property="og:updated_time" content="2019-06-19T09:39:52.885Z">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Library/Application%20Support/typora-user-images/image-20200203183743444.png">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Library/Application%20Support/typora-user-images/image-20200203185856803.png">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Library/Application%20Support/typora-user-images/image-20200203190041025.png">
+<meta property="og:updated_time" content="2020-03-20T02:51:41.221Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jenkins初始化及常见问题整理">
-<meta name="twitter:description" content="[TOC] 错误异常处理1. Failed to connect to repository : Error performing command: git ls-remote -h产生原因:  Jenkins服务器没有安装git 解决方式： 1. Jenkins服务器上查看git是否已安装及安装位置 1234567[root@ci ~]# git version-bash: git: comma">
-<meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/qs1.gif">
+<meta name="twitter:title" content="Consul初体验">
+<meta name="twitter:description" content="[TOC] 12345678910111213docker-machine create -d xhyve nginxdocker-machine create -d xhyve consuldocker-machine create -d xhyve work1docker-machine create -d xhyve work2docker-machine lsdocker-machine">
+<meta name="twitter:image" content="https://blog.zhimma.com/Users/zhimma/Library/Application%20Support/typora-user-images/image-20200203183743444.png">
 
 
 
@@ -185,13 +182,13 @@
 
 
 
-  <link rel="canonical" href="https://blog.zhimma.com/2019/06/19/Jenkins初始化及常见问题整理/">
+  <link rel="canonical" href="https://blog.zhimma.com/2020/03/20/Consul初体验/">
 
 
 
 
 
-  <title>Jenkins初始化及常见问题整理 | zhimma's blog</title>
+  <title>Consul初体验 | zhimma's blog</title>
   
 
 
@@ -394,7 +391,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/06/19/Jenkins初始化及常见问题整理/">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2020/03/20/Consul初体验/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhimma">
@@ -411,7 +408,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Jenkins初始化及常见问题整理</h1>
+          <h1 class="post-title" itemprop="name headline">Consul初体验</h1>
         
 
         <div class="post-meta">
@@ -423,8 +420,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-19T10:21:41+08:00">
-                2019-06-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T10:50:39+08:00">
+                2020-03-20
               </time>
             
 
@@ -446,8 +443,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
+                  <a href="/categories/容器化服务/" itemprop="url" rel="index">
+                    <span itemprop="name">容器化服务</span>
                   </a>
                 </span>
 
@@ -464,8 +461,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/06/19/Jenkins初始化及常见问题整理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/19/Jenkins初始化及常见问题整理/" itemprop="commentCount"></span>
+                <a href="/2020/03/20/Consul初体验/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/20/Consul初体验/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -503,7 +500,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -525,89 +522,57 @@
 
       
         <p>[TOC]</p>
-<h2 id="错误异常处理"><a href="#错误异常处理" class="headerlink" title="错误异常处理"></a>错误异常处理</h2><h3 id="1-Failed-to-connect-to-repository-Error-performing-command-git-ls-remote-h"><a href="#1-Failed-to-connect-to-repository-Error-performing-command-git-ls-remote-h" class="headerlink" title="1. Failed to connect to repository : Error performing command: git ls-remote -h"></a>1. Failed to connect to repository : Error performing command: git ls-remote -h</h3><p><strong>产生原因:</strong> </p>
-<p>Jenkins服务器没有安装git</p>
-<p><strong>解决方式：</strong></p>
-<p><strong>1. Jenkins服务器上查看git是否已安装及安装位置</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@ci ~]<span class="comment"># git version</span></span><br><span class="line">-bash: git: <span class="built_in">command</span> not found</span><br><span class="line">[root@ci ~]<span class="comment"># yum install git -y</span></span><br><span class="line">Complete!</span><br><span class="line"></span><br><span class="line">[root@ci ~]<span class="comment"># whereis git</span></span><br><span class="line">git: /usr/bin/git</span><br></pre></td></tr></table></figure>
-<p><strong>2. 打开Jenkins的 主页面 &gt; 系统管理 &gt; Global Tool Configuration</strong></p>
-<p>配置下git 的path   </p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/qs1.gif" alt=""></p>
-<h3 id="2-stdout-stderr-Host-key-verification-failed-fatal-Could-not-read-from-remote-repository-Please-make-sure-you-have-the-correct-access-rights-and-the-repository-exists"><a href="#2-stdout-stderr-Host-key-verification-failed-fatal-Could-not-read-from-remote-repository-Please-make-sure-you-have-the-correct-access-rights-and-the-repository-exists" class="headerlink" title="2. stdout: stderr: Host key verification failed. fatal: Could not read from remote repository.Please make sure you have the correct access rights and the repository exists."></a>2. stdout: stderr: Host key verification failed. fatal: Could not read from remote repository.Please make sure you have the correct access rights and the repository exists.</h3><p><strong>产生原因:</strong> </p>
-<p>代码仓库没有添加允许jenkins服务器用户拉取代</p>
-<p><strong>解决方式：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create -d xhyve nginx</span><br><span class="line">docker-machine create -d xhyve consul</span><br><span class="line">docker-machine create -d xhyve work1</span><br><span class="line">docker-machine create -d xhyve work2</span><br><span class="line">docker-machine ls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker-machine ls</span><br><span class="line">NAME     ACTIVE   DRIVER    STATE     URL                         SWARM   DOCKER     ERRORS</span><br><span class="line">consul   -        xhyve     Running   tcp://192.168.64.15:2376            v19.03.5</span><br><span class="line">nginx    -        xhyve     Running   tcp://192.168.64.14:2376            v19.03.5</span><br><span class="line">work1    -        xhyve     Running   tcp://192.168.64.16:2376            v19.03.5</span><br><span class="line">work2    -        xhyve     Running   tcp://192.168.64.17:2376            v19.03.5</span><br></pre></td></tr></table></figure>
+<h3 id="consul"><a href="#consul" class="headerlink" title="consul"></a>consul</h3><h4 id="进入consul机器"><a href="#进入consul机器" class="headerlink" title="进入consul机器"></a>进入consul机器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh consul</span><br></pre></td></tr></table></figure>
+<h4 id="运行consul节点容器"><a href="#运行consul节点容器" class="headerlink" title="运行consul节点容器"></a>运行consul节点容器</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -d \</span><br><span class="line">    -v /data:/data \</span><br><span class="line">    -p 8500:8500 \</span><br><span class="line">    -p 8600:8600/udp \</span><br><span class="line">    --name=consul \</span><br><span class="line">    consul agent -server -ui -node=server1 -bootstrap-expect=1 -client=0.0.0.0</span><br></pre></td></tr></table></figure>
+<h4 id="查看容器启动情况"><a href="#查看容器启动情况" class="headerlink" title="查看容器启动情况"></a>查看容器启动情况</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@consul:/home/docker# docker container ls</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                                                    NAMES</span><br><span class="line">2d9d0cdd3f13        consul              &quot;docker-entrypoint.s…&quot;   3 minutes ago       Up 3 minutes        8300-8302/tcp, 8600/tcp, 8301-8302/udp, 0.0.0.0:8500-&gt;8500/tcp, 0.0.0.0:8600-&gt;8600/udp   consul</span><br></pre></td></tr></table></figure>
+<h4 id="访问web页面"><a href="#访问web页面" class="headerlink" title="访问web页面"></a>访问web页面</h4><p><a href="http://192.168.64.15:8500/ui/dc1/services" target="_blank" rel="noopener">http://192.168.64.15:8500/ui/dc1/services</a></p>
+<p><img src="/Users/zhimma/Library/Application Support/typora-user-images/image-20200203183743444.png" alt="image-20200203183743444"></p>
+<h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><h4 id="进入nginx节点机器"><a href="#进入nginx节点机器" class="headerlink" title="进入nginx节点机器"></a>进入nginx节点机器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh nginx</span><br></pre></td></tr></table></figure>
+<h4 id="consul-template配置"><a href="#consul-template配置" class="headerlink" title="consul-template配置"></a>consul-template配置</h4><h5 id="安装consul-template"><a href="#安装consul-template" class="headerlink" title="安装consul-template"></a>安装consul-template</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https://releases.hashicorp.com/consul-template/0.24.1/consul-template_0.24.1_linux_amd64.tgz </span><br><span class="line"></span><br><span class="line">tar -zxf consul-template_0.24.1_linux_amd64.tgz</span><br><span class="line"></span><br><span class="line">mv consul-template /usr/bin/</span><br></pre></td></tr></table></figure>
+<h5 id="创建nginx-ctmpl模板"><a href="#创建nginx-ctmpl模板" class="headerlink" title="创建nginx.ctmpl模板"></a>创建nginx.ctmpl模板</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line"></span><br><span class="line">mkdir /data/nginx</span><br><span class="line"></span><br><span class="line">vi /data/nginx/nginx.ctmpl</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">upstream</span> http_backend &#123;</span><br><span class="line">    &#123;&#123;range service "nginx"&#125;&#125;</span><br><span class="line">    server &#123;&#123; .Address &#125;&#125;:&#123;&#123; .Port &#125;&#125;;</span><br><span class="line">    &#123;&#123; end &#125;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">8000</span>;</span><br><span class="line">    <span class="attribute">server_name</span> localhost;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://http_backend;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="启动consul-template服务"><a href="#启动consul-template服务" class="headerlink" title="启动consul-template服务"></a>启动consul-template服务</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul-template --consul-addr 192.168.64.15:8500 --template &quot;./nginx.ctmpl:vhost.conf:docker exec nginx nginx -s reload&quot; --log-level=info</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>创建秘钥可以参考第三个错误的解决步骤</p>
+<p>–consul-addr：指定consul服务的ip和端口；<br>./nginx.ctmpl：这是用nginx.ctmpl这个模板来启动进程，这是写的相对路径，也可以写绝对路径；<br>vhost.conf：nginx.ctmpl模板生成后的文件名，这也可以写绝对路径，如果不写绝对路径，这个文件就在当前目录生成（/usr/local/nginx/consul/）</p>
 </blockquote>
-<ul>
-<li><p>检查jenkins服务器ssh key</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[jenkins@ci ~]<span class="comment"># cd .ssh</span></span><br><span class="line">[jenkins@ci ~]<span class="comment"># ll</span></span><br><span class="line">total 8</span><br><span class="line">-rw-------. 1 root root 1675 Jun 19 11:06 id_rsa</span><br><span class="line">-rw-r--r--. 1 root root  389 Jun 19 11:06 id_rsa.pub</span><br></pre></td></tr></table></figure>
-<p>如果没有文件，则使用下面命令进行创建</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[jenkins@ci ~]<span class="variable">$ssh</span>-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/var/lib/jenkins/.ssh/id_rsa):</span><br><span class="line">// 一路回车即可</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在代码仓库添加jenkins服务器用户的公钥</p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic3.png" alt=""></p>
-</li>
-<li><p>在jenkins管理端创建全局凭证并使用</p>
-<ul>
-<li><p>创建全局凭证</p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/qs2.gif" alt=""></p>
-</li>
-<li><p>使用全局凭证</p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic4.gif" alt=""></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-Load-key-“-var-lib-jenkins-ssh-id-rsa”-Permission-denied"><a href="#3-Load-key-“-var-lib-jenkins-ssh-id-rsa”-Permission-denied" class="headerlink" title="3. Load key “/var/lib/jenkins/.ssh/id_rsa”: Permission denied"></a>3. Load key “/var/lib/jenkins/.ssh/id_rsa”: Permission denied</h3><p><a href="https://blog.csdn.net/cdnight/article/details/81078191" target="_blank" rel="noopener">参考1</a></p>
-<p>这里需要对Jenkins密钥进行配置</p>
-<h4 id="3-1-切换jenkins用户不成功"><a href="#3-1-切换jenkins用户不成功" class="headerlink" title="3-1 切换jenkins用户不成功"></a>3-1 切换jenkins用户不成功</h4><p>jenkins系统本身有bug的，下面切换用户会失败</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su jenkins</span><br></pre></td></tr></table></figure>
-<p>解决办法如下：</p>
-<p><code>/etc/passwd</code>文件中的<code>/bin/bash</code>被yum安装的时候变成了<code>/bin/false</code></p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic5.png" alt=""></p>
-<p>然后我执行<code>cat /etc/passwd</code>命令，果然被改成了<code>/bin/false</code></p>
-<p><code>cat /etc/passwd</code></p>
-<p>接着执行<code>sudo vim /etc/passwd</code>命令,把<code>false</code>改为<code>bash</code></p>
-<p><code>sudo vim /etc/passwd</code></p>
-<p>改完后使用<code>grep jenkins /etc/passwd</code> 查看下是否成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jenkins:x:997:995:Jenkins Automation Server:/var/lib/jenkins:/bin/bash</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-su-jenkins-bash-4-2问题"><a href="#3-2-su-jenkins-bash-4-2问题" class="headerlink" title="3-2 su jenkins  bash-4.2问题"></a>3-2 su jenkins  bash-4.2问题</h4><p>当我们切换到jenkins用户后，命令提示符的用户名不是jenkins而变成了<br><code>-bash-4.2#</code></p>
-<p>网上一查，原因是在安装jenkins时，jenkins只是创建了jenkins用户，并没有为其创建home目录。所以系统就不会在创建用户的时候，自动拷贝/etc/skel目录下的用户环境变量文件到用户家目录，也就导致这些文件不存在，出现-bash-4.2#的问题了<br>以下命令是在切换到jenkins用户下执行的！（只是用户现在显示的是-bash-4.2）</p>
-<p>这个时候呢，参考网上的做法我执行下面步骤： </p>
+<h5 id="验证consul-template服务状态"><a href="#验证consul-template服务状态" class="headerlink" title="验证consul-template服务状态"></a>验证consul-template服务状态</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep consul-template</span><br></pre></td></tr></table></figure>
+<p><img src="/Users/zhimma/Library/Application Support/typora-user-images/image-20200203185856803.png" alt="image-20200203185856803"></p>
+<p>我们看到在本目录下生成了vhost.conf</p>
+<p><img src="/Users/zhimma/Library/Application Support/typora-user-images/image-20200203190041025.png" alt="image-20200203190041025"></p>
+<blockquote>
+<p>由于我们是容器启动的nginx，所以需要挂载当前目录将这个加载在容器里面的nginx配置里面运行</p>
+</blockquote>
+<h4 id="运行nginx容器"><a href="#运行nginx容器" class="headerlink" title="运行nginx容器"></a>运行nginx容器</h4><h5 id="创建nginx-conf和conf-d目录"><a href="#创建nginx-conf和conf-d目录" class="headerlink" title="创建nginx.conf和conf.d目录"></a>创建nginx.conf和conf.d目录</h5><blockquote>
 <ol>
-<li><p>vim ~/.bash_profile<br>执行上面的命令，即使没有.bash_profile文件，linux会自动创建。 </p>
-</li>
-<li><p>然后再添加这句</p>
-<p><code>export PS1=&#39;[\u@\h \W]\$&#39;</code></p>
-</li>
-<li><p>我们最后再刷新.bash_profile文件，使其起作用</p>
-<p><code>source ~/.bash_profile</code></p>
-</li>
+<li>先运行一个nginx容器，随便挂载一个目录，拷贝出来nginx官方镜像生成的容器里面的conf.d目录和nginx.conf</li>
+<li>再删除这个容器，重新运行并且挂载nginx.conf和conf.d目录到新容器</li>
+<li>重新运行consul-template 并且重新指定vhost.conf的生成目录</li>
 </ol>
-<h4 id="3-2-su-jenkins-bash-4-2再解决"><a href="#3-2-su-jenkins-bash-4-2再解决" class="headerlink" title="3-2 su jenkins  bash-4.2再解决"></a>3-2 su jenkins  bash-4.2再解决</h4><p><a href="https://www.mgchen.com/227.html" target="_blank" rel="noopener">参考</a></p>
-<p>在上面操作后，我使用su jenkins 还是会有bash-4.2界面，只需把命令变为su - jenkins可以解决，同事给了一个其他的方法</p>
-<p>​    将/etc/skel/目录下 .bashrc和 .bash_profile 文件拷贝到用户的家目录下，然后对复制过去的文件授予该用户、用户组权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp /etc/skel/.bashrc /var/lib/jenkins/</span><br><span class="line">cp /etc/skel/.bash_profile /var/lib/jenkins/</span><br><span class="line">chown jenkins.jenkins /var/lib/jenkins/.bashrc</span><br><span class="line">chown jenkins.jenkins /var/lib/jenkins/.bash_profile</span><br></pre></td></tr></table></figure>
-<p>​    然后退出重新登录，就恢复正常了。</p>
-<p><strong>/etc/skel/目录作用：</strong></p>
-<p>​       用来存放新用户环境变量文件，添加新用户时，将该目录下文件拷贝到新用户家目录中。</p>
-<p>​       默认情况下该目录下都是隐藏文件（以.点开头的文件）；</p>
-<p>​       通过修改、添加、删除该目录下的文件，可为新添加的用户提供统一的、标准的、初始化用户环境。</p>
-<p>####3-3 su jenkins  需要输密码</p>
-<p>上面我们解决了bash-4.2，下次从root切换jenkins用户的时候，发现需要输入密码，下面解决下这个错误</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sudoers</span><br></pre></td></tr></table></figure>
-<p>添加<code>jenkins ALL=(ALL) NOPASSWD: ALL</code></p>
-<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/Jenkins/pic6.png" alt=""></p>
-<p>然后执行<code>/etc/init.d/jenkins restart</code></p>
-<h4 id="3-4-Jenkins密钥配置"><a href="#3-4-Jenkins密钥配置" class="headerlink" title="3-4 Jenkins密钥配置"></a>3-4 Jenkins密钥配置</h4><p><code>su - jenkins</code>切换到jenkins用户后，使用下面命令生成秘钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[jenkins@ci ~]$ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/var/lib/jenkins/.ssh/id_rsa):</span><br><span class="line">// 一路回车即可</span><br></pre></td></tr></table></figure>
-<p>生成后，</p>
-<ol>
-<li>把公钥添加到代码管理工具gitlab或者其他平台，使得jenkins用户有权限拉取代码</li>
-<li>把公钥添加到需要发布代码的服务器，使得jenkins所在服务器有权限进行scp 或 ssh操作</li>
-</ol>
-
+</blockquote>
+<p><strong>运行容器</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_tmp -v /zhimma:/zhimma -d nginx</span><br></pre></td></tr></table></figure>
+<p><strong>进入容器并拷贝目录</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@nginx:/data/nginx<span class="comment"># docker exec -it nginx_tmp bash</span></span><br><span class="line">root@49762af8ada3:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	etc  home  lib	lib64  media  mnt  opt	proc  root  run  sbin  srv  sys  tmp  usr  var	zhimma</span><br><span class="line"></span><br><span class="line">root@49762af8ada3:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@49762af8ada3:/etc/nginx<span class="comment"># cp -r conf.d/ nginx.conf  /zhimma/</span></span><br><span class="line">root@49762af8ada3:/etc/nginx<span class="comment"># exit</span></span><br></pre></td></tr></table></figure>
+<p><strong>删除容器</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f nginx_tmp</span><br></pre></td></tr></table></figure>
+<p><strong>放置文件</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@nginx:/data/nginx<span class="comment"># pwd</span></span><br><span class="line">/data/nginx</span><br><span class="line">root@nginx:/data/nginx<span class="comment"># ls</span></span><br><span class="line">nginx.ctmpl  vhost.conf</span><br><span class="line"></span><br><span class="line">root@nginx:/data/nginx<span class="comment"># mv /zhimma/conf.d/ /zhimma/nginx.conf ./</span></span><br><span class="line">root@nginx:/data/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d       nginx.conf   nginx.ctmpl  vhost.conf</span><br></pre></td></tr></table></figure>
+<h5 id="运行新容器"><a href="#运行新容器" class="headerlink" title="运行新容器"></a>运行新容器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx -p 8000:8000 -p 80:80 -v /data/nginx/nginx.conf:/etc/nginx/nginx.conf -v /data/nginx/conf.d:/etc/nginx/conf.d -d nginx</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此步完成后可以去容器里面看看挂载是否成功</p>
+</blockquote>
+<h5 id="重新运行consul-template"><a href="#重新运行consul-template" class="headerlink" title="重新运行consul-template"></a>重新运行consul-template</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul-template --consul-addr 192.168.64.15:8500 --template <span class="string">"./nginx.ctmpl:./conf.d/vhost.conf:docker exec nginx nginx -s reload"</span> --<span class="built_in">log</span>-level=info</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此步完成后可以去容器里面看看挂载是否成功</p>
+<p><code>-template</code>参数来指定模板的解析，规则是：冒号第一段是模板文件路径，第二段是生成的配置文件路径，第三段是额外指令（<strong>这里特别重要：如果我们没有nginx -s reload这个，配置更新之后，无法自动生效。这个代表每次配置改变之后，都会自动执行此指令，用来reload nginx的配置，以便自动生效</strong>）</p>
+</blockquote>
+<h3 id="work1"><a href="#work1" class="headerlink" title="work1"></a>work1</h3><h4 id="进入work1机器"><a href="#进入work1机器" class="headerlink" title="进入work1机器"></a>进入work1机器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh work1</span><br></pre></td></tr></table></figure>
+<h4 id="创建registrator容器"><a href="#创建registrator容器" class="headerlink" title="创建registrator容器"></a>创建registrator容器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name registrator --network=host -v /var/run/docker.sock:/tmp/docker.sock --restart=always gliderlabs/registrator:latest --ip 192.168.64.16 consul://192.168.64.15:8500</span><br></pre></td></tr></table></figure>
+<h5 id="创建nginx容器并修改index-html内容"><a href="#创建nginx容器并修改index-html内容" class="headerlink" title="创建nginx容器并修改index.html内容"></a>创建nginx容器并修改index.html内容</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name work_81  -p 81:80 -v /data/www/81/:/usr/share/nginx/html nginx</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"work1_81"</span> &gt;&gt; /data/www/81/index.html</span><br><span class="line"></span><br><span class="line">docker run -itd --name work_82  -p 82:80 -v /data/www/82/:/usr/share/nginx/html nginx</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"work1_82"</span> &gt;&gt; /data/www/82/index.html</span><br></pre></td></tr></table></figure>
+<h3 id="Work2"><a href="#Work2" class="headerlink" title="Work2"></a>Work2</h3><h4 id="进入work2机器"><a href="#进入work2机器" class="headerlink" title="进入work2机器"></a>进入work2机器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh work2</span><br></pre></td></tr></table></figure>
+<h4 id="创建registrator容器-1"><a href="#创建registrator容器-1" class="headerlink" title="创建registrator容器"></a>创建registrator容器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name registrator --network=host -v /var/run/docker.sock:/tmp/docker.sock --restart=always gliderlabs/registrator:latest --ip 192.168.64.17 consul://192.168.64.15:8500</span><br></pre></td></tr></table></figure>
+<h5 id="创建nginx容器并修改index-html内容-1"><a href="#创建nginx容器并修改index-html内容-1" class="headerlink" title="创建nginx容器并修改index.html内容"></a>创建nginx容器并修改index.html内容</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name work_83  -p 83:80 -v /data/www/83/:/usr/share/nginx/html nginx</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"work2_83"</span> &gt;&gt; /data/www/83/index.html</span><br><span class="line"></span><br><span class="line">docker run -itd --name work_84  -p 84:80 -v /data/www/84/:/usr/share/nginx/html nginx</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"work2_84"</span> &gt;&gt; /data/www/84/index.html</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -632,7 +597,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Jenkins/" rel="tag"><i class="fa fa-tag"></i> Jenkins</a>
+            <a href="/tags/Consul/" rel="tag"><i class="fa fa-tag"></i> Consul</a>
           
         </div>
       
@@ -645,8 +610,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/17/Go零零碎碎/" rel="next" title="Go零零碎碎">
-                <i class="fa fa-chevron-left"></i> Go零零碎碎
+              <a href="/2020/03/17/Rabbitmq名称解释/" rel="next" title="Rabbitmq名称解释">
+                <i class="fa fa-chevron-left"></i> Rabbitmq名称解释
               </a>
             
           </div>
@@ -654,10 +619,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/16/Lumen接入Azure的blob存储配置/" rel="prev" title="Lumen接入Azure的blob存储配置">
-                Lumen接入Azure的blob存储配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -811,7 +772,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#错误异常处理"><span class="nav-number">1.</span> <span class="nav-text">错误异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Failed-to-connect-to-repository-Error-performing-command-git-ls-remote-h"><span class="nav-number">1.1.</span> <span class="nav-text">1. Failed to connect to repository : Error performing command: git ls-remote -h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-stdout-stderr-Host-key-verification-failed-fatal-Could-not-read-from-remote-repository-Please-make-sure-you-have-the-correct-access-rights-and-the-repository-exists"><span class="nav-number">1.2.</span> <span class="nav-text">2. stdout: stderr: Host key verification failed. fatal: Could not read from remote repository.Please make sure you have the correct access rights and the repository exists.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Load-key-“-var-lib-jenkins-ssh-id-rsa”-Permission-denied"><span class="nav-number">1.3.</span> <span class="nav-text">3. Load key “/var/lib/jenkins/.ssh/id_rsa”: Permission denied</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-切换jenkins用户不成功"><span class="nav-number">1.3.1.</span> <span class="nav-text">3-1 切换jenkins用户不成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-su-jenkins-bash-4-2问题"><span class="nav-number">1.3.2.</span> <span class="nav-text">3-2 su jenkins  bash-4.2问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-su-jenkins-bash-4-2再解决"><span class="nav-number">1.3.3.</span> <span class="nav-text">3-2 su jenkins  bash-4.2再解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-Jenkins密钥配置"><span class="nav-number">1.3.4.</span> <span class="nav-text">3-4 Jenkins密钥配置</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#consul"><span class="nav-number">1.</span> <span class="nav-text">consul</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入consul机器"><span class="nav-number">1.1.</span> <span class="nav-text">进入consul机器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行consul节点容器"><span class="nav-number">1.2.</span> <span class="nav-text">运行consul节点容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看容器启动情况"><span class="nav-number">1.3.</span> <span class="nav-text">查看容器启动情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问web页面"><span class="nav-number">1.4.</span> <span class="nav-text">访问web页面</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx"><span class="nav-number">2.</span> <span class="nav-text">nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入nginx节点机器"><span class="nav-number">2.1.</span> <span class="nav-text">进入nginx节点机器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#consul-template配置"><span class="nav-number">2.2.</span> <span class="nav-text">consul-template配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装consul-template"><span class="nav-number">2.2.1.</span> <span class="nav-text">安装consul-template</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建nginx-ctmpl模板"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建nginx.ctmpl模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动consul-template服务"><span class="nav-number">2.2.3.</span> <span class="nav-text">启动consul-template服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#验证consul-template服务状态"><span class="nav-number">2.2.4.</span> <span class="nav-text">验证consul-template服务状态</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行nginx容器"><span class="nav-number">2.3.</span> <span class="nav-text">运行nginx容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建nginx-conf和conf-d目录"><span class="nav-number">2.3.1.</span> <span class="nav-text">创建nginx.conf和conf.d目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#运行新容器"><span class="nav-number">2.3.2.</span> <span class="nav-text">运行新容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重新运行consul-template"><span class="nav-number">2.3.3.</span> <span class="nav-text">重新运行consul-template</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work1"><span class="nav-number">3.</span> <span class="nav-text">work1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入work1机器"><span class="nav-number">3.1.</span> <span class="nav-text">进入work1机器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建registrator容器"><span class="nav-number">3.2.</span> <span class="nav-text">创建registrator容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建nginx容器并修改index-html内容"><span class="nav-number">3.2.1.</span> <span class="nav-text">创建nginx容器并修改index.html内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Work2"><span class="nav-number">4.</span> <span class="nav-text">Work2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入work2机器"><span class="nav-number">4.1.</span> <span class="nav-text">进入work2机器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建registrator容器-1"><span class="nav-number">4.2.</span> <span class="nav-text">创建registrator容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建nginx容器并修改index-html内容-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">创建nginx容器并修改index.html内容</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
