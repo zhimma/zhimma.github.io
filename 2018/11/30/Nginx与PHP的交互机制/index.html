@@ -1,37 +1,438 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="Nginx与PHP的交互机制(1)from there https:&#x2F;&#x2F;www.awaimai.com&#x2F;371.html 在搭建 LAMP&#x2F;LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这些概念之间的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx与PHP的交互机制(1)">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="Nginx与PHP的交互机制(1)from there https:&#x2F;&#x2F;www.awaimai.com&#x2F;371.html 在搭建 LAMP&#x2F;LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这些概念之间的关系。">
+<meta property="og:locale">
+<meta property="og:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/php-nginx-1.png">
+<meta property="og:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/php-nginx-2.png">
+<meta property="og:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/cgi.png">
+<meta property="og:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/nginx-fastcgi-php.png">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:09:24.158Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/php-nginx-1.png">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Nginx与PHP的交互机制(1) | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6-1"><span class="nav-number">1.</span> <span class="nav-text">Nginx与PHP的交互机制(1)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGI"><span class="nav-number">1.2.</span> <span class="nav-text">CGI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FastCGI"><span class="nav-number">1.3.</span> <span class="nav-text">FastCGI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-CGI"><span class="nav-number">1.4.</span> <span class="nav-text">PHP-CGI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-FPM"><span class="nav-number">1.5.</span> <span class="nav-text">PHP-FPM</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nginx与PHP的交互机制(1)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:09:24" itemprop="dateModified" datetime="2021-03-23T18:09:24+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Nginx与PHP的交互机制-1"><a href="#Nginx与PHP的交互机制-1" class="headerlink" title="Nginx与PHP的交互机制(1)"></a>Nginx与PHP的交互机制(1)</h1><p>from there <a target="_blank" rel="noopener" href="https://www.awaimai.com/371.html">https://www.awaimai.com/371.html</a></p>
+<p>在搭建 LAMP/LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这些概念之间的关系。</p>
+ <span id="more"></span>
+
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>在整个网站架构中，Web Server（如Apache）只是内容的分发者。举个栗子，如果客户端请求的是 index.html，那么Web Server会去文件系统中找到这个文件，发送给浏览器，这里分发的是静态数据。</p>
+<p><img src="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/php-nginx-1.png" alt="php-nginx-1"></p>
+<p>如果请求的是 index.php，根据配置文件，Web Server知道这个不是静态文件，需要去找 PHP 解析器来处理，那么他会把这个请求简单处理，然后交给PHP解析器。</p>
+<p><img src="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/php-nginx-2.png" alt="php-nginx-2"></p>
+<p>当Web Server收到 index.php 这个请求后，会启动对应的 CGI 程序，这里就是PHP的解析器。接下来PHP解析器会解析php.ini文件，初始化执行环境，然后处理请求，再以规定CGI规定的格式返回处理后的结果，退出进程，Web server再把结果返回给浏览器。这就是一个完整的动态PHP Web访问流程</p>
+<h2 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a><strong>CGI</strong></h2><p><strong>CGI</strong>是 Web Server 与 Web Application 之间数据交换的一种协议。<br>CGI全称是“公共网关接口”(Common Gateway Interface)，描述的是<strong>服务器和请求处理程序之间传输数据的一种标准</strong>（服务器与你的或其它机器上的程序进行“交谈”的一种工具）。 所以，<code>CGI</code>是一种协议。<code>CGI</code>可用于任何语言，只要该语言具有标准的输出、输入以及环境变量。如perl、php等语言。 以nginx和php为例，我们可以理解为，这是php在与nginx服务器之间交互时，对传输数据的一种约定。</p>
+<p><strong>CGI的原理是什么?</strong><br>当需要请求使用网关的资源时，服务器会请辅助应用程序来处理请求（比如nginx会请php程序来处理请求）。 服务器会将辅助应用程序的数据传送给网关。然后网关会向服务器返回一条响应或者响应数据，服务器再将响应或响应数据转发给客户端。<br><img src="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/cgi.png" alt="cgi"></p>
+<p>由此我们可以清楚两点：</p>
+<ol>
+<li>服务器和网关是相互独立的应用程序</li>
+<li>服务器是应用程序和网关之间的一座桥梁</li>
+</ol>
+<p>由此，我们可知<code>CGI</code>有一个致命的弱点，<strong>即应用程序的每次请求，都要引发一个全新的进程</strong>。所以，服务器和网关之间的分离会造成性能的 耗费，会限制使用<code>CGI</code>的服务器的性能，并且会加重服务端机器资源的负担。<br>好啦，重角要登场了。后来为了解决这个问题，出现了<code>FastCGI</code>，也就是快速的<code>CGI</code>。 接下来，我们再详细的了解下<code>FastCGI</code>。</p>
+<h2 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a><strong>FastCGI</strong></h2><p> <strong>FastCGI</strong>:(Fast Common Gateway Interface),即快速通用网关接口，是一种让交互程序与Web服务器通信的协议。它是<code>CGI</code>的增强版本 <code>FastCGI</code>致力于减少网页服务器与CGI程序之间互动的开销，从而使服务器可以同时处理更多的网页请求。<br>以上来自维基百科，我们可以由此了解到，<code>FastCGI</code>，<strong>同<code>CGI</code>一样，也是一种协议，</strong>只不过它是<code>CGI</code>的增强版本。<br><strong>那<code>FastCGI</code>是如何增强性能的呢？</strong> <code>FastCGI</code>接口模拟了<code>CGI</code>，但<code>FastCGI</code>是作为持久守护进程运行的，消除了为每个请求建立或拆除新进程所带来的性能损耗。也就是允许，一个进程内可以处理多个请求。 也就说CGI解释器保持在内存中，并接受了<code>FastCGI</code>进程管理和调度，所以它可以提供更好的性能，可扩展性，故障切换等特点</p>
+<p><strong>FastCGI的特点:</strong></p>
+<ol>
+<li>FastCGI与语言无关</li>
+<li>FastCGI应用在进程中，独立于核心网络服务器，提供了一个比API环境更安全的环境。 APIs的代码和web服务器的应用的核心是 紧紧关联的。这也就意味着在API应用程序的错误可能会损坏其它应用程序或核心服务器。恶意API应用程序代码甚至可以窃取另一个应用程序或核心服务器密钥。</li>
+<li>FastCGI技术目前支持PHP,C/C++, Java lanuage, Perl, Tcl, Python, SmallTalk, Ruby etc.. 它在Apache, ISS, Lighttpd和其他流行的 服务器中的相关模块都是可以使用的。FastCGI不依赖于任何服务器体系结构，所以即使服务器在技术上改变了，FastCGI还是稳定的</li>
+</ol>
+<p><strong>FastCGI的工作原理</strong></p>
+<ol>
+<li>Web Server 启动时载入FastCGI进程管理器 (IIS ISAPI 或Apache Module)</li>
+<li>FastCGI进程管理器首先初始化自己，启动一批CGI解释器进程（可见多个php-cgi），然后等待来自Web Server的连接。</li>
+<li>当Web Server中的一个客户端请求达到时， FastCGI进程管理器会选择并连接一个CGI解释器。Web server的CGI环境变量和标准输入会被送达FastCGI进程的php-cgi。</li>
+<li>FastCGI子进程从同一连接完成返还给Web Server的标准输出和错误信息。当请求进程完成后，FastCGI进程会关闭此连接。FastCGI会等待并出来来自FastCGI进程管理器（运行在Web Server中的）的下一个连接。 在CGI模式，php-cgi然后会退出。</li>
+</ol>
+<p><img src="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/nginx-fastcgi-php.png" alt="nginx-fastcgi-php"></p>
+<p>如上图所示，FastCGI的下游，是CGI-APP，在我们的LNMP架构里，这个CGI-APP就是PHP程序。<br>而FastCGI的上游是Nginx，他们之间有一个通信载体，即图中的socket。<br>上图中的Pre-fork，则对应着我们PHP-FPM的启动，也就是在我们启动PHP-FPM时便会根据用户配置启动诸多FastCGI触发器（FastCGI Wrapper）。</p>
+<p><strong>FastCGI的不足</strong> 因为是多进程，所以比CGI多线程消耗更多的服务器内存，PHP-CGI解释器每进程消耗7至25兆内存，将这个数字乘以50或100就是很大的内存数。 Nginx 0.8.46+PHP 5.2.14(FastCGI)服务器在3万并发连接下，开启的10个Nginx进程消耗150M内存（15M_10=150M），开启的64个php-cgi进程消耗1280M内存（20M_64=1280M），加上系统自身消耗的内存，总共消耗不到2GB内存。 如果服务器内存较小，完全可以只开启25个php-cgi进程，这样php-cgi消耗的总内存数才500M。 <a target="_blank" rel="noopener" href="http://zyan.cc/nginx_php_v6/">上面的数据摘自Nginx 0.8.x + PHP 5.2.13(FastCGI)搭建胜过Apache十倍的Web服务器(第6版)</a></p>
+<h2 id="PHP-CGI"><a href="#PHP-CGI" class="headerlink" title="PHP-CGI"></a><strong>PHP-CGI</strong></h2><p><strong>PHP-CGI</strong>：是 PHP （Web Application）对 Web Server 提供的 CGI 协议的接口程序,是PHP自带的FastCGI管理器。</p>
+<p><strong>PHP-CGI的不足:</strong></p>
+<ol>
+<li>php-cgi变更php.ini配置后需重启php-cgi才能让新的php-ini生效，不可以平滑重启</li>
+<li>直接杀死php-cgi进程,php就不能运行了。(PHP-FPM和Spawn-FCGI就没有这个问题,守护进程会平滑从新生成新的子进程。）</li>
+</ol>
+<h2 id="PHP-FPM"><a href="#PHP-FPM" class="headerlink" title="PHP-FPM"></a><strong>PHP-FPM</strong></h2><p><strong>PHP-FPM</strong>：是 PHP（Web Application）对 Web Server 提供的 FastCGI 协议的接口程序，额外还提供了相对智能一些任务管理。<br>PHP-FPM的全称是PHP FastCGI Process Manager。<br>它是 PHP 针对 FastCGI 协议的具体实现，它会通过用户配置来管理一批FastCGI进程.<br>因此它也是PHP 在多种服务器端应用编程端口（SAPI：cgi、fast-cgi、cli、isapi、apache）里使用最普遍、性能最佳的一款进程管理器。<br>在PHP-FPM管理下的某个FastCGI进程挂了，PHP-FPM会根据用户配置来看是否要重启补全。<br>PHP-FPM更像是管理器，负责管理PHP FastCGI，而真正衔接Nginx与PHP的则是FastCGI进程。<br>因此，CGI是通用网关协议，FastCGI则是一种常驻进程的CGI模式程序，而PHP-FPM更像是管理器，用于管理FastCGI进程。<br>WEB 中:</p>
+<ul>
+<li>  Web Server 一般指Apache、Nginx、IIS、Lighttpd、Tomcat等服务器，</li>
+<li>  Web Application 一般指PHP、Java、Asp.net等应用程序。</li>
+</ul>
+<p><strong>Nginx+PHP的工程模式下，两位主角分工明确，Nginx负责承载HTTP请求的响应与返回，以及超时控制记录日志等HTTP相关的功能，而PHP则负责处理具体请求要做的业务逻辑，它们俩的这种合作模式也是常见的分层架构设计中的一种，在它们各有专注面的同时，FastCGI又很好的将两块衔接，保障上下游通信交互</strong>，这种通过某种协议或规范来衔接好上下游的模式，在我们日常的PHP应用开发中也有这样的思想落地，譬如我们所开发的<strong>高性能API</strong>，具体的Client到底是PC、APP还是某个其他程序，我们不关心，而这些PC、APP、第三方程序也不关心我们的PHP代码实现，他们按照API的规范来请求做处理即可</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+              <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/Nginx%E9%85%8D%E7%BD%AE%E6%95%B4%E7%90%86/" rel="prev" title="Nginx配置整理">
+                  <i class="fa fa-chevron-left"></i> Nginx配置整理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/Nginx/" rel="next" title="Nginx">
+                  Nginx <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

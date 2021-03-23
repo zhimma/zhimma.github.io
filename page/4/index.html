@@ -1,23 +1,1183 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-{% block title %}{{ config.title }}{% if theme.index_with_subtitle and config.subtitle %} - {{config.subtitle }}{% endif %}{% endblock %}
+<link rel="stylesheet" href="/css/main.css">
 
-{% block page_class %}
-  {% if is_home() %}page-home{% endif -%}
-{% endblock %}
 
-{% block content %}
-  <section id="posts" class="posts-expand">
-    {% for post in page.posts %}
-      {{ post_template.render(post, true) }}
-    {% endfor %}
-  </section>
 
-  {% include '_partials/pagination.swig' %}
-{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="zhimma&#39;s 技术blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="zhimma&#39;s blog">
+<meta property="og:url" content="https://blog.zhimma.com/page/4/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="zhimma&#39;s 技术blog">
+<meta property="og:locale">
+<meta property="article:author" content="zhimma">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.zhimma.com/page/4/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner index posts-expand">
+      
+
+      
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Git%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AAssh-key/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Git%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AAssh-key/" class="post-title-link" itemprop="url">Git生成多个ssh key</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-01-24 17:11:10" itemprop="dateModified" datetime="2019-01-24T17:11:10+08:00">2019-01-24</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>当使用了多个不同的git版本控制系统，分别有不同账号时，如一个在github上面有项目，一个在coding或者开源中国上面的有项目时，如果2者的邮箱不同时，就会涉及一个问题，生成的ssh key 会相互覆盖，必然有一个无法使用；</p>
+<p>下面记录下解决方法：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Git%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AAssh-key/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/JSON%E5%92%8CJSONP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/JSON%E5%92%8CJSONP/" class="post-title-link" itemprop="url">JSON和JSONP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:20" itemprop="dateModified" datetime="2021-03-23T18:08:20+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cors/" itemprop="url" rel="index"><span itemprop="name">Cors</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><a target="_blank" rel="noopener" href="http://note.youdao.com/">有一篇文章</a>介绍了跨域问题的几种解决方法,其中有一种是使用jsonP方式解决,那么今天来详细说说Json和JsonP</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>说到AJAX就会不可避免的面临两个问题,<strong>第一个是AJAX以何种格式来交换数据?第二个是跨域的需求如何解决?</strong>,目前为止最被推崇或者说首选的方案还是用<strong>JSON来传数据</strong>,靠<strong>JSONP来跨域</strong>.而这就是本文将要讲述的内容</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/JSON%E5%92%8CJSONP/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/" class="post-title-link" itemprop="url">Laravel开发前期准备</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-01-24 17:12:16" itemprop="dateModified" datetime="2019-01-24T17:12:16+08:00">2019-01-24</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Laravel/" itemprop="url" rel="index"><span itemprop="name">Laravel</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>环境 ： windows10</p>
+<p>本地开发环境 ：<a target="_blank" rel="noopener" href="https://github.com/salamander-mh/SalamanderWnmp">SalamanderWnmp</a></p>
+<p>Phpstrom版本：Phpstrom 2017.1 </p>
+<p>Laravel版本：Laravel5.4</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">Mac环境ELK搭建</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:36" itemprop="dateModified" datetime="2021-03-23T18:08:36+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mac/" itemprop="url" rel="index"><span itemprop="name">Mac</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ELK/" itemprop="url" rel="index"><span itemprop="name">ELK</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="安装Java"><a href="#安装Java" class="headerlink" title="安装Java"></a>安装Java</h2><p>略。。。</p>
+<p><del>这里我使用<code>brew install java</code>命令安装</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">☁  ~  java -version</span><br><span class="line">java version &quot;11&quot; 2018-09-25</span><br><span class="line">Java(TM) SE Runtime Environment 18.9 (build 11+28)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11+28, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<p>不要使用上述方式安装，有坑</p>
+<p>下载这个文件安装java:<a target="_blank" rel="noopener" href="https://edelivery.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-macosx-x64.dmg">https://edelivery.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-macosx-x64.dmg</a></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Mac%E9%87%8D%E5%90%AFphp-fpm%E5%A4%B1%E8%B4%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Mac%E9%87%8D%E5%90%AFphp-fpm%E5%A4%B1%E8%B4%A5/" class="post-title-link" itemprop="url">Mac重启php-fpm失败</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:40" itemprop="dateModified" datetime="2021-03-23T18:08:40+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mac/" itemprop="url" rel="index"><span itemprop="name">Mac</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="Mac重启php-fpm失败"><a href="#Mac重启php-fpm失败" class="headerlink" title="Mac重启php-fpm失败"></a><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c9306c69e8b4">Mac重启php-fpm失败</a></h3><p>关闭</p>
+<p><code>killall -HUP php-fpm</code></p>
+<p>重启，这里报错，提示找不到文件</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Mac%E9%87%8D%E5%90%AFphp-fpm%E5%A4%B1%E8%B4%A5/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">MySQL数据类型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:47" itemprop="dateModified" datetime="2021-03-23T18:08:47+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="MySQL数据类型"><a href="#MySQL数据类型" class="headerlink" title="MySQL数据类型"></a>MySQL数据类型</h2><h3 id="char和varchar"><a href="#char和varchar" class="headerlink" title="char和varchar"></a>char和varchar</h3><h3 id="varchar数据类型的变化"><a href="#varchar数据类型的变化" class="headerlink" title="varchar数据类型的变化"></a>varchar数据类型的变化</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/MySQL%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B71364/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/MySQL%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B71364/" class="post-title-link" itemprop="url">MySQL添加新用户1364</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:55" itemprop="dateModified" datetime="2021-03-23T18:08:55+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>MySQL5.7添加新用户 出现<code>ERROR 1364 (HY000): Field &#39;ssl_cipher&#39; doesn&#39;t have a default value</code></p>
+<h2 id="解决方法1："><a href="#解决方法1：" class="headerlink" title="解决方法1："></a>解决方法1：</h2><p><code>insert into user (host,user,authentication_string,select_priv,insert_priv,update_priv) values (&#39;%&#39; , &#39;mma&#39; ,PASSWORD(&#39;123456&#39;),&#39;Y&#39;,&#39;Y&#39;,&#39;Y&#39;);</code></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/MySQL%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B71364/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Mycat%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Mycat%E5%AE%9E%E8%B7%B5/" class="post-title-link" itemprop="url">MyCat实践</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:44" itemprop="dateModified" datetime="2021-03-23T18:08:44+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>接着上一篇MySql主从配置完成后，下面实战下Mycat做读写分离和分库分表</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://foofish.net/mysql-for-mycat.html">https://foofish.net/mysql-for-mycat.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/joylee/p/7513038.html">https://www.cnblogs.com/joylee/p/7513038.html</a></p>
+<p>[TOC]</p>
+<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><p>windows 下4台服务器，真实机IP：192.168.2.107，其中</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Mycat%E5%AE%9E%E8%B7%B5/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Nginx/" class="post-title-link" itemprop="url">Nginx</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:09:05" itemprop="dateModified" datetime="2021-03-23T18:09:05+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h3><p>Mainline version        开发版本</p>
+<p>Stable version        稳定版本</p>
+<p>Legacy versions        历史版本</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Nginx/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">Nginx与PHP的交互机制(1)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:09:24" itemprop="dateModified" datetime="2021-03-23T18:09:24+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Nginx与PHP的交互机制-1"><a href="#Nginx与PHP的交互机制-1" class="headerlink" title="Nginx与PHP的交互机制(1)"></a>Nginx与PHP的交互机制(1)</h1><p>from there <a target="_blank" rel="noopener" href="https://www.awaimai.com/371.html">https://www.awaimai.com/371.html</a></p>
+<p>在搭建 LAMP/LNMP 服务器时，会经常遇到 PHP-FPM、FastCGI和CGI 这几个概念。如果对它们一知半解，很难搭建出高性能的服务器。接下来我们就以图形方式，解释这些概念之间的关系。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/30/Nginx%E4%B8%8EPHP%E7%9A%84%E4%BA%A4%E4%BA%92%E6%9C%BA%E5%88%B6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

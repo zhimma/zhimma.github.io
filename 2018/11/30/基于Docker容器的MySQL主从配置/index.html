@@ -1,37 +1,448 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="基于Docker容器的MySQL主从配置我本机的镜像 1234docker imagesREPOSITORY                                     TAG                 IMAGE ID           ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Docker容器的MySQL主从配置">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="基于Docker容器的MySQL主从配置我本机的镜像 1234docker imagesREPOSITORY                                     TAG                 IMAGE ID           ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:05:53.783Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>基于Docker容器的MySQL主从配置 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">基于Docker容器的MySQL主从配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#binlog%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">binlog方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#master%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.1.1.</span> <span class="nav-text">master数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-my-cnf"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">修改MySQL配置文件(my.cnf)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E7%94%A8%E6%88%B7"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">创建复制用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BMySQL"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">查看MySQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slave%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.1.2.</span> <span class="nav-text">slave数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9server-uuid"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">修改server-uuid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9MySQL%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-my-cnf-1"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">修改MySQL配置文件(my.cnf)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E4%B8%BB%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">导入主备份文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E5%90%AFslave%E5%90%8C%E6%AD%A5"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">开启slave同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%98%AF%E5%90%A6%E5%90%8C%E6%AD%A5%E6%88%90%E5%8A%9Fslave%E8%BF%9E%E6%8E%A5master%E6%88%90%E5%8A%9F"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">查看是否同步成功slave连接master成功</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于Docker容器的MySQL主从配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:05:53" itemprop="dateModified" datetime="2021-03-23T18:05:53+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="基于Docker容器的MySQL主从配置"><a href="#基于Docker容器的MySQL主从配置" class="headerlink" title="基于Docker容器的MySQL主从配置"></a>基于Docker容器的MySQL主从配置</h1><p>我本机的镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line"></span><br><span class="line">REPOSITORY                                     TAG                 IMAGE ID           </span><br><span class="line">ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da5efb40932</span><br></pre></td></tr></table></figure>
+
+<p>环境搭建及MySQL安装步骤省略，根据已有的镜像创建容器</p>
+<ol>
+<li><p>master数据库</p>
+<p><code>docker run -it -d --privileged=true --name master -p 33060:3306 -p 220:22 -p 8080:80 -p 1024:1024 -p 16379:6379 -p 9001:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+</li>
+<li><p>slave1数据库</p>
+<p><code>docker run -it -d --privileged=true --name slave1 -p 33061:3306 -p 221:22 -p 8081:80 -p 2024:1024 -p 26379:6379 -p 9002:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+</li>
+<li><p>slave2数据库</p>
+<p><code>docker run -it -d --privileged=true --name slave2 -p 33062:3306 -p 222:22 -p 8082:80 -p 3024:1024 -p 36379:6379 -p 9003:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+<p>……  slaveN</p>
+ <span id="more"></span></li>
+</ol>
+<h2 id="binlog方式"><a href="#binlog方式" class="headerlink" title="binlog方式"></a>binlog方式</h2><h3 id="master数据库"><a href="#master数据库" class="headerlink" title="master数据库"></a>master数据库</h3><p>真实机IP：192.168.2.107   容器IP:172.17.0.2</p>
+<h4 id="修改MySQL配置文件-my-cnf"><a href="#修改MySQL配置文件-my-cnf" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;1			 #服务器ID</span><br></pre></td></tr></table></figure>
+
+<p>附一份全一点的配置,指定需要同步的数据库和不需要同步的数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server-id&#x3D;1</span><br><span class="line">log-bin&#x3D;mysql-bin</span><br><span class="line">log-bin-index&#x3D;master-bin.index</span><br><span class="line">binlog_format&#x3D;mixed  &#x2F;&#x2F; binlog 日志文件格式</span><br><span class="line">sync-binlog&#x3D;1		&#x2F;&#x2F;</span><br><span class="line">binlog-ignore-db&#x3D;mysql</span><br><span class="line">binlog-ignore-db&#x3D;product</span><br><span class="line">binlog-do-db&#x3D;test</span><br><span class="line">binlog-do-db&#x3D;local</span><br></pre></td></tr></table></figure>
+
+
+
+<p>重启MySQL；</p>
+<h4 id="创建复制用户"><a href="#创建复制用户" class="headerlink" title="创建复制用户"></a>创建复制用户</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>	<span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">	<span class="keyword">GRANT</span> REPLICATION SLAVE <span class="keyword">ON</span> . <span class="keyword">TO</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">	或者</span><br><span class="line"><span class="number">2.</span>  <span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> MASTER STATUS;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="查看MySQL"><a href="#查看MySQL" class="headerlink" title="查看MySQL"></a>查看MySQL</h4><p><code>show master status</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show master status;</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000001 |      998 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果是项目中途使用主从复制，可以使用下面方法迁移数据</p>
+<ol>
+<li><p>锁定所有表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; FLUSH TABLES WITH READ LOCK;</span><br><span class="line">Query OK, 0 rows affected (2.59 sec)</span><br></pre></td></tr></table></figure></li>
+<li><p>备份表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac ~]# mysqldump -uroot -p123456 --all-databases -l -F &gt;&#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure></li>
+<li><p>解锁</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; UNLOCK TABLES; </span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></li>
+<li><p>传输数据到从库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -P 221&#x2F;222 &#x2F;tmp&#x2F;all_db.sql root@192.168.2.107:&#x2F;tmp </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="slave数据库"><a href="#slave数据库" class="headerlink" title="slave数据库"></a>slave数据库</h3><h4 id="修改server-uuid"><a href="#修改server-uuid" class="headerlink" title="修改server-uuid"></a>修改server-uuid</h4><p>将<code>/var/lib/mysql/auto.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[auto]</span><br><span class="line">server-uuid&#x3D;f781e2b4-28e1-11e8-a1c0-0242ac110001</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改MySQL配置文件-my-cnf-1"><a href="#修改MySQL配置文件-my-cnf-1" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;101			 #服务器ID</span><br></pre></td></tr></table></figure>
+
+<p>重启MySQL；</p>
+<h4 id="导入主备份文件"><a href="#导入主备份文件" class="headerlink" title="导入主备份文件"></a>导入主备份文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@9ae039d46474 tmp]# mysql -uroot -p123456 &lt; &#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启slave同步"><a href="#开启slave同步" class="headerlink" title="开启slave同步"></a>开启slave同步</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;192.168.2.107&#39;,MASTER_PORT&#x3D;33060, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;172.17.0.2&#39;, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">start slave</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看是否同步成功slave连接master成功"><a href="#查看是否同步成功slave连接master成功" class="headerlink" title="查看是否同步成功slave连接master成功"></a>查看是否同步成功slave连接master成功</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; start slave;</span><br><span class="line"></span><br><span class="line">Query OK, 0 rows affected (0.43 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show slave status\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Queueing master event to the relay log</span><br><span class="line">                  Master_Host: 192.168.2.107</span><br><span class="line">                  Master_User: zhimma</span><br><span class="line">                  Master_Port: 33060</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: mysql-bin.000003</span><br><span class="line">          Read_Master_Log_Pos: 4</span><br><span class="line">               Relay_Log_File: 06e5a050e74b-relay-bin.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: mysql-bin.000001</span><br><span class="line">              Slave_IO_Running: Yes</span><br><span class="line">              Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 998</span><br><span class="line">              Relay_Log_Space: 1483</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">                  Master_UUID: f781e2b4-28e1-11e8-a1c0-0242ac110002</span><br><span class="line">             Master_Info_File: &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;master.info</span><br><span class="line">                    SQL_Delay: 0</span><br><span class="line">          SQL_Remaining_Delay: NULL</span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates</span><br><span class="line">           Master_Retry_Count: 86400</span><br><span class="line">                  Master_Bind: </span><br><span class="line">      Last_IO_Error_Timestamp: </span><br><span class="line">     Last_SQL_Error_Timestamp: </span><br><span class="line">               Master_SSL_Crl: </span><br><span class="line">           Master_SSL_Crlpath: </span><br><span class="line">           Retrieved_Gtid_Set: </span><br><span class="line">            Executed_Gtid_Set: </span><br><span class="line">                Auto_Position: 0</span><br><span class="line">         Replicate_Rewrite_DB: </span><br><span class="line">                 Channel_Name: </span><br><span class="line">           Master_TLS_Version: </span><br><span class="line">1 row in set (0.20 sec)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Slave_IO_Running: Yes</span><br><span class="line">Slave_SQL_Running: Yes</span><br></pre></td></tr></table></figure>
+
+<p>同步成功</p>
+<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/clsn/p/8150036.html">http://www.cnblogs.com/clsn/p/8150036.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/%E5%B8%B8%E7%94%A8%E7%9A%84git/" rel="prev" title="常用的Git">
+                  <i class="fa fa-chevron-left"></i> 常用的Git
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/sea.js%E4%B8%AD%E5%8A%A0%E8%BD%BDlayer%EF%BC%8C%E7%BC%BA%E5%B0%91css%E6%96%87%E4%BB%B6%E8%A7%A3%E5%86%B3/" rel="next" title="sea.js中加载layer，缺少css文件解决">
+                  sea.js中加载layer，缺少css文件解决 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

@@ -1,37 +1,439 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="安装Java略。。。 这里我使用brew install java命令安装 1234☁  ~  java -versionjava version &quot;11&quot; 2018-09-25Java(TM) SE Runtime Environment 18.9 (build 11+28)Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11+28">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac环境ELK搭建">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="安装Java略。。。 这里我使用brew install java命令安装 1234☁  ~  java -versionjava version &quot;11&quot; 2018-09-25Java(TM) SE Runtime Environment 18.9 (build 11+28)Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11+28">
+<meta property="og:locale">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Pictures/ELK/downloadE.png">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Pictures/ELK/downloadK.png">
+<meta property="og:image" content="https://blog.zhimma.com/Users/zhimma/Pictures/ELK/downloadL.png">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:08:36.809Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="ELK">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.zhimma.com/Users/zhimma/Pictures/ELK/downloadE.png">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Mac环境ELK搭建 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Java"><span class="nav-number">1.</span> <span class="nav-text">安装Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Elasticsearch安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Elasticsearch"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置 Elasticsearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Elasticsearch-%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">配置 Elasticsearch 内存占用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-number">2.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kibana%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">kibana安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-number">3.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="nav-number">3.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-1"><span class="nav-number">3.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logstash%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">Logstash安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-2"><span class="nav-number">4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-2"><span class="nav-number">4.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Logstash"><span class="nav-number">4.2.1.</span> <span class="nav-text">配置 Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Logstash-%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8"><span class="nav-number">4.2.2.</span> <span class="nav-text">配置 Logstash 内存占用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%A1%B9%E7%9B%AE%E6%88%96%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">4.3.</span> <span class="nav-text">添加项目或自定义配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-2"><span class="nav-number">4.4.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE"><span class="nav-number">5.</span> <span class="nav-text">## 访问</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/Mac%E7%8E%AF%E5%A2%83ELK%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mac环境ELK搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:36" itemprop="dateModified" datetime="2021-03-23T18:08:36+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mac/" itemprop="url" rel="index"><span itemprop="name">Mac</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ELK/" itemprop="url" rel="index"><span itemprop="name">ELK</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="安装Java"><a href="#安装Java" class="headerlink" title="安装Java"></a>安装Java</h2><p>略。。。</p>
+<p><del>这里我使用<code>brew install java</code>命令安装</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">☁  ~  java -version</span><br><span class="line">java version &quot;11&quot; 2018-09-25</span><br><span class="line">Java(TM) SE Runtime Environment 18.9 (build 11+28)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11+28, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<p>不要使用上述方式安装，有坑</p>
+<p>下载这个文件安装java:<a target="_blank" rel="noopener" href="https://edelivery.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-macosx-x64.dmg">https://edelivery.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-macosx-x64.dmg</a></p>
+ <span id="more"></span>
+
+<h2 id="Elasticsearch安装配置"><a href="#Elasticsearch安装配置" class="headerlink" title="Elasticsearch安装配置"></a>Elasticsearch安装配置</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>官网下载对应平台的安装包</p>
+<p><img src="/Users/zhimma/Pictures/ELK/downloadE.png" alt="下载Elasticsearch"></p>
+<p>放到合适的位置，我放置后解压的目录是<code>/Users/zhimma/Soft/elasticsearch-6.4.1</code></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="配置-Elasticsearch"><a href="#配置-Elasticsearch" class="headerlink" title="配置 Elasticsearch"></a>配置 Elasticsearch</h4><p>下面是我的配置文件内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">☁  config  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;elasticsearch-6.4.1&#x2F;config</span><br><span class="line">☁  config  grep &#39;^[a-z]&#39; elasticsearch.yml</span><br><span class="line">cluster.name: elk-stack</span><br><span class="line">path.data: &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;elk_stack&#x2F;data</span><br><span class="line">path.logs: &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;elk_stack&#x2F;logs</span><br><span class="line">bootstrap.memory_lock: false</span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Elasticsearch-内存占用"><a href="#配置-Elasticsearch-内存占用" class="headerlink" title="配置 Elasticsearch 内存占用"></a>配置 Elasticsearch 内存占用</h4><p>配置 jvm 最大堆和最小堆，一般为服务器物理内存的一半，最大不超过 32g</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">☁  config  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;elasticsearch-6.4.1&#x2F;config</span><br><span class="line">☁  config  vi jvm.options </span><br><span class="line"></span><br><span class="line">-Xms8g</span><br><span class="line">-Xmx8g</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>进入<code>bin</code>目录启动<code>Elasticsearch</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">☁  bin  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;elasticsearch-6.4.1&#x2F;bin</span><br><span class="line">☁  bin  .&#x2F;elasticsearch</span><br></pre></td></tr></table></figure>
+
+<h2 id="kibana安装配置"><a href="#kibana安装配置" class="headerlink" title="kibana安装配置"></a>kibana安装配置</h2><h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><p>官网下载对应平台的安装包</p>
+<p><img src="/Users/zhimma/Pictures/ELK/downloadK.png" alt="下载Kibana"></p>
+<p>放到合适的位置，我放置后解压的目录是<code>/Users/zhimma/Soft/kibana-6.4.1-darwin-x86_64</code></p>
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>凭感觉配置了一些，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">☁  config  grep &#39;^[a-z]&#39; kibana.yml</span><br><span class="line">server.port: 5601</span><br><span class="line">server.host: &quot;0.0.0.0&quot;</span><br><span class="line">elasticsearch.url: &quot;http:&#x2F;&#x2F;0.0.0.0:9200&quot;</span><br><span class="line">kibana.index: &quot;.kibana&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><p>进入<code>bin</code>目录启动<code>Kibana</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">☁  bin  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;kibana-6.4.1-darwin-x86_64&#x2F;bin</span><br><span class="line">☁  bin  .&#x2F;kibana</span><br></pre></td></tr></table></figure>
+
+<h2 id="Logstash安装配置"><a href="#Logstash安装配置" class="headerlink" title="Logstash安装配置"></a>Logstash安装配置</h2><h3 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h3><p>官网下载对应平台的安装包</p>
+<p><img src="/Users/zhimma/Pictures/ELK/downloadL.png" alt="下载Logstash"></p>
+<p>放到合适的位置，我放置后解压的目录是<code>/Users/zhimma/Soft/logstash-6.4.1</code></p>
+<h3 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h3><h4 id="配置-Logstash"><a href="#配置-Logstash" class="headerlink" title="配置 Logstash"></a>配置 Logstash</h4><p>不是很了解，暂时使用默认配置</p>
+<h4 id="配置-Logstash-内存占用"><a href="#配置-Logstash-内存占用" class="headerlink" title="配置 Logstash 内存占用"></a>配置 Logstash 内存占用</h4><p>配置 jvm 最大堆和最小堆，一般为服务器物理内存的一半，最大不超过 32g</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">☁  config  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;logstash-6.4.1&#x2F;config</span><br><span class="line">☁  config  vi jvm.options </span><br><span class="line"></span><br><span class="line">-Xms8g</span><br><span class="line">-Xmx8g</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加项目或自定义配置文件"><a href="#添加项目或自定义配置文件" class="headerlink" title="添加项目或自定义配置文件"></a>添加项目或自定义配置文件</h3><p><code>Logstash</code>收集日志时候，可以对日志进行一定的操作和过滤，这里需要自定义不同的配置文件来实现，针对我们目前的项目，我简单的创建了下面的配置文件</p>
+<p>在<code>/Users/zhimma/Soft/logstash-6.4.1/config</code>目录下创建<code>conf.d</code>文件夹，这个文件夹下存放我们所有的自定义配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    path &#x3D;&gt; [ &quot;&#x2F;data&#x2F;www&#x2F;XX_project&#x2F;trunk&#x2F;Common&#x2F;Runtime&#x2F;Apps&#x2F;Api&#x2F;*.log&quot; ]</span><br><span class="line">    start_position &#x3D;&gt; &quot;beginning&quot;</span><br><span class="line">    ignore_older &#x3D;&gt; 0</span><br><span class="line">    sincedb_path &#x3D;&gt; &quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">    type &#x3D;&gt; &quot;Api&quot;</span><br><span class="line">    codec &#x3D;&gt; multiline &#123;</span><br><span class="line">      pattern &#x3D;&gt; &quot;^\[&quot;</span><br><span class="line">      negate &#x3D;&gt; true</span><br><span class="line">      what &#x3D;&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  file &#123;</span><br><span class="line">    path &#x3D;&gt; [ &quot;&#x2F;data&#x2F;www&#x2F;XX_project&#x2F;trunk&#x2F;Common&#x2F;Runtime&#x2F;Apps&#x2F;SDK&#x2F;*.log&quot; ]</span><br><span class="line">    start_position &#x3D;&gt; &quot;beginning&quot;</span><br><span class="line">    ignore_older &#x3D;&gt; 0</span><br><span class="line">    sincedb_path &#x3D;&gt; &quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">    type &#x3D;&gt; &quot;SDK&quot;</span><br><span class="line">    codec &#x3D;&gt; multiline &#123;</span><br><span class="line">      pattern &#x3D;&gt; &quot;^\[&quot;</span><br><span class="line">      negate &#x3D;&gt; true</span><br><span class="line">      what &#x3D;&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123; </span><br><span class="line">  if [type] &#x3D;&#x3D; &quot;Api&quot; &#123;</span><br><span class="line">	elasticsearch &#123;</span><br><span class="line">      hosts &#x3D;&gt; [ &quot;127.0.0.1:9200&quot; ] </span><br><span class="line">      index &#x3D;&gt; &quot;api&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  if [type] &#x3D;&#x3D; &quot;SDK&quot; &#123;</span><br><span class="line">	elasticsearch &#123;</span><br><span class="line">      hosts &#x3D;&gt; [ &quot;127.0.0.1:9200&quot; ] </span><br><span class="line">      index &#x3D;&gt; &quot;sdk&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  stdout &#123; codec &#x3D;&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h3><p>进入<code>bin</code>目录启动Llogstash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">☁  bin  pwd</span><br><span class="line">&#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;logstash-6.4.1&#x2F;bin</span><br><span class="line">☁  bin  .&#x2F;logstash -f &#x2F;Users&#x2F;zhimma&#x2F;Soft&#x2F;logstash-6.4.1&#x2F;config&#x2F;conf.d&#x2F;default.conf</span><br></pre></td></tr></table></figure>
+
+<h2 id="访问"><a href="#访问" class="headerlink" title="## 访问"></a>## 访问</h2><p>浏览器访问0.0.0.0:5601即可</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mac/" rel="tag"># Mac</a>
+              <a href="/tags/ELK/" rel="tag"># ELK</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/Mac%E9%87%8D%E5%90%AFphp-fpm%E5%A4%B1%E8%B4%A5/" rel="prev" title="Mac重启php-fpm失败">
+                  <i class="fa fa-chevron-left"></i> Mac重启php-fpm失败
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/" rel="next" title="Laravel开发前期准备">
+                  Laravel开发前期准备 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

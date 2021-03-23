@@ -1,37 +1,441 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] openssl&#x2F;ssl.h’ file not found&#96;&#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;swoole&#x2F;include&#x2F;swoole.h:438:10: fatal error: &#39;openssl&#x2F;ssl.h&#39; file not found">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac安装Swoole扩展问题记录">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/mac%E5%AE%89%E8%A3%85swoole%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] openssl&#x2F;ssl.h’ file not found&#96;&#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;swoole&#x2F;include&#x2F;swoole.h:438:10: fatal error: &#39;openssl&#x2F;ssl.h&#39; file not found">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:08:33.967Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="Swoole">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/mac%E5%AE%89%E8%A3%85swoole%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Mac安装Swoole扩展问题记录 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#openssl-ssl-h%E2%80%99-file-not-found"><span class="nav-number">1.</span> <span class="nav-text">openssl&#x2F;ssl.h’ file not found&#96;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-openssl-support-require-openssl-library"><span class="nav-number">2.</span> <span class="nav-text">Enable openssl support, require openssl library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-http2-support-require-nghttp2-library"><span class="nav-number">3.</span> <span class="nav-text">Enable http2 support, require nghttp2 library.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hiredis-hiredis-h-39-file-not-found"><span class="nav-number">4.</span> <span class="nav-text">hiredis&#x2F;hiredis.h&#39; file not found</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%8F%82%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">编译参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#centos-%E5%AE%89%E8%A3%85swoole-%E6%89%A9%E5%B1%95"><span class="nav-number">6.</span> <span class="nav-text">centos 安装swoole 扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#builtin-saddl-overflow"><span class="nav-number">6.1.</span> <span class="nav-text">__builtin_saddl_overflow</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/mac%E5%AE%89%E8%A3%85swoole%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mac安装Swoole扩展问题记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:33" itemprop="dateModified" datetime="2021-03-23T18:08:33+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mac/" itemprop="url" rel="index"><span itemprop="name">Mac</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Swoole/" itemprop="url" rel="index"><span itemprop="name">Swoole</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="openssl-ssl-h’-file-not-found"><a href="#openssl-ssl-h’-file-not-found" class="headerlink" title="openssl/ssl.h’ file not found`"></a>openssl/ssl.h’ file not found`</h2><p><code>/private/tmp/pear/temp/swoole/include/swoole.h:438:10: fatal error: &#39;openssl/ssl.h&#39; file not found</code></p>
+ <span id="more"></span>
+
+<p><strong>原因：</strong><br>openssl 未安装或 openssl 库不在标准位置中<br><strong>解决方案：</strong></p>
+<ol>
+<li><p>确认是否安装了 openssl<br><code>brew search openssl</code><br>若未安装则执行命令<code>brew install openssl</code>进行安装</p>
+</li>
+<li><p>确认 openssl 库是否在标准位置中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">☁  ~ ls &#x2F;usr&#x2F;local&#x2F;include&#x2F;openssl</span><br><span class="line">☁  ~ No such file or directory</span><br></pre></td></tr></table></figure>
+
+<p>这就是问题所在了，找到 openssl/include/openssl 目录，并 cp 到 /usr/local/include 目录中。</p>
+<p><code>☁  ~  ln -s /usr/local/Cellar/openssl/1.0.2p/include/openssl/ /usr/local/include/</code></p>
+<p>一般情况下就可以解决该问题了。</p>
+<p>但是，也可能会遇到很诡异的状况，上步没有解决问题，依然找不到 openssl/ssl.h 等文件<br>复制 openssl 源文件到 swoole 的源码目录中，编译就可以了。</p>
+<p><code>cp -R  /usr/local/Cellar/openssl/1.0.2p/include/openssl swoole-src-2.1.3/include</code></p>
+<p>这个肯定能解决问题了</p>
+</li>
+</ol>
+<h2 id="Enable-openssl-support-require-openssl-library"><a href="#Enable-openssl-support-require-openssl-library" class="headerlink" title="Enable openssl support, require openssl library."></a><code>Enable openssl support, require openssl library.</code></h2><p><code>/private/tmp/pear/temp/swoole/php_swoole.h:137:2: error: &quot;Enable openssl support, require openssl library.&quot;</code></p>
+<p>上面的问题解决了，再次<code>pecl install swoole</code>时候报了这个错，找了很久都么有找到解决方案，偶然看到pecl 安装的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">enable debug&#x2F;trace log support? [no] : yes</span><br><span class="line">enable sockets supports? [no] : yes</span><br><span class="line">enable openssl support? [no] : yes</span><br><span class="line">enable http2 support? [no] : yes</span><br><span class="line">enable async-redis support? [no] : yes</span><br><span class="line">enable mysqlnd support? [no] : yes</span><br><span class="line">enable postgresql coroutine client support? [no] : no</span><br><span class="line">building in &#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;pear-build-zhimmaSwGIQ1&#x2F;swoole-4.2.1</span><br><span class="line">running: &#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;swoole&#x2F;configure --with-php-config&#x3D;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;php@7.1&#x2F;bin&#x2F;php-config --enable-debug-log&#x3D;yes --enable-sockets&#x3D;yes --enable-openssl&#x3D;yes --enable-http2&#x3D;yes --enable-async-redis&#x3D;yes --enable-mysqlnd&#x3D;yes --enable-coroutine-postgresql&#x3D;no</span><br></pre></td></tr></table></figure>
+
+<p>，于是猜想如果指定<code>openssl</code>的目录，是否可以解决，先看看<code>openssl</code>目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">☁  ~  which openssl</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;opt&#x2F;openssl&#x2F;bin&#x2F;openssl</span><br></pre></td></tr></table></figure>
+
+<p>于是安装过程就变成下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">enable debug&#x2F;trace log support? [no] : yes</span><br><span class="line">enable sockets supports? [no] : yes</span><br><span class="line">enable openssl support? [no] : yes --with-openssl-dir&#x3D;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;openssl&#x2F;bin&#x2F;openssl</span><br><span class="line">enable http2 support? [no] : yes</span><br><span class="line">enable async-redis support? [no] : yes</span><br><span class="line">enable mysqlnd support? [no] : yes</span><br><span class="line">enable postgresql coroutine client support? [no] : no</span><br><span class="line">building in &#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;pear-build-zhimmaN9CyFV&#x2F;swoole-4.2.1</span><br><span class="line">running: &#x2F;private&#x2F;tmp&#x2F;pear&#x2F;temp&#x2F;swoole&#x2F;configure --with-php-config&#x3D;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;php@7.1&#x2F;bin&#x2F;php-config --enable-debug-log&#x3D;yes --enable-sockets&#x3D;yes --enable-openssl&#x3D;yes --with-openssl-dir&#x3D;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;openssl&#x2F;bin&#x2F;openssl --enable-http2&#x3D;yes --enable-async-redis&#x3D;yes --enable-mysqlnd&#x3D;yes --enable-coroutine-postgresql&#x3D;no</span><br></pre></td></tr></table></figure>
+
+<p>错误解决</p>
+<h2 id="Enable-http2-support-require-nghttp2-library"><a href="#Enable-http2-support-require-nghttp2-library" class="headerlink" title="Enable http2 support, require nghttp2 library."></a><code>Enable http2 support, require nghttp2 library.</code></h2><p><code>/private/tmp/pear/temp/swoole/php_swoole.h:148:2: error: &quot;Enable http2 support, require nghttp2 library.</code></p>
+<p><strong>解决方案：</strong></p>
+<p><code>brew install nghttp2</code></p>
+<blockquote>
+<p>未能解决</p>
+</blockquote>
+<h2 id="hiredis-hiredis-h-39-file-not-found"><a href="#hiredis-hiredis-h-39-file-not-found" class="headerlink" title="hiredis/hiredis.h&#39; file not found"></a><code>hiredis/hiredis.h&#39; file not found</code></h2><p><code>/private/tmp/pear/temp/swoole/swoole_redis.c:20:10: fatal error: hiredis/hiredis.h&#39; file not found</code></p>
+<p><strong>解决方案：</strong></p>
+<p><code>brew install hiredis</code></p>
+<h2 id="编译参数"><a href="#编译参数" class="headerlink" title="编译参数"></a>编译参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">--disable-option-checking  ignore unrecognized --enable&#x2F;--with options</span><br><span class="line">  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE&#x3D;no)</span><br><span class="line">  --enable-FEATURE[&#x3D;ARG]  include FEATURE [ARG&#x3D;yes]</span><br><span class="line">  --with-PACKAGE[&#x3D;ARG]    use PACKAGE [ARG&#x3D;yes]</span><br><span class="line">  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE&#x3D;no)</span><br><span class="line">  --with-libdir&#x3D;NAME      Look for libraries in ...&#x2F;NAME rather than ...&#x2F;lib</span><br><span class="line">  --with-php-config&#x3D;PATH  Path to php-config php-config</span><br><span class="line">  --enable-swoole-debug   Enable swoole debug</span><br><span class="line">  启用swoole的调试日志。不要在生产环境中启用此配置。</span><br><span class="line">  --enable-trace-log   Enable swoole trace log</span><br><span class="line">  --enable-sockets        Do you have sockets extension?</span><br><span class="line">  启用对 sockets 的支持。依赖 sockets</span><br><span class="line">  --enable-async-redis    Do you have hiredis?</span><br><span class="line">  启用对异步Redis客户端的支持。依赖 hiredis</span><br><span class="line">  --enable-coroutine-postgresql    Do you install postgresql?</span><br><span class="line">  启用协程 Postgresql 客户端，依赖 libpq</span><br><span class="line">  --enable-openssl        Use openssl?</span><br><span class="line">  启用openssl支持。依赖 libssl.so</span><br><span class="line">  --enable-http2          Use http2.0?</span><br><span class="line">  启用HTTP2的支持。依赖 nghttp2</span><br><span class="line">  --enable-thread         Experimental: Use thread?</span><br><span class="line">  启用线程支持 &#x2F;&#x2F;实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-hugepage       Experimental: Use hugepage?</span><br><span class="line">  启用 hugepage &#x2F;&#x2F;使用大内存页优化性能，具体鸟哥在他的博客中讲到。</span><br><span class="line">  如果已经开启了 jemalloc，再开启hugepage 印象性能</span><br><span class="line">  https:&#x2F;&#x2F;blog.digitalocean.com&#x2F;transparent-huge-pages-and-alternative-memory-allocators&#x2F;</span><br><span class="line">  实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-swoole         Enable swoole support</span><br><span class="line">  --enable-swoole-static    Enable swoole static compile support</span><br><span class="line">  --with-swoole           With swoole support</span><br><span class="line">  --with-libpq-dir&#x3D;DIR    Include libpq support (requires libpq &gt;&#x3D; 9.5)</span><br><span class="line">  --with-openssl-dir&#x3D;DIR    Include OpenSSL support (requires OpenSSL &gt;&#x3D; 0.9.6)</span><br><span class="line">  设置openssl库的路径，例如：--with-openssl-dir&#x3D;&#x2F;opt&#x2F;openssl&#x2F;.</span><br><span class="line">  --with-jemalloc-dir&#x3D;DIR    Include jemalloc support</span><br><span class="line">  使用 jemalloc 进行内存优化支持</span><br><span class="line">  --enable-mysqlnd       Do you have mysqlnd?</span><br><span class="line">  启用对 mysqlnd 的支持，依赖 mysqlnd</span><br><span class="line">  --enable-coroutine      Enable coroutine (requires PHP &gt;&#x3D; 5.5)</span><br><span class="line">  启用协程</span><br><span class="line">  --enable-asan      Enable asan</span><br><span class="line">  启用 Address-Sanitizier 内存检测工具 &#x2F;&#x2F;只有开启debug才有效</span><br><span class="line">  --enable-picohttpparser     Experimental: Do you have picohttpparser?</span><br><span class="line">  启用 picohttpparser 支持 &#x2F;&#x2F;这是一个超高性能的http解析器，实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-timewheel     Experimental: Enable timewheel heartbeat?</span><br><span class="line">  启用时间轮算法并优化心跳算法 &#x2F;&#x2F;实验性功能。请勿在生产环境中使用此功能</span><br><span class="line">  --enable-debug,  compile with debug symbols</span><br><span class="line">  编译时加入符号表 &#x2F;&#x2F;使用gdb调试时有用</span><br><span class="line">  --enable-shared&#x3D;PKGS    Build shared libraries default&#x3D;yes</span><br><span class="line">  --enable-static&#x3D;PKGS    Build static libraries default&#x3D;yes</span><br><span class="line">  --enable-fast-install&#x3D;PKGS</span><br><span class="line">                          Optimize for fast installation default&#x3D;yes</span><br><span class="line">  --with-gnu-ld           Assume the C compiler uses GNU ld default&#x3D;no</span><br><span class="line">  --disable-libtool-lock  Avoid locking (might break parallel builds)</span><br><span class="line">  --with-pic              Try to use only PIC&#x2F;non-PIC objects default&#x3D;use both</span><br><span class="line">  --with-tags&#x3D;TAGS        Include additional configurations automatic</span><br></pre></td></tr></table></figure>
+
+<h2 id="centos-安装swoole-扩展"><a href="#centos-安装swoole-扩展" class="headerlink" title="centos 安装swoole 扩展"></a>centos 安装swoole 扩展</h2><h3 id="builtin-saddl-overflow"><a href="#builtin-saddl-overflow" class="headerlink" title="__builtin_saddl_overflow"></a>__builtin_saddl_overflow</h3><p><a target="_blank" rel="noopener" href="https://www.vpser.net/manage/centos-6-upgrade-gcc.html">https://www.vpser.net/manage/centos-6-upgrade-gcc.html</a></p>
+<blockquote>
+<p>__builtin_saddl_overflow’ was not declared in this scope<br>这是一个已知的问题 - 问题是 CentOS 上的默认 gcc 缺少必需的定义，即使在升级 gcc 之后，PECL 也会找到旧的编译器。要安装驱动程序，必须首先通过安装 devtoolset 集合来升级 gcc，如下所示：</p>
+</blockquote>
+<ul>
+<li>sudo yum install centos-release-scl</li>
+<li>sudo yum install devtoolset-7</li>
+<li>scl enable devtoolset-7 bash</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mac/" rel="tag"># Mac</a>
+              <a href="/tags/Swoole/" rel="tag"># Swoole</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/mysql%E4%B8%AD%E6%8C%89%E7%85%A7%E5%A7%93%E5%90%8D%E6%88%96%E8%80%85%E4%B8%AD%E6%96%87%E9%A6%96%E5%AD%97%E6%AF%8D%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2%E6%8E%92%E5%BA%8F/" rel="prev" title="MySQL中按照姓名或者中文首字母区间查询排序">
+                  <i class="fa fa-chevron-left"></i> MySQL中按照姓名或者中文首字母区间查询排序
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/SSH%20%E5%AF%86%E9%92%A5%E5%88%9B%E5%BB%BA%E5%8F%8A%E5%AF%86%E9%92%A5%E7%99%BB%E5%BD%95/" rel="next" title="SSH 密钥创建及密钥登录">
+                  SSH 密钥创建及密钥登录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

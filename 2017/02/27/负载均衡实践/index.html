@@ -1,37 +1,482 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="引用参考：https:&#x2F;&#x2F;juejin.im&#x2F;post&#x2F;5821c24e570c350060bef4c3 环境说明：windows 下4台服务器，真实机IP：192.168.2.107，其中    服务器 IP 说明    nginx1 172.17.0.3 nginx服务器1   nginx2 172.17.0.4 nginx服务器2   server1 172.17.0.5 服务器1   se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载均衡实践">
+<meta property="og:url" content="https://blog.zhimma.com/2017/02/27/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="引用参考：https:&#x2F;&#x2F;juejin.im&#x2F;post&#x2F;5821c24e570c350060bef4c3 环境说明：windows 下4台服务器，真实机IP：192.168.2.107，其中    服务器 IP 说明    nginx1 172.17.0.3 nginx服务器1   nginx2 172.17.0.4 nginx服务器2   server1 172.17.0.5 服务器1   se">
+<meta property="og:locale">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/xiHZhG.jpg">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/GcaA4z.jpg">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/v0vkmt.jpg">
+<meta property="article:published_time" content="2017-02-27T08:58:28.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:05:35.348Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/xiHZhG.jpg">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2017/02/27/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%9E%E8%B7%B5/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>负载均衡实践 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">环境说明：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">2.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="nav-number">2.3.</span> <span class="nav-text">负载均衡策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2"><span class="nav-number">2.3.1.</span> <span class="nav-text">加权轮询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-IP-HASH"><span class="nav-number">2.3.2.</span> <span class="nav-text">3.IP HASH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ip-hash-ip%E7%BB%91%E5%AE%9A"><span class="nav-number">2.3.3.</span> <span class="nav-text">ip_hash(ip绑定)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fair"><span class="nav-number">2.3.4.</span> <span class="nav-text">fair</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E7%94%A8hash%E3%80%81%E4%B8%80%E8%87%B4%E6%80%A7hash"><span class="nav-number">2.3.5.</span> <span class="nav-text">通用hash、一致性hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#session-sticky"><span class="nav-number">2.3.6.</span> <span class="nav-text">session_sticky</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%AF%A6%E6%83%85"><span class="nav-number">3.</span> <span class="nav-text">配置详情</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">负载均衡服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">业务服务器</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2017/02/27/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          负载均衡实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-02-27 16:58:28" itemprop="dateCreated datePublished" datetime="2017-02-27T16:58:28+08:00">2017-02-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:05:35" itemprop="dateModified" datetime="2021-03-23T18:05:35+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>引用参考：<a target="_blank" rel="noopener" href="https://juejin.im/post/5821c24e570c350060bef4c3">https://juejin.im/post/5821c24e570c350060bef4c3</a></p>
+<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><p>windows 下4台服务器，真实机IP：192.168.2.107，其中</p>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>IP</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nginx1</td>
+<td>172.17.0.3</td>
+<td>nginx服务器1</td>
+</tr>
+<tr>
+<td>nginx2</td>
+<td>172.17.0.4</td>
+<td>nginx服务器2</td>
+</tr>
+<tr>
+<td>server1</td>
+<td>172.17.0.5</td>
+<td>服务器1</td>
+</tr>
+<tr>
+<td>server2</td>
+<td>172.17.0.6</td>
+<td>服务器2</td>
+</tr>
+<tr>
+<td>server3</td>
+<td>172.17.0.7</td>
+<td>服务器3</td>
+</tr>
+</tbody></table>
+ <span id="more"></span>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\mma&gt;docker ps</span><br><span class="line">CONTAINER ID        PORTS											NAMES</span><br><span class="line">73e6f2096612        6379&#x2F;tcp, 0.0.0.0:201-&gt;22&#x2F;tcp, 0.0.0.0:881-&gt;80&#x2F;tcp, 0.0.0.0:3361-&gt;3306&#x2F;tcp, 0.0.0.0:9004-&gt;9001&#x2F;tcp                                           		nginx1</span><br><span class="line">805ef8d42fa6        6379&#x2F;tcp, 0.0.0.0:202-&gt;22&#x2F;tcp, 0.0.0.0:882-&gt;80&#x2F;tcp, 0.0.0.0:3362-&gt;3306&#x2F;tcp, 0.0.0.0:9005-&gt;9001&#x2F;tcp                                           		nginx2</span><br><span class="line">e91b4a662023        6379&#x2F;tcp, 0.0.0.0:203-&gt;22&#x2F;tcp, 0.0.0.0:883-&gt;80&#x2F;tcp, 0.0.0.0:3363-&gt;3306&#x2F;tcp, 0.0.0.0:9006-&gt;9001&#x2F;tcp                                           		server1</span><br><span class="line">01bb4850cc8c        6379&#x2F;tcp, 0.0.0.0:204-&gt;22&#x2F;tcp, 0.0.0.0:884-&gt;80&#x2F;tcp, 0.0.0.0:3364-&gt;3306&#x2F;tcp, 0.0.0.0:9007-&gt;9001&#x2F;tcp                                           		server2</span><br><span class="line">e500cbd1efad        6379&#x2F;tcp, 0.0.0.0:205-&gt;22&#x2F;tcp, 0.0.0.0:885-&gt;80&#x2F;tcp, 0.0.0.0:3365-&gt;3306&#x2F;tcp, 0.0.0.0:9008-&gt;9001&#x2F;tcp												server3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>主要需要暴露http服务端口</p>
+</blockquote>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>负载均衡，英文名称为Load Balance，其意思就是分摊到多个操作单元上进行执行，例如Web服务器、FTP服务器、企业关键应用服务器和其它关键任务服务器等，从而共同完成工作任务。</p>
+<p>我们知道单台服务器的性能是有上限的，当流量很大时，就需要使用多台服务器来共同提供服务，这就是所谓的集群。</p>
+<p>负载均衡服务器，就是用来把经过它的流量，按照某种方法，分配到集群中的各台服务器上。这样一来不仅可以承担更大的流量、降低服务的延迟，还可以避免单点故障造成服务不可用。一般的反向代理服务器，都具备负载均衡的功能。</p>
+<p>负载均衡功能可以由硬件来提供，比如以前的F5设备。也可以由软件来提供，LVS可以提供四层的负载均衡(利用IP和端口)，</p>
+<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/md/xiHZhG.jpg" alt="负载均衡"></p>
+<h3 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h3><h4 id="加权轮询"><a href="#加权轮询" class="headerlink" title="加权轮询"></a>加权轮询</h4><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。</p>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/md/GcaA4z.jpg" alt="加权轮询"></p>
+<blockquote>
+<p>图中有两点需要注意，第一，如果可以把加权轮询算法分为先深搜索和先广搜索，那么nginx采用的是先深搜索算法，即将首先将请求都分给高权重的机器，直到该机器的权值降到了比其他机器低，才开始将请求分给下一个高权重的机器；第二，当所有后端机器都down掉时，nginx会立即将所有机器的标志位清成初始状态，以避免造成所有的机器都处在timeout的状态，从而导致整个前端被夯住。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">upstream</span> zhimma &#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:883</span> weight=<span class="number">5</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:884</span> weight=<span class="number">6</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:885</span> weight=<span class="number">7</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    server&#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span> zhimma.ma;</span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span>         http://zhimma;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   Host             $host;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Real-IP        $remote_addr;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Forwarded-For  $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除了 weight 之外，还有别的配置项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream phpServers &#123;  </span><br><span class="line">    server 192.168.2.107:883 weight&#x3D;5 max_fails&#x3D;1 fail_timeout&#x3D;20 max_conns&#x3D;100;</span><br><span class="line">    server 192.168.2.107:883 weight&#x3D;6 backup down</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>max_fails</strong></p>
+<blockquote>
+<p>默认为1。某台Server允许请求失败的次数，超过最大次数后，在failtimeout时间内，新的请求将不会分配给这台机器。如果设置为0，Nginx会将这台Server置为永久无效状态，然后将请求发给定义了proxynextupstream, fastcginextupstream, uwsginextupstream, scginextupstream, and memcachednext_upstream指令来处理这次错误的请求。</p>
+</blockquote>
+<p><strong>fail_timeout</strong></p>
+<blockquote>
+<p>默认为10秒。某台Server达到maxfails次失败请求后，在failtimeout期间内，nginx会认为这台Server暂时不可用，不会将请求分配给它</p>
+</blockquote>
+<p><strong>backup</strong></p>
+<blockquote>
+<p>备份机，所有服务器挂了之后才会生效</p>
+</blockquote>
+<p><strong>down</strong></p>
+<blockquote>
+<p>标识某一台server不可用</p>
+</blockquote>
+<p><strong>max_conns</strong></p>
+<blockquote>
+<p>限制分配给某台Server处理的最大连接数量，超过这个数量，将不会分配新的连接给它。默认为0，表示不限制。注意：1.5.9之后的版本才有这个配置 表示最多给100这台Server分配1000个请求，如果这台Server正在处理1000个请求，nginx将不会分配新的请求给到它。假如有一个请求处理完了，还剩下999个请求在处理，这时nginx也会将新的请求分配给它。</p>
+</blockquote>
+<h4 id="3-IP-HASH"><a href="#3-IP-HASH" class="headerlink" title="3.IP HASH"></a>3.IP HASH</h4><h4 id="ip-hash-ip绑定"><a href="#ip-hash-ip绑定" class="headerlink" title="ip_hash(ip绑定)"></a>ip_hash(ip绑定)</h4><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。</p>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/md/v0vkmt.jpg" alt="ip_hash"></p>
+<p>ip hash算法的核心实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for(i &#x3D; 0;i &lt; 3;i++)&#123;</span><br><span class="line">    hash &#x3D; (hash * 113 + iphp-&gt;addr[i]) % 6271; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">p &#x3D; hash % iphp-&gt;rrp.peers-&gt;number; </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>从代码中可以看出，hash值既与ip有关又与后端机器的数量有关。经过测试，上述算法可以连续产生1045个互异的value，这是该算法的硬限制。对此nginx使用了保护机制，当经过20次hash仍然找不到可用的机器时，算法退化成轮询。因此，从本质上说，ip hash算法是一种变相的轮询算法，如果两个ip的初始hash值恰好相同，那么来自这两个ip的请求将永远落在同一台服务器上，这为均衡性埋下了很深的隐患。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">upstream</span> zhimma &#123;</span><br><span class="line">        ip_hash;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:883</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:884</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:885</span>;</span><br><span class="line">	&#125;</span><br><span class="line">    server&#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span> zhimma.ma;</span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span>         http://zhimma;</span><br><span class="line">            <span class="comment">#如果服务器要获取客户端真实IP，可以用下三句设置主机头和客户端真实地址</span></span><br><span class="line">            <span class="attribute">proxy_set_header</span>   Host             $host;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Real-IP        $remote_addr;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Forwarded-For  $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="fair"><a href="#fair" class="headerlink" title="fair"></a>fair</h4><h4 id="通用hash、一致性hash"><a href="#通用hash、一致性hash" class="headerlink" title="通用hash、一致性hash"></a>通用hash、一致性hash</h4><h4 id="session-sticky"><a href="#session-sticky" class="headerlink" title="session_sticky"></a>session_sticky</h4><h2 id="配置详情"><a href="#配置详情" class="headerlink" title="配置详情"></a>配置详情</h2><h3 id="负载均衡服务器"><a href="#负载均衡服务器" class="headerlink" title="负载均衡服务器"></a>负载均衡服务器</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span>  nginx;</span><br><span class="line"><span class="attribute">worker_processes</span>  <span class="number">1</span>;</span><br><span class="line"><span class="attribute">error_log</span>  /var/log/nginx/error.log <span class="literal">warn</span>;</span><br><span class="line"><span class="attribute">pid</span>        /var/run/nginx.pid;</span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">include</span>       /etc/nginx/mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line">    <span class="attribute">log_format</span>  main  <span class="string">&#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  /var/log/nginx/access.log  main;</span><br><span class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</span><br><span class="line">    <span class="comment">#tcp_nopush     on;</span></span><br><span class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</span><br><span class="line">    <span class="comment">#gzip  on;</span></span><br><span class="line">    <span class="attribute">upstream</span> zhimma &#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:883</span>   weight=<span class="number">3</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:884</span>   weight=<span class="number">4</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.2.107:885</span>   weight=<span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    server&#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span> zhimma.ma;</span><br><span class="line">        <span class="attribute">root</span>   /home/www/tourism/laravel_store/public;</span><br><span class="line">        <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">                <span class="attribute">proxy_pass</span>         http://zhimma;</span><br><span class="line">                <span class="attribute">proxy_set_header</span>   Host             $host;</span><br><span class="line">                <span class="attribute">proxy_set_header</span>   X-Real-IP        $remote_addr;</span><br><span class="line">                <span class="attribute">proxy_set_header</span>   X-Forwarded-For  $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">#   include /etc/nginx/conf.d/*.conf;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="业务服务器"><a href="#业务服务器" class="headerlink" title="业务服务器"></a>业务服务器</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@e91b4a662023 conf.d]# pwd </span><br><span class="line">/etc/nginx/conf.d</span><br><span class="line">[root@e91b4a662023 conf.d]# ls</span><br><span class="line">zhimma.ma.conf</span><br><span class="line">root@e91b4a662023 conf.d]# cat zhimma.ma.conf </span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span>  zhimma.ma;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">## Root and index files.</span></span><br><span class="line">    <span class="comment"># 这里的路径对应自己项目路径，因为我是做了目录挂载，所以剩下2台服务器nginx的配置做了区分</span></span><br><span class="line">    <span class="comment"># 分别是/home/www/zhimma/server2和/home/www/zhimma/server3</span></span><br><span class="line">    <span class="attribute">root</span> /home/www/zhimma/server1;</span><br><span class="line">    <span class="attribute">index</span>  index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">    <span class="attribute">location</span> = /50x.html &#123;</span><br><span class="line">        <span class="attribute">root</span>   html;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ \.php$</span> &#123;</span><br><span class="line">            <span class="attribute">fastcgi_pass</span>   <span class="number">127.0.0.1:9000</span>;</span><br><span class="line">            <span class="attribute">fastcgi_index</span>  index.php;</span><br><span class="line">            <span class="attribute">fastcgi_param</span>  SCRIPT_FILENAME    $document_root$fastcgi_script_name;</span><br><span class="line">            <span class="attribute">include</span>        fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="attribute">try_files</span> $uri $uri/ /index.php$is_args$args;</span><br><span class="line">     &#125;</span><br><span class="line">   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重启nginx ，配置hosts,访问<code>zhimma.ma:881</code>,就能看的切换的效果了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/02/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%89%B9%E6%80%A7/" rel="prev" title="面向对象的特性">
+                  <i class="fa fa-chevron-left"></i> 面向对象的特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/02/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="next" title="计算机基础">
+                  计算机基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

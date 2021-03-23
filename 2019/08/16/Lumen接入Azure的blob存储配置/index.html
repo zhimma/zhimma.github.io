@@ -1,37 +1,425 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] 最近在做的一个项目使用的是Azure服务器，其中数据库、redis、和对象存储和国内厂商都有不同，最直观的区别就是Azure基本都是SSL方式进行连接，相对国内云服务器厂商的服务接入没有那么无脑，今天简单记录下Azure提供的blob存储在lumen框架的接入 几个轮子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lumen接入Azure的blob存储配置">
+<meta property="og:url" content="https://blog.zhimma.com/2019/08/16/Lumen%E6%8E%A5%E5%85%A5Azure%E7%9A%84blob%E5%AD%98%E5%82%A8%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] 最近在做的一个项目使用的是Azure服务器，其中数据库、redis、和对象存储和国内厂商都有不同，最直观的区别就是Azure基本都是SSL方式进行连接，相对国内云服务器厂商的服务接入没有那么无脑，今天简单记录下Azure提供的blob存储在lumen框架的接入 几个轮子">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-16T06:42:41.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:08:28.335Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Azure">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2019/08/16/Lumen%E6%8E%A5%E5%85%A5Azure%E7%9A%84blob%E5%AD%98%E5%82%A8%E9%85%8D%E7%BD%AE/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Lumen接入Azure的blob存储配置 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E8%BD%AE%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">几个轮子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">上传测试</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/08/16/Lumen%E6%8E%A5%E5%85%A5Azure%E7%9A%84blob%E5%AD%98%E5%82%A8%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lumen接入Azure的blob存储配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-16 14:42:41" itemprop="dateCreated datePublished" datetime="2019-08-16T14:42:41+08:00">2019-08-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:28" itemprop="dateModified" datetime="2021-03-23T18:08:28+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Azure/" itemprop="url" rel="index"><span itemprop="name">Azure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<p>最近在做的一个项目使用的是Azure服务器，其中数据库、redis、和对象存储和国内厂商都有不同，最直观的区别就是Azure基本都是SSL方式进行连接，相对国内云服务器厂商的服务接入没有那么无脑，今天简单记录下Azure提供的blob存储在lumen框架的接入</p>
+<h3 id="几个轮子"><a href="#几个轮子" class="headerlink" title="几个轮子"></a>几个轮子</h3> <span id="more"></span>
+
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">composer require league/flysystem</span><br><span class="line">composer require league/flysystem-azure-blob-storage</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>Laravel/Lumen 提供了很强大的文件管理系统和云存储功能的集成</p>
+<p><code>/Users/zhimma/Data/www/lumen/vendor/laravel/lumen-framework/config</code>目录复制一份到项目根目录下,主要检查<code>/Users/zhimma/Data/www/lumen/config/filesystems.php</code>这个文件是否存在</p>
+<p>下面进行配置：</p>
+<ol>
+<li><p><code>/Users/zhimma/Data/www/lumen/config/filesystems.php</code></p>
+<p>在配置s3下方添加如下内容：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="string">&#x27;azure&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span>    =&gt; <span class="string">&#x27;azure&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;name&#x27;</span>      =&gt; env(<span class="string">&#x27;AZURE_STORAGE_NAME&#x27;</span>, <span class="string">&#x27;xxx&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;key&#x27;</span>       =&gt; env(<span class="string">&#x27;AZURE_STORAGE_KEY&#x27;</span>, <span class="string">&#x27;xxx&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;container&#x27;</span> =&gt; env(<span class="string">&#x27;AZURE_STORAGE_CONTAINER&#x27;</span>, <span class="string">&#x27;xxx&#x27;</span>),</span><br><span class="line">],</span><br></pre></td></tr></table></figure></li>
+<li><p><code>/Users/zhimma/Data/www/lumen/bootstrap/app.php</code></p>
+<ol>
+<li>添加<code>$app-&gt;configure(&#39;filesystems&#39;);</code>表示加载该配置文件项</li>
+<li>添加<code>$app-&gt;register(\Illuminate\Filesystem\FilesystemServiceProvider::class);</code>加载该服务提供者</li>
+</ol>
+</li>
+<li><p><code>/Users/zhimma/Data/www/lumen/app/Providers/AppServiceProvider.php</code></p>
+<p>新增下面的方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Storage::extend(<span class="string">&#x27;azure&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$app</span>, <span class="variable">$config</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$endpoint</span> = sprintf(<span class="string">&#x27;DefaultEndpointsProtocol=https;AccountName=%s;AccountKey=%s;EndpointSuffix=core.chinacloudapi.cn&#x27;</span>,</span><br><span class="line">            <span class="variable">$config</span>[<span class="string">&#x27;name&#x27;</span>], <span class="variable">$config</span>[<span class="string">&#x27;key&#x27;</span>], <span class="variable">$config</span>[<span class="string">&#x27;url&#x27;</span>] ?? <span class="literal">null</span>, <span class="variable">$config</span>[<span class="string">&#x27;prefix&#x27;</span>] ?? <span class="literal">null</span>);</span><br><span class="line">        <span class="variable">$client</span> = BlobRestProxy::createBlobService(<span class="variable">$endpoint</span>);</span><br><span class="line">        <span class="variable">$adapter</span> = <span class="keyword">new</span> AzureBlobStorageAdapter(<span class="variable">$client</span>, <span class="variable">$config</span>[<span class="string">&#x27;container&#x27;</span>], <span class="variable">$config</span>[<span class="string">&#x27;prefix&#x27;</span>] ?? <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Filesystem(<span class="variable">$adapter</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/5.5/filesystem/1319#custom-filesystems">https://learnku.com/docs/laravel/5.5/filesystem/1319#custom-filesystems</a></p>
+</li>
+</ol>
+<h3 id="上传测试"><a href="#上传测试" class="headerlink" title="上传测试"></a>上传测试</h3><p>新增好路由后，我们进行上传测试</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 文件上传</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> Request $request</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> \Exception</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span>  zhimma</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span>    2019/5/27 12:00 PM</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">upload</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$request</span>-&gt;hasFile(<span class="string">&#x27;file&#x27;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&quot;文件不存在&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$file</span> = <span class="variable">$request</span>-&gt;file(<span class="string">&#x27;file&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$file</span>-&gt;isValid()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="variable">$file</span>-&gt;getErrorMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$path</span> = Storage::put(date(<span class="string">&#x27;Ymd&#x27;</span>), <span class="variable">$file</span>);</span><br><span class="line">        <span class="variable">$url</span> = env(<span class="string">&#x27;AZURE_BLOB_URL&#x27;</span>).<span class="string">&#x27;/&#x27;</span>.env(<span class="string">&#x27;AZURE_STORAGE_CONTAINER&#x27;</span>).<span class="string">&#x27;/&#x27;</span>.<span class="variable">$path</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;success([<span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$url</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>返回如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;status&quot;</span>: <span class="string">&quot;success&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;httpCode&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">&quot;statusCode&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;url&quot;</span>: <span class="string">&quot;https://xxx.blob.core.chinacloudapi.cn/xxx/20190816/FKRJQXqo1Rdm77mAW2biuBSaVx12mH4U52NtKlZI.png&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>至此配置完成</p>
+<p>参考</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://matthewdaly.co.uk/blog/2016/10/24/creating-an-azure-storage-adapter-for-laravel/">https://matthewdaly.co.uk/blog/2016/10/24/creating-an-azure-storage-adapter-for-laravel/</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/56267900/how-to-use-azure-blob-in-lumen">https://stackoverflow.com/questions/56267900/how-to-use-azure-blob-in-lumen</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Azure/" rel="tag"># Azure</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/06/19/Jenkins%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="prev" title="Jenkins初始化及常见问题整理">
+                  <i class="fa fa-chevron-left"></i> Jenkins初始化及常见问题整理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/02/%E9%A1%B9%E7%9B%AE%E5%8E%8B%E6%B5%8B%E5%8F%8A%E8%B0%83%E4%BC%98/" rel="next" title="项目压测及调优">
+                  项目压测及调优 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

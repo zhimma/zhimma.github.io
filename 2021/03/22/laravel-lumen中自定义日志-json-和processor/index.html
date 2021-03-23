@@ -1,37 +1,404 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] 项目上线后,有一些场景需要收集日志进行业务分析或者进行业务监控用，通常需要将日志转为json的格式，这里记录下laravel框架中如何最小化改动进行日志格式化，完成收集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel&#x2F;lumen中自定义日志(json)和processor">
+<meta property="og:url" content="https://blog.zhimma.com/2021/03/22/laravel-lumen%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97-json-%E5%92%8Cprocessor/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] 项目上线后,有一些场景需要收集日志进行业务分析或者进行业务监控用，通常需要将日志转为json的格式，这里记录下laravel框架中如何最小化改动进行日志格式化，完成收集">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-03-22T03:58:43.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:08:23.573Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="log">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2021/03/22/laravel-lumen%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97-json-%E5%92%8Cprocessor/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>laravel/lumen中自定义日志(json)和processor | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#logging%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="nav-number">1.</span> <span class="nav-text">logging文件修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%97%A5%E5%BF%97%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">实现自定义格式化日志类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2021/03/22/laravel-lumen%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97-json-%E5%92%8Cprocessor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          laravel/lumen中自定义日志(json)和processor
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-22 11:58:43" itemprop="dateCreated datePublished" datetime="2021-03-22T11:58:43+08:00">2021-03-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:08:23" itemprop="dateModified" datetime="2021-03-23T18:08:23+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Laravel/" itemprop="url" rel="index"><span itemprop="name">Laravel</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<p>项目上线后,有一些场景需要收集日志进行业务分析或者进行业务监控用，通常需要将日志转为<code>json</code>的格式，这里记录下laravel框架中如何最小化改动进行日志格式化，完成收集</p>
+ <span id="more"></span>
+
+<p>先看一下最终收集的数据格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">调用：</span><br><span class="line">Log::info(&quot;code登陆后解析返回的数据&quot;, is_array($result) ? $result : [$result]);</span><br><span class="line">日志记录：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;@timestamp&quot;:&quot;2021-03-22T14:42:44.538683+08:00&quot;,</span><br><span class="line">    &quot;@version&quot;:1,</span><br><span class="line">    &quot;host&quot;:&quot;7468a43f9a91&quot;,</span><br><span class="line">    &quot;message&quot;:&quot;code登陆后解析返回的数据&quot;,</span><br><span class="line">    &quot;type&quot;:&quot;legendage&quot;,</span><br><span class="line">    &quot;channel&quot;:&quot;prod&quot;,</span><br><span class="line">    &quot;level&quot;:&quot;INFO&quot;,</span><br><span class="line">    &quot;monolog_level&quot;:200,</span><br><span class="line">    &quot;extra&quot;:&#123;</span><br><span class="line">        &quot;request_id&quot;:&quot;e5031cbd2ea6f3a86c8a9c41a1d637b827171&quot;,</span><br><span class="line">        &quot;process_id&quot;:89,</span><br><span class="line">        &quot;memory_usage&quot;:&quot;2 MB&quot;,</span><br><span class="line">        &quot;url&quot;:&quot;&#x2F;api&#x2F;auth&#x2F;login?code&#x3D;023A051w37kB4W2GNn3w3hueAU2A0516&quot;,</span><br><span class="line">        &quot;ip&quot;:&quot;1.85.216.155&quot;,</span><br><span class="line">        &quot;http_method&quot;:&quot;GET&quot;,</span><br><span class="line">        &quot;server&quot;:&quot;api.domain.cn&quot;,</span><br><span class="line">        &quot;referrer&quot;:&quot;https:&#x2F;&#x2F;servicewechat.com&#x2F;appid&#x2F;devtools&#x2F;page-frame.html&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;context&quot;:&#123;</span><br><span class="line">        &quot;session_key&quot;:&quot;SuW7afBI0sYjOHmExBwIMw&#x3D;&#x3D;&quot;,</span><br><span class="line">        &quot;openid&quot;:&quot;o9GF_5dZ5ZS1-wLyx4ziY1z2Shds&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一般说来除了<code>extra</code>可以进行自定义添加附加的数据，其他的数据均由框架自动生成，原有的日志生成方法不变，接下来演示下如何配置：</p>
+<h1 id="logging文件修改"><a href="#logging文件修改" class="headerlink" title="logging文件修改"></a>logging文件修改</h1><p>找到<code>src/config/logging.php</code>文件，进行下列配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">use App\Logging\LogstashJsonFormatter;</span><br><span class="line"></span><br><span class="line">return [</span><br><span class="line">    &#39;default&#39; &#x3D;&gt; env(&#39;LOG_CHANNEL&#39;, &#39;stack&#39;),</span><br><span class="line">    &#39;channels&#39; &#x3D;&gt; [</span><br><span class="line">        &#39;stack&#39; &#x3D;&gt; [</span><br><span class="line">            &#39;driver&#39; &#x3D;&gt; &#39;stack&#39;,</span><br><span class="line">            &#39;channels&#39; &#x3D;&gt; [&#39;daily&#39;],</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &#39;single&#39; &#x3D;&gt; [</span><br><span class="line">            &#39;driver&#39; &#x3D;&gt; &#39;single&#39;,</span><br><span class="line">            &#39;path&#39; &#x3D;&gt; storage_path(&#39;logs&#x2F;lumen.log&#39;),</span><br><span class="line">            &#39;level&#39; &#x3D;&gt; &#39;debug&#39;,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &#39;daily&#39; &#x3D;&gt; [</span><br><span class="line">            &#39;driver&#39; &#x3D;&gt; &#39;daily&#39;,</span><br><span class="line">            &#39;path&#39; &#x3D;&gt; storage_path(&#39;logs&#x2F;app&#x2F;&#39; . date(&#39;Y&#x2F;m&#x2F;d&#x2F;\h-H&#39;, time()) . &#39;.log&#39;),</span><br><span class="line">            &#39;level&#39; &#x3D;&gt; &#39;debug&#39;,</span><br><span class="line">            &#39;days&#39; &#x3D;&gt; 14,</span><br><span class="line">            &#39;permission&#39; &#x3D;&gt; 0755,</span><br><span class="line">            &#39;tap&#39; &#x3D;&gt; [LogstashJsonFormatter::class,], &#x2F;&#x2F; 重点是这一句</span><br><span class="line">        ],</span><br><span class="line">  	],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>具体说明可参考官方文档：<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/logging/9376#customizing-monolog-for-channels">https://learnku.com/docs/laravel/8.x/logging/9376#customizing-monolog-for-channels</a></p>
+</blockquote>
+<h1 id="实现自定义格式化日志类"><a href="#实现自定义格式化日志类" class="headerlink" title="实现自定义格式化日志类"></a>实现自定义格式化日志类</h1><p>官方的自定义格式化类示例是在<code>App\Logging</code>命名空间下，所以我们在app目录下创建我们的自定义格式化类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Logging;</span><br><span class="line"></span><br><span class="line">use App\Logging\Formatter\LogStashFormatter as CustomerLogstashFormatter;</span><br><span class="line">use Illuminate\Log\Logger;</span><br><span class="line">use Monolog\Formatter\LogstashFormatter as MonoLogstashFormatter;</span><br><span class="line">use Monolog\Processor\MemoryUsageProcessor;</span><br><span class="line">use Monolog\Processor\ProcessIdProcessor;</span><br><span class="line">use Monolog\Processor\WebProcessor;</span><br><span class="line"></span><br><span class="line">class LogstashJsonFormatter</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 自定义给定的日志实例</span><br><span class="line">     *</span><br><span class="line">     * @param Logger $logger</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public function __invoke(Logger $logger)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach ($logger-&gt;getHandlers() as $handler) &#123;</span><br><span class="line">            $handler-&gt;setFormatter(new CustomerLogstashFormatter(env(&quot;APP_NAME&quot;)));</span><br><span class="line">            $handler-&gt;pushProcessor(new WebProcessor());</span><br><span class="line">            $handler-&gt;pushProcessor(new MemoryUsageProcessor());</span><br><span class="line">            $handler-&gt;pushProcessor(new ProcessIdProcessor());</span><br><span class="line">            &#x2F;&#x2F; 进行额外扩展数据的添加</span><br><span class="line">            $handler-&gt;pushProcessor(</span><br><span class="line">                function ($record) &#123;</span><br><span class="line">                    $record[&#39;extra&#39;][&#39;request_id&#39;] &#x3D; REQUEST_ID;</span><br><span class="line">                    return $record;</span><br><span class="line">                &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>参考上面的实现就可以完成上面说的<code>json</code>格式的日志</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p>Using Monolog:<a target="_blank" rel="noopener" href="http://seldaek.github.io/monolog/doc/01-usage.html">http://seldaek.github.io/monolog/doc/01-usage.html</a></p>
+<p>[Proposal] Add processors option to monolog:<a target="_blank" rel="noopener" href="https://github.com/laravel/ideas/issues/1796">https://github.com/laravel/ideas/issues/1796</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Laravel/" rel="tag"># Laravel</a>
+              <a href="/tags/log/" rel="tag"># log</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/20/Consul%E5%88%9D%E4%BD%93%E9%AA%8C/" rel="prev" title="Consul初体验">
+                  <i class="fa fa-chevron-left"></i> Consul初体验
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

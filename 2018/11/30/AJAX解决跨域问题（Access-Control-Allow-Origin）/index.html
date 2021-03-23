@@ -1,37 +1,475 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="之前遇到过跨域的问题,一直觉得很神秘,也没有多关注,就过去了,今天又看到几篇文章说跨域,闲来无事于是将其整理记录下来； 一些概念先来阐述下几个概念:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AJAX解决跨域问题（Access-Control-Allow-Origin）">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/AJAX%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%EF%BC%88Access-Control-Allow-Origin%EF%BC%89/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="之前遇到过跨域的问题,一直觉得很神秘,也没有多关注,就过去了,今天又看到几篇文章说跨域,闲来无事于是将其整理记录下来； 一些概念先来阐述下几个概念:">
+<meta property="og:locale">
+<meta property="og:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/JavaScript/error1.png">
+<meta property="og:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/JavaScript/success%60.png">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:06:40.044Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Cors">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/JavaScript/error1.png">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/AJAX%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%EF%BC%88Access-Control-Allow-Origin%EF%BC%89/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>AJAX解决跨域问题（Access-Control-Allow-Origin） | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">一些概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution-1-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%A8%8B%E5%BA%8F%E8%A7%A3%E5%86%B3"><span class="nav-number">2.1.</span> <span class="nav-text">Solution 1:服务端程序解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution-2-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">Solution 2:代理模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution-3-%E4%BD%BF%E7%94%A8JSONP"><span class="nav-number">2.3.</span> <span class="nav-text">Solution 3:使用JSONP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution-4-%E4%BD%BF%E7%94%A8html5-API-postMessage-%E8%BD%AC%E8%87%AA%E8%BF%99%E9%87%8C"><span class="nav-number">3.</span> <span class="nav-text">Solution 4:使用html5 API postMessage(转自这里)</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/AJAX%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%EF%BC%88Access-Control-Allow-Origin%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AJAX解决跨域问题（Access-Control-Allow-Origin）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:06:40" itemprop="dateModified" datetime="2021-03-23T18:06:40+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>之前遇到过跨域的问题,一直觉得很神秘,也没有多关注,就过去了,今天又看到几篇文章说跨域,闲来无事于是将其整理记录下来；</p>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>先来阐述下几个概念:</p>
+ <span id="more"></span>
+
+<p><strong>跨域</strong>:是指浏览器对于JavaScript的同源策略限制,只要协议、域名、端口有任何一个不同,都被当作是不同的域,都不能执行或获取其他网站的资源；</p>
+<p>姑且这么定义吧,举个简单例子,就是<a target="_blank" rel="noopener" href="http://www.client.com网站上的程序不能从www.server.com网站上获取数据,如果强行获取,则会报出下面错误/">www.client.com网站上的程序不能从www.server.com网站上获取数据,如果强行获取,则会报出下面错误</a></p>
+<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/JavaScript/error1.png" alt="image"></p>
+<!-- more -->
+
+<p>有没有跨域,判断是不是属于跨域,可以参考下面:</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>说明</th>
+<th>是否允许通信</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/a.js">http://www.a.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://www.a.com/b.js">http://www.a.com/b.js</a></td>
+<td>同一域名下</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/lab/a.js">http://www.a.com/lab/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://www.a.com/script/b.js">http://www.a.com/script/b.js</a></td>
+<td>同一域名下不同文件夹</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com:8000/a.js">http://www.a.com:8000/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://www.a.com/b.js">http://www.a.com/b.js</a></td>
+<td>同一域名,不同端口</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/a.js">http://www.a.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="https://www.a.com/b.js">https://www.a.com/b.js</a></td>
+<td>同一域名,不同协议</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/a.js">http://www.a.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://70.32.92.74/b.js">http://70.32.92.74/b.js</a></td>
+<td>域名和域名对应ip</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/a.js">http://www.a.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://script.a.com/b.js">http://script.a.com/b.js</a></td>
+<td>主域相同,子域不同</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.a.com/a.js">http://www.a.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://a.com/b.js">http://a.com/b.js</a> 同一域名,不同二级域名（同上）</td>
+<td>不允许（cookie这种情况下也不允许访问）</td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://www.cnblogs.com/a.js">http://www.cnblogs.com/a.js</a> 调用 <a target="_blank" rel="noopener" href="http://www.a.com/b.js">http://www.a.com/b.js</a></td>
+<td>不同域名</td>
+<td>不允许</td>
+</tr>
+</tbody></table>
+<p><strong>CORS</strong>:<strong>CORS（Cross-Origin Resource Sharing）跨域资源共享</strong>,定义了必须在访问跨域资源时,浏览器与服务器应该如何沟通.CORS背后的基本思想就是使用自定义的HTTP头部让浏览器与服务器进行沟通,从而决定请求或响应是应该成功还是失败.</p>
+<p>服务器端对于<strong>CORS</strong>的支持,主要就是通过设置<strong>Access-Control-Allow-Origin</strong>来进行的.如果浏览器检测到相应的设置,就可以允许Ajax进行跨域的访问.</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="Solution-1-服务端程序解决"><a href="#Solution-1-服务端程序解决" class="headerlink" title="Solution 1:服务端程序解决"></a>Solution 1:服务端程序解决</h3><p>如果是双方预定沟通好请求允许数据,可以在服务端添加header头来解决</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">header( &quot;Access-Control-Allow-Origin:*&quot; );</span><br><span class="line"></span><br><span class="line">header( &quot;Access-Control-Allow-Methods:POST,GET&quot; );</span><br></pre></td></tr></table></figure>
+
+<p>看下面的例子:</p>
+<p>客户端 <a target="_blank" rel="noopener" href="http://www.client.com/cliend.html">www.client.com/cliend.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;content-type&quot; content&#x3D;&quot;text&#x2F;html;charset&#x3D;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt; 跨域测试 &lt;&#x2F;title&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;&#x2F;&#x2F;code.jquery.com&#x2F;jquery-1.11.3.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;button style&#x3D;&quot;width:100px&quot;&gt;click client&lt;&#x2F;button&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;</span><br><span class="line">    $(&quot;button&quot;).click(function () &#123;</span><br><span class="line">        $.ajax(&#123;</span><br><span class="line">            url: &quot;http:&#x2F;&#x2F;www.server.com&#x2F;server.php&quot;,</span><br><span class="line">            type: &quot;post&quot;,</span><br><span class="line">            data: &#123;&#39;text&#39;: &#39;hello world&#39;&#125;,</span><br><span class="line">            success: function (msg) &#123;</span><br><span class="line">                $(&quot;button&quot;).html(msg);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>服务器端 <a target="_blank" rel="noopener" href="http://www.server.com/server.php">www.server.com/server.php</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;允许所有域名获取数据</span><br><span class="line">&lt;?php</span><br><span class="line">$text &#x3D; $_POST[&#39;text&#39;];</span><br><span class="line">&#x2F;&#x2F;允许所有的域名</span><br><span class="line">header(&#39;content-type:application:json;charset&#x3D;utf8&#39;);</span><br><span class="line">header(&#39;Access-Control-Allow-Origin:*&#39;);  </span><br><span class="line">header(&#39;Access-Control-Allow-Methods:POST,GET&#39;);  </span><br><span class="line">header(&#39;Access-Control-Allow-Headers:x-requested-with,content-type&#39;);</span><br><span class="line">echo json_encode($text);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;允许制定域名获取数据</span><br><span class="line">&lt;?php</span><br><span class="line">$text &#x3D; $_POST[&#39;text&#39;];</span><br><span class="line">header(&#39;content-type:application:json;charset&#x3D;utf8&#39;);</span><br><span class="line">$origin &#x3D; isset($_SERVER[&#39;HTTP_ORIGIN&#39;]) ? $_SERVER[&#39;HTTP_ORIGIN&#39;] : &#39;&#39;;</span><br><span class="line">&#x2F;&#x2F;允许指定域名</span><br><span class="line">$allow_origin &#x3D; [</span><br><span class="line">    &#39;http:&#x2F;&#x2F;www.client.com&#39;,</span><br><span class="line">    &#39;http:&#x2F;&#x2F;www.client2.com&#39;</span><br><span class="line">];</span><br><span class="line">if (in_array($origin, $allow_origin)) &#123;</span><br><span class="line">    header(&#39;Access-Control-Allow-Origin:&#39; . $origin);</span><br><span class="line">    header(&#39;Access-Control-Allow-Methods:POST,GET&#39;);</span><br><span class="line">    header(&#39;Access-Control-Allow-Headers:x-requested-with,content-type&#39;);</span><br><span class="line">&#125;</span><br><span class="line">echo json_encode($text);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这样,理论上就可以解决跨域问题:</p>
+<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/JavaScript/success%60.png" alt="image"></p>
+<h3 id="Solution-2-代理模式"><a href="#Solution-2-代理模式" class="headerlink" title="Solution 2:代理模式"></a>Solution 2:代理模式</h3><p>解决思路:<br>例如 <a target="_blank" rel="noopener" href="http://www.client.com/client.html">www.client.com/client.html</a> 需要调用 <a target="_blank" rel="noopener" href="http://www.server.com/server.php">www.server.com/server.php</a> ,可以写一个接口 <a target="_blank" rel="noopener" href="http://www.client.com/server.php">www.client.com/server.php</a> ,由这个接口在后端去调用 <a target="_blank" rel="noopener" href="http://www.server.com/server.php">www.server.com/server.php</a> 并拿到返回值,然后再返回给index.html,这就是一个代理的模式.相当于绕过了浏览器端,自然就不存在跨域问题.</p>
+<h3 id="Solution-3-使用JSONP"><a href="#Solution-3-使用JSONP" class="headerlink" title="Solution 3:使用JSONP"></a>Solution 3:使用JSONP</h3><p>使用之前,建议去看下我的另一篇文章<a target="_blank" rel="noopener" href="https://blog.bytesclub.com/2017/06/12/JSON%E5%92%8CJSONP/">Json和JsonP</a>,然后再过来实践；</p>
+<p>还是直接上代码:</p>
+<p>客户端 <a target="_blank" rel="noopener" href="http://www.client.com/client.html">www.client.com/client.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;content-type&quot; content&#x3D;&quot;text&#x2F;html;charset&#x3D;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt; 跨域测试 &lt;&#x2F;title&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;&#x2F;&#x2F;code.jquery.com&#x2F;jquery-1.11.3.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;button id&#x3D;&quot;clickMe&quot; style&#x3D;&quot;width:100px&quot;&gt;click get jsonP&lt;&#x2F;button&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;</span><br><span class="line">    $(&quot;#clickMe&quot;).click(function () &#123;</span><br><span class="line">        $.ajax(&#123;</span><br><span class="line">            url: &quot;http:&#x2F;&#x2F;www.server.com&#x2F;jsonP.json&quot;,</span><br><span class="line">            type: &quot;post&quot;,</span><br><span class="line">            dataType: &quot;jsonP&quot;,</span><br><span class="line">            data: &#123;&#39;text&#39;: &#39;hello world&#39;&#125;,</span><br><span class="line">            jsonpCallback: &#39;returnData&#39;,  &#x2F;&#x2F;可自定义 函数名</span><br><span class="line">            success: function (msg) &#123;</span><br><span class="line">                alert(msg.text);</span><br><span class="line">            &#125;,</span><br><span class="line">            error: function (XMLHttpRequest, textStatus, errorThrown) &#123;</span><br><span class="line">                alert(XMLHttpRequest.status);</span><br><span class="line">                alert(XMLHttpRequest.readyState);</span><br><span class="line">                alert(textStatus);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>服务器端 <a target="_blank" rel="noopener" href="http://www.server.com/jsonP.json">www.server.com/jsonP.json</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">returnData(&#123;&quot;text&quot;:&quot;hello jsonP&quot;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>同样的也可以跨域获取数据</p>
+<h2 id="Solution-4-使用html5-API-postMessage-转自这里"><a href="#Solution-4-使用html5-API-postMessage-转自这里" class="headerlink" title="Solution 4:使用html5 API postMessage(转自这里)"></a>Solution 4:<a target="_blank" rel="noopener" href="http://blog.xieliqun.com/2016/08/25/postMessage-cross-domain/">使用html5 API postMessage(转自这里)</a></h2><p>客户端 <a target="_blank" rel="noopener" href="http://www.client.com/client.html">www.client.com/client.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;&#x2F;title&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;iframe style&#x3D;&quot;display: none&quot; src&#x3D;&quot;http:&#x2F;&#x2F;www.server.com&#x2F;server.html&quot; name&#x3D;&quot;postIframe&quot; onload&#x3D;&quot;messageLoad()&quot;&gt;&lt;&#x2F;iframe&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    function messageLoad() &#123;</span><br><span class="line">        var url &#x3D; &quot;http:&#x2F;&#x2F;www.server.com&quot;;</span><br><span class="line">        window.postIframe.postMessage(&quot;给我tsort的信息&quot;, url); &#x2F;&#x2F;发送数据</span><br><span class="line">    &#125;</span><br><span class="line">    window.onmessage &#x3D; function (e) &#123;</span><br><span class="line">        e &#x3D; e || event;</span><br><span class="line">        console.log(e.data); &#x2F;&#x2F;接收b返回的数据,在控制台有两次输出</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>服务器端 <a target="_blank" rel="noopener" href="http://www.server.com/server.html">www.server.com/server.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;&#x2F;title&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.onmessage &#x3D; function(e)&#123;</span><br><span class="line">        e &#x3D; e || event;</span><br><span class="line">        alert(e.data); &#x2F;&#x2F;立即弹出a发送过来的数据</span><br><span class="line">        e.source.postMessage(&quot;好的,请稍等三秒！&quot;,e.origin); &#x2F;&#x2F;立即回复a</span><br><span class="line"></span><br><span class="line">        var postData &#x3D; &#123;name:&quot;tsrot&quot;,age:24&#125;;</span><br><span class="line">        var strData &#x3D; JSON.stringify(postData); &#x2F;&#x2F;json对象转化为字符串</span><br><span class="line">        setTimeout(function()&#123;</span><br><span class="line">            e.source.postMessage(strData,e.origin);</span><br><span class="line">        &#125;,3000); &#x2F;&#x2F;3秒后向a发送数据</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cors/" rel="tag"># Cors</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/CentOS7%E2%98%9Elnmp%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="prev" title="CentOS7☞lnmp环境搭建">
+                  <i class="fa fa-chevron-left"></i> CentOS7☞lnmp环境搭建
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/25/1-Mac-Docker-Kubernetes-Rancher-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96/" rel="next" title="1-Mac-Docker-Kubernetes-Rancher-环境初始化">
+                  1-Mac-Docker-Kubernetes-Rancher-环境初始化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

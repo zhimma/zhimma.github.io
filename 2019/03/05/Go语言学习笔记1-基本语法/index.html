@@ -1,37 +1,604 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] 变量声明(使用var关键字) 变量（Variable）的功能是存储用户的数据,不同的逻辑有不同的对象类型，也就有不同的变量类型  Go语言使用var关键字进行变量的声明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言学习笔记1-基本语法">
+<meta property="og:url" content="https://blog.zhimma.com/2019/03/05/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] 变量声明(使用var关键字) 变量（Variable）的功能是存储用户的数据,不同的逻辑有不同的对象类型，也就有不同的变量类型  Go语言使用var关键字进行变量的声明">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-03-05T08:48:28.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:07:26.377Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2019/03/05/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Go语言学习笔记1-基本语法 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E-%E4%BD%BF%E7%94%A8var%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.</span> <span class="nav-text">变量声明(使用var关键字)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">标准格式声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E6%A0%BC%E5%BC%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">批量格式声明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">变量初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">变量初始化标准格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E6%8E%A8%E5%AF%BC%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">编译器推导类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%AD%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E5%B9%B6%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.3.</span> <span class="nav-text">短变量声明并初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%8F%98%E9%87%8F%E5%90%8C%E6%97%B6%E8%B5%8B%E5%80%BC"><span class="nav-number">3.</span> <span class="nav-text">多个变量同时赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">匿名变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">Go语言类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">整数类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%EF%BC%88%E5%B0%8F%E6%95%B0%E7%B1%BB%E5%9E%8B%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">浮点类型（小数类型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bool%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.3.</span> <span class="nav-text">bool类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">5.4.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E4%B9%89%E7%AC%A6"><span class="nav-number">5.4.1.</span> <span class="nav-text">字符串转义符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%A4%9A%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">5.4.2.</span> <span class="nav-text">定义多行字符串</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E7%B1%BB%E5%9E%8B-byte%E5%92%8Crune"><span class="nav-number">5.5.</span> <span class="nav-text">字符类型(byte和rune)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.</span> <span class="nav-text">Go数据类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F"><span class="nav-number">7.</span> <span class="nav-text">常量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F%E6%9E%9A%E4%B8%BE-const%E5%92%8Ciota%E6%A8%A1%E6%8B%9F%E6%9E%9A%E4%B8%BE"><span class="nav-number">8.</span> <span class="nav-text">模拟枚举(const和iota模拟枚举)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80type%E5%85%B3%E9%94%AE%E5%AD%97-%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D"><span class="nav-number">9.</span> <span class="nav-text">Go语言type关键字(类型别名)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">9.1.</span> <span class="nav-text">类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D"><span class="nav-number">9.2.</span> <span class="nav-text">类型别名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88"><span class="nav-number">10.</span> <span class="nav-text">Go语言指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%9C%B0%E5%9D%80%E5%92%8C%E6%8C%87%E9%92%88%E7%B1%BB%E5%9E%8B"><span class="nav-number">10.1.</span> <span class="nav-text">指针地址和指针类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%8F%96%E5%80%BC"><span class="nav-number">10.2.</span> <span class="nav-text">指针取值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E3%80%81%E6%8C%87%E9%92%88%E5%9C%B0%E5%9D%80%E3%80%81%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E3%80%81%E5%8F%96%E5%9C%B0%E5%9D%80%E3%80%81%E5%8F%96%E5%80%BC%E7%9A%84%E7%9B%B8%E4%BA%92%E5%85%B3%E7%B3%BB%E5%92%8C%E7%89%B9%E6%80%A7"><span class="nav-number">10.3.</span> <span class="nav-text">变量、指针地址、指针变量、取地址、取值的相互关系和特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E9%92%88%E4%BF%AE%E6%94%B9%E5%80%BC"><span class="nav-number">10.4.</span> <span class="nav-text">使用指针修改值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%8C%87%E9%92%88%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%E2%80%94%E2%80%94new-%E5%87%BD%E6%95%B0"><span class="nav-number">10.5.</span> <span class="nav-text">创建指针的另一种方法——new() 函数</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/03/05/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言学习笔记1-基本语法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-05 16:48:28" itemprop="dateCreated datePublished" datetime="2019-03-05T16:48:28+08:00">2019-03-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:07:26" itemprop="dateModified" datetime="2021-03-23T18:07:26+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="变量声明-使用var关键字"><a href="#变量声明-使用var关键字" class="headerlink" title="变量声明(使用var关键字)"></a>变量声明(使用var关键字)</h2><blockquote>
+<p>变量（Variable）的功能是存储用户的数据,不同的逻辑有不同的对象类型，也就有不同的变量类型</p>
+</blockquote>
+<p>Go语言使用<strong>var</strong>关键字进行变量的声明</p>
+ <span id="more"></span>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> c []<span class="keyword">float32</span></span><br><span class="line"><span class="keyword">var</span> d <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">bool</span></span></span><br><span class="line"><span class="keyword">var</span> e <span class="keyword">struct</span>&#123;</span><br><span class="line">    x <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一行，声明一个整形类型的变量，用来保存整数数值</li>
+<li>第二行，声明一个字符串类型的变量</li>
+<li>第三行，声明一个32位浮点切片类型的变量，浮点切片表示由多个浮点类型组成的数据结构</li>
+<li>第四行，声明一个返回值为bool类型的函数变量，这种形式一般用于回调函数，即将函数以变量的形式保存下来，在需要的时候重新调用这个函数</li>
+<li>声明一个结构体类型的变量，这个结构体拥有一个整形的x字段</li>
+</ul>
+<h3 id="标准格式声明"><a href="#标准格式声明" class="headerlink" title="标准格式声明"></a>标准格式声明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 变量名 变量类型</span><br></pre></td></tr></table></figure>
+
+<p>变量的声明是以var关键字开头，要声明的变量名放中间，将其类型放在后面，行尾无需分号</p>
+<h3 id="批量格式声明"><a href="#批量格式声明" class="headerlink" title="批量格式声明"></a>批量格式声明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	a <span class="keyword">int</span></span><br><span class="line">	b <span class="keyword">string</span></span><br><span class="line">	c []<span class="keyword">float32</span></span><br><span class="line">	d <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">bool</span></span></span><br><span class="line">	e <span class="keyword">struct</span> &#123;</span><br><span class="line">        x <span class="keyword">int</span></span><br><span class="line">	&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>使用var和括号，可以将一组变量定义放在一起</p>
+<h2 id="变量初始化"><a href="#变量初始化" class="headerlink" title="变量初始化"></a>变量初始化</h2><p>Go语言在声明变量时，自动对变量对应的内存区域进行初始化操作。每个变量会初始化其类型的默认值，例如：</p>
+<ul>
+<li>整型和浮点型变量的默认值为 0</li>
+<li>字符串变量的默认值为空字符串</li>
+<li>布尔型变量默认为 bool</li>
+<li>切片、函数、指针变量的默认为 nil</li>
+</ul>
+<p>在声明变量的时候也可以进行赋初始值</p>
+<h3 id="变量初始化标准格式"><a href="#变量初始化标准格式" class="headerlink" title="变量初始化标准格式"></a>变量初始化标准格式</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 变量名 类型 = 表达式</span><br><span class="line"><span class="keyword">var</span> name <span class="keyword">string</span> = <span class="string">&quot;zhimma&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="编译器推导类型"><a href="#编译器推导类型" class="headerlink" title="编译器推导类型"></a>编译器推导类型</h3><p>在标准格式的基础上，可以省略部分变量类型，编译器会尝试根据等号右边的表达式推导变量的类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&quot;zhimma&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>等号右边的部分在编译原理里被称做右值（rvalue）</p>
+<h3 id="短变量声明并初始化"><a href="#短变量声明并初始化" class="headerlink" title="短变量声明并初始化"></a>短变量声明并初始化</h3><p>var 的变量声明还有一种精简写法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := <span class="string">&quot;zhimma&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 左值变量必须是没有定义过的变量</p>
+</blockquote>
+<p>在多个短变量声明和赋值中，至少有一个新声明的变量出现在左值中，即便其他变量名可能是重复声明的，编译器也不会报错，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conn, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8080&quot;</span>)</span><br><span class="line">conn2, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8080&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="多个变量同时赋值"><a href="#多个变量同时赋值" class="headerlink" title="多个变量同时赋值"></a>多个变量同时赋值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int</span> = <span class="number">200</span></span><br><span class="line"></span><br><span class="line">b, a = a, b</span><br></pre></td></tr></table></figure>
+
+<p>多重赋值时，变量的左值和右值按从左到右的顺序赋值<br>多重赋值在 Go 语言的错误处理和函数返回值中会大量地使用。</p>
+<h2 id="匿名变量"><a href="#匿名变量" class="headerlink" title="匿名变量"></a>匿名变量</h2><p>在使用多重赋值时，如果不需要在左值中接收变量，可以使用匿名变量（anonymous variable）</p>
+<p>匿名变量的表现是一个下划线<code>_</code>,使用匿名变量时，只需要在变量声明的地方使用下画线替换即可</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetData</span><span class="params">()</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span>, <span class="number">200</span></span><br><span class="line">&#125;</span><br><span class="line">a, _ := GetData()</span><br><span class="line">_, b := GetData()</span><br><span class="line">fmt.Println(a, b)<span class="comment">// 100 200</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>匿名变量不占用命名空间，不会分配内存。匿名变量与匿名变量之间也不会因为多次声明而无法使用。</strong></p>
+<p>匿名变量：</p>
+<ul>
+<li>可以理解为一种占位符。</li>
+<li>本身这种变量不会进行空间分配，也不会占用一个变量的名字。</li>
+<li>在<code> for range</code> 可以对 key 使用匿名变量，也可以对 value 使用匿名变量。</li>
+</ul>
+<h2 id="Go语言类型"><a href="#Go语言类型" class="headerlink" title="Go语言类型"></a>Go语言类型</h2><p>Go语言 中有丰富的数据类型，除了基本的整型、浮点型、布尔型、字符串外，还有切片、结构体、函数、map、通道（channel）等。Go 语言的基本类型和其他语言大同小异，切片类型有着指针的便利性，但比指针更为安全，很多高级语言都配有切片进行安全和高效率的内存操作。</p>
+<h3 id="整数类型"><a href="#整数类型" class="headerlink" title="整数类型"></a>整数类型</h3><p>整型分为以下两个大类：</p>
+<ul>
+<li>按长度分为：int8、int16、int32、int64</li>
+<li>还有对应的无符号整型：uint8、uint16、uint32、uint64</li>
+</ul>
+<p>其中，uint8 就是我们熟知的 byte 型，int16 对应C语言中的 short 型，int64 对应C语言中的 long 型。</p>
+<h3 id="浮点类型（小数类型）"><a href="#浮点类型（小数类型）" class="headerlink" title="浮点类型（小数类型）"></a>浮点类型（小数类型）</h3><p>Go语言</p>
+<p>支持两种浮点型数：float32 和 float64。这两种浮点型数据格式遵循 IEEE 754 标准：</p>
+<ul>
+<li>float32 的浮点数的最大范围约为 3.4e38，可以使用常量定义：math.MaxFloat32。</li>
+<li>float64 的浮点数的最大范围约为 1.8e308，可以使用一个常量定义：math.MaxFloat64。</li>
+</ul>
+<p>打印浮点数时，可以使用 fmt 包配合动词<code>%f</code>，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">        <span class="string">&quot;fmt&quot;</span></span><br><span class="line">        <span class="string">&quot;math&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;%f\n&quot;</span>, math.Pi) 	<span class="comment">//按默认宽度和精度输出整型</span></span><br><span class="line">        fmt.Printf(<span class="string">&quot;%.2f\n&quot;</span>, math.Pi)	<span class="comment">//按默认宽度，2 位精度输出（小数点后的位数）。</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 3.141593</span></span><br><span class="line"><span class="comment">// 3.14</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="bool类型"><a href="#bool类型" class="headerlink" title="bool类型"></a>bool类型</h3><p>布尔型数据只有 true（真）和 false（假）两个值，布尔型无法参与数值运算，也无法与其他类型进行转换</p>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>字符串在Go语言中以原生数据类型出现，使用字符串就像使用其他原生数据类型（int、bool、float32、float64 等）一样。</p>
+<h4 id="字符串转义符"><a href="#字符串转义符" class="headerlink" title="字符串转义符"></a>字符串转义符</h4><p>Go 语言的字符串常见转义符包含回车、换行、单双引号、制表符等，如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>转移符</th>
+<th>含  义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\r</td>
+<td>回车符（返回行首）</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符（直接跳到下一行的同列位置）</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>&#39;</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\</td>
+<td>反斜杠</td>
+</tr>
+</tbody></table>
+<h4 id="定义多行字符串"><a href="#定义多行字符串" class="headerlink" title="定义多行字符串"></a>定义多行字符串</h4><p>在源码中，将字符串的值以双引号书写的方式是字符串的常见表达方式，被称为字符串字面量（string literal）<br>这种双引号字面量不能跨行。如果需要在源码中嵌入一个多行字符串时，就必须使用**`**字符，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">`第一行</span></span><br><span class="line"><span class="string">第二行</span></span><br><span class="line"><span class="string">第三行</span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在**`**间的所有代码均不会被编译器识别，而只是作为字符串的一部分</p>
+</blockquote>
+<h3 id="字符类型-byte和rune"><a href="#字符类型-byte和rune" class="headerlink" title="字符类型(byte和rune)"></a>字符类型(byte和rune)</h3><p>字符串中的每一个元素叫做<strong>“字符”</strong>，在遍历或者单个获取字符串元素时可以获得字符</p>
+<p>Go语言的字符有以下两种：</p>
+<ol>
+<li><strong>uint8</strong>类型，也叫<strong>byte</strong>型，代表了<strong>ASCLL</strong>码中的一个字符</li>
+<li><strong>rune</strong>类型，代表一个<strong>UTF-8</strong>字符。当需要处理中文、日文或者其他复合字符时，则需要用到 rune 类型。rune 类型实际是一个 int32。</li>
+</ol>
+<p>使用<code>fmt.Printf</code>中的<code>%T</code>动词可以输出、变量的实际类型，使用这个方法可以查看 byte 和 rune 的本来类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">byte</span> = <span class="string">&#x27;a&#x27;</span></span><br><span class="line">fmt.Printf(<span class="string">&quot;%d %T\n&quot;</span>, a, a) <span class="comment">// 97 uint8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">rune</span> = <span class="string">&#x27;你&#x27;</span></span><br><span class="line">fmt.Printf(<span class="string">&quot;%d %T\n&quot;</span>, b, b) <span class="comment">// 20320 int32</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以发现，byte 类型的 a 变量，实际类型是 uint8，其值为 ‘a’，对应的 ASCII 编码为 97<br>rune 类型的 b 变量的实际类型是 int32，对应的 Unicode 码就是 20320<br>Go 使用了特殊的 rune 类型来处理 Unicode，让基于 Unicode 的文本处理更为方便，也可以使用 byte 型进行默认字符串处理，性能和扩展性都有照顾。</p>
+</blockquote>
+<h2 id="Go数据类型转换"><a href="#Go数据类型转换" class="headerlink" title="Go数据类型转换"></a>Go数据类型转换</h2><p>Go语言使用类型前置加括号的方式进行数据类型转换，一般格式如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T(表达式)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>T代表要转换的类型。表达式包括变量、复杂算子和函数返回值等</p>
+<p>类型转换时，需要考虑两种类型的关系和范围，是否会发生数值截断等</p>
+</blockquote>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>相对于变量，常量是恒定不变的值，例如圆周率。<br>可以在编译时，对常量表达式进行计算求值，并在运行期使用该计算结果，计算结果无法被修改。常量表示起来非常简单，如下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pi = <span class="number">4.14159</span></span><br></pre></td></tr></table></figure>
+
+<p>常量的声明和变量声明非常类似，只是把 var 换成了 const。</p>
+<p>多个变量可以一起声明，类似的，常量也是可以多个一起声明的，如下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    pi = <span class="number">3.141592</span></span><br><span class="line">    e = <span class="number">2.718281</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>常量因为在编译期确定，所以可以用于数组声明，如下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> size = <span class="number">4</span></span><br><span class="line"><span class="keyword">var</span> arr [size]<span class="keyword">int</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="模拟枚举-const和iota模拟枚举"><a href="#模拟枚举-const和iota模拟枚举" class="headerlink" title="模拟枚举(const和iota模拟枚举)"></a>模拟枚举(const和iota模拟枚举)</h2><p>Go语言现阶段没有枚举，可以使用 const 常量配合 iota 模拟枚举，请看下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Weapon <span class="keyword">int</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">     Arrow Weapon = <span class="literal">iota</span>    <span class="comment">// 开始生成枚举值, 默认为0</span></span><br><span class="line">     Shuriken</span><br><span class="line">     SniperRifle</span><br><span class="line">     Rifle</span><br><span class="line">     Blower</span><br><span class="line">)</span><br><span class="line"><span class="comment">// 输出所有枚举值</span></span><br><span class="line">fmt.Println(Arrow, Shuriken, SniperRifle, Rifle, Blower) <span class="comment">// 1 2 3 4</span></span><br><span class="line"><span class="comment">// 使用枚举类型并赋初值</span></span><br><span class="line"><span class="keyword">var</span> weapon Weapon = Blower</span><br><span class="line">fmt.Println(weapon) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<p>枚举类型其实本质是一个 int 一样。当然，某些情况下，如果需要 int32 和 int64 的枚举，也是可以的。</p>
+<h2 id="Go语言type关键字-类型别名"><a href="#Go语言type关键字-类型别名" class="headerlink" title="Go语言type关键字(类型别名)"></a>Go语言type关键字(类型别名)</h2><h3 id="类型定义"><a href="#类型定义" class="headerlink" title="类型定义"></a>类型定义</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="keyword">byte</span> <span class="keyword">uint8</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h3><p>类型别名的写法为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TypeAlias = Type</span><br></pre></td></tr></table></figure>
+
+<p>类型别名规定：TypeAlias 只是 Type 的别名，本质上 TypeAlias 与 Type 是同一个类型。就像一个孩子小时候有小名、乳名，上学后用学名，英语老师又会给他起英文名，但这些名字都指的是他本人。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将NewInt定义为int类型</span><br><span class="line">type NewInt int</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将int取一个别名叫IntAlias</span><br><span class="line">type IntAlias &#x3D; int</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">	var a NewInt</span><br><span class="line">	fmt.Printf(&quot;a type : %T\n&quot;, a) &#x2F;&#x2F; a type : main.NewInt</span><br><span class="line"></span><br><span class="line">	var b IntAlias</span><br><span class="line">	fmt.Printf(&quot;b type %T\n&quot;, b) &#x2F;&#x2F; b type int</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码说明如下：</p>
+<ul>
+<li>第 8 行，将 NewInt 定义为 int 类型，这是常见定义类型的方法，通过 type 关键字的定义，NewInt 会形成一种新的类型。NewInt 本身依然具备int的特性。</li>
+<li>第 11 行，将 IntAlias 设置为 int 的一个别名，使用 IntAlias 与 int 等效。</li>
+<li>第 15 行，将 a 声明为 NewInt 类型，此时若打印，则 a 的值为 0。</li>
+<li>第 16 行，使用<code>%T</code>格式化参数，显示 a 变量本身的类型。</li>
+<li>第 18 行，将 b 声明为 IntAlias 类型，此时打印 b 的值为 0。</li>
+<li>第 19 行，显示 b 变量的类型。</li>
+</ul>
+<p>结果显示a的类型是 main.NewInt，表示 main 包下定义的 NewInt 类型。b 类型是 int。IntAlias 类型只会在代码中存在，编译完成时，不会有 IntAlias 类型。</p>
+<h2 id="Go语言指针"><a href="#Go语言指针" class="headerlink" title="Go语言指针"></a>Go语言指针</h2><p>指针（pointer）概念在Go语言中被拆分为两个核心概念：</p>
+<ol>
+<li>类型指针，运行对这个指针类型的数据进行修改，传递数据使用指针，而无需拷贝数据。类型指针不能进行偏移和运算</li>
+<li>切片，由指向起始元素的原始指针、元素数量和容量组成</li>
+</ol>
+<p>受益于这样的约束和拆分，Go 语言的指针类型变量拥有指针的高效访问，但又不会发生指针偏移，从而避免非法修改关键性数据问题。同时，垃圾回收也比较容易对不会发生偏移的指针进行检索和回收。</p>
+<p>切片比原始指针具备更强大的特性，更为安全。切片发生越界时，运行时会报出宕机，并打出堆栈，而原始指针只会崩溃。</p>
+<p>要明白指针，需要知道几个概念：<strong>指针地址</strong>、<strong>指针类型</strong>和<strong>指针取值</strong>，下面将展开细说。</p>
+<h3 id="指针地址和指针类型"><a href="#指针地址和指针类型" class="headerlink" title="指针地址和指针类型"></a>指针地址和指针类型</h3><p>每个变量在运行时都拥有一个地址，这个地址代表变量在内存中的位置</p>
+<p>Go 语言中使用<code>&amp;</code>作符放在变量前面对变量进行“取地址”操作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ptr := &amp;v <span class="comment">// v的类型为T</span></span><br></pre></td></tr></table></figure>
+
+<p>其中v代表被取地址的变量，被取地址的v使用ptr变量进行接收，ptr的类型就为<code>*T</code>,称做 T 的指针类型，<code>*</code>代表指针。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> cat <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line">    <span class="keyword">var</span> str <span class="keyword">string</span> = <span class="string">&quot;banana&quot;</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;%p %p&quot;</span>, &amp;cat, &amp;str) <span class="comment">// 0xc042052088 0xc0420461b0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码说明：</p>
+<ul>
+<li>第 8 行，声明整型 cat 变量。</li>
+<li>第 9 行，声明字符串 str 变量。</li>
+<li>第 10 行，使用 fmt.Printf 的动词<code>%p</code>输出 cat 和 str 变量取地址后的指针值，指针值带有<code>0x</code>的十六进制前缀。</li>
+</ul>
+<p>输出值在每次运行是不同的，代表 cat 和 str 两个变量在运行时的地址。</p>
+<p><strong>提示：变量、指针和地址三者的关系是：每个变量都拥有地址，指针的值就是地址</strong></p>
+<h3 id="指针取值"><a href="#指针取值" class="headerlink" title="指针取值"></a>指针取值</h3><p>在对普通变量使用<code>&amp;</code>操作符获取地址获得这个变量的指针后，可以对指针使用<code>*</code>操作，也就是指针取值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 声明一个字符串类型变量</span></span><br><span class="line">	<span class="keyword">var</span> house = <span class="string">&quot;陕西西安&quot;</span></span><br><span class="line">	<span class="comment">// 对字符串取地址，ptr类型为*string</span></span><br><span class="line">	ptr := &amp;house</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输出ptr类型</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;ptr type: %T\n&quot;</span> , ptr) <span class="comment">// ptr type: *string</span></span><br><span class="line">	<span class="comment">// 输出ptr指针地址</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;address: %p\n&quot;</span> , ptr) <span class="comment">// address: 0xc00000e1e0</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 对指针进行取值操作</span></span><br><span class="line">	value := *ptr</span><br><span class="line">	<span class="comment">// 取值后类型</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;value type: %T\n&quot;</span> , value) <span class="comment">// value type: string</span></span><br><span class="line">	<span class="comment">// 指针去之后就是指向变量的值</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;value: %s\n&quot;</span> , value) <span class="comment">//value: 陕西西安</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>取地址操作符<code>&amp;</code>和取值操作符<code>*</code>是一对互补操作符，<code>&amp;</code>取出地址，<code>*</code>根据地址取出地址指向的值。</strong></p>
+<h3 id="变量、指针地址、指针变量、取地址、取值的相互关系和特性"><a href="#变量、指针地址、指针变量、取地址、取值的相互关系和特性" class="headerlink" title="变量、指针地址、指针变量、取地址、取值的相互关系和特性"></a>变量、指针地址、指针变量、取地址、取值的相互关系和特性</h3><p>如下：</p>
+<ul>
+<li>对变量进行取地址（&amp;）操作，可以获得这个变量的指针变量。</li>
+<li>指针变量的值是指针地址。</li>
+<li>对指针变量进行取值（*）操作，可以获得指针变量指向的原变量的值。</li>
+</ul>
+<h3 id="使用指针修改值"><a href="#使用指针修改值" class="headerlink" title="使用指针修改值"></a>使用指针修改值</h3><p>通过指针不仅可以取值，也可以修改值。</p>
+<p>前面已经使用多重赋值的方法进行数值交换，使用指针同样可以进行数值交换，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 准备两个变量, 赋值1和2</span></span><br><span class="line">	x, y := <span class="number">1</span>, <span class="number">2</span></span><br><span class="line">	<span class="comment">// 交换变量值</span></span><br><span class="line">	swap(&amp;x, &amp;y)</span><br><span class="line">	<span class="comment">// 输出变量值</span></span><br><span class="line">	fmt.Println(x, y) <span class="comment">// 2 1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">swap</span><span class="params">(a, b *<span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 取a指针的值, 赋给临时变量t</span></span><br><span class="line">	t := *a</span><br><span class="line">	<span class="comment">// 取b指针的值, 赋给a指针指向的变量</span></span><br><span class="line">	*a = *b</span><br><span class="line">	<span class="comment">// 将a指针的值赋给b指针指向的变量</span></span><br><span class="line">	*b = t</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>*</code>操作符作为右值时，意义是取指针的值，作为左值时，也就是放在赋值操作符的左边时，表示 a 指向的变量</p>
+<p><code>*</code>操作符的根本意义就是操作指针指向的变量，当操作在右值时，就是取指向变量的值，当操作在左值时，就是将值设置给指向的变量。</p>
+</blockquote>
+<h3 id="创建指针的另一种方法——new-函数"><a href="#创建指针的另一种方法——new-函数" class="headerlink" title="创建指针的另一种方法——new() 函数"></a>创建指针的另一种方法——new() 函数</h3><p>Go 语言还提供了另外一种方法来创建指针变量，格式如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">new</span>(T) <span class="comment">// T代表类型</span></span><br></pre></td></tr></table></figure>
+
+<p>一般这样写：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">str := <span class="built_in">new</span>(<span class="keyword">string</span>)</span><br><span class="line">*str = <span class="string">&quot;zhimma&quot;</span></span><br><span class="line"></span><br><span class="line">fmt.Println(*str) <span class="comment">// zhimma</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>new() 函数可以创建一个对应类型的指针，创建过程会分配内存。被创建的指针指向的值为默认值。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"># Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/01/Nginx%E5%8D%95%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE%E5%A4%9AVue%E5%B7%A5%E7%A8%8B%E5%92%8C%E5%A4%9APHP%E6%8E%A5%E5%8F%A3/" rel="prev" title="Nginx单域名配置多Vue工程和多PHP接口">
+                  <i class="fa fa-chevron-left"></i> Nginx单域名配置多Vue工程和多PHP接口
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/06/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E5%AE%B9%E5%99%A8/" rel="next" title="Go语言学习笔记2-容器">
+                  Go语言学习笔记2-容器 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

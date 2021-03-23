@@ -1,37 +1,505 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] Go 语言的常用流程控制有 if 和 for，而 switch 和 goto 主要是为了简化代码、降低重复代码而生的结构，属于扩展类的流程控制。  Go 语言中的基本流程控制语句，包括分支语句（if 和 switch）、循环（for）和跳转（goto）语句。还有循环控制语句（break 和 continue），前者的功能是中断循环或者跳出 switch 判断，后者的功能是继续 for">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言学习笔记3-流程控制">
+<meta property="og:url" content="https://blog.zhimma.com/2019/03/07/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] Go 语言的常用流程控制有 if 和 for，而 switch 和 goto 主要是为了简化代码、降低重复代码而生的结构，属于扩展类的流程控制。  Go 语言中的基本流程控制语句，包括分支语句（if 和 switch）、循环（for）和跳转（goto）语句。还有循环控制语句（break 和 continue），前者的功能是中断循环或者跳出 switch 判断，后者的功能是继续 for">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-03-07T06:54:49.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:07:36.367Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2019/03/07/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Go语言学习笔记3-流程控制 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#if-else-%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">if else (分支结构)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%86%99%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">特殊写法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5for"><span class="nav-number">2.</span> <span class="nav-text">循环语句for</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E8%AF%AD%E5%8F%A5%E2%80%94%E2%80%94%E5%BC%80%E5%A7%8B%E5%BE%AA%E7%8E%AF%E6%97%B6%E6%89%A7%E8%A1%8C%E7%9A%84%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.1.</span> <span class="nav-text">for 中的初始语句——开始循环时执行的语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-%E4%B8%AD%E7%9A%84%E6%9D%A1%E4%BB%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E2%80%94%E2%80%94%E6%8E%A7%E5%88%B6%E6%98%AF%E5%90%A6%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%BC%80%E5%85%B3"><span class="nav-number">2.2.</span> <span class="nav-text">for 中的条件表达式——控制是否循环的开关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E5%BE%AA%E7%8E%AF%E6%97%B6%E5%B8%A6%E5%8F%AF%E6%89%A7%E8%A1%8C%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.2.1.</span> <span class="nav-text">结束循环时带可执行语句的无限循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.2.2.</span> <span class="nav-text">无线循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E5%BE%AA%E7%8E%AF%E6%9D%A1%E4%BB%B6%E7%9A%84%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.2.3.</span> <span class="nav-text">只有一个循环条件的循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9D%9F%E8%AF%AD%E5%8F%A5%E2%80%94%E2%80%94%E6%AF%8F%E6%AC%A1%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9D%9F%E6%97%B6%E6%89%A7%E8%A1%8C%E7%9A%84%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.3.</span> <span class="nav-text">for 中的结束语句——每次循环结束时执行的语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo-%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8"><span class="nav-number">2.4.</span> <span class="nav-text">Demo 九九乘法表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for-range-%E9%94%AE%E5%80%BC%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.</span> <span class="nav-text">for range (键值循环)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84%E3%80%81%E5%88%87%E7%89%87%E2%80%94%E2%80%94%E8%8E%B7%E5%BE%97%E7%B4%A2%E5%BC%95%E5%92%8C%E5%85%83%E7%B4%A0"><span class="nav-number">3.1.</span> <span class="nav-text">遍历数组、切片——获得索引和元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%80%94%E2%80%94%E8%8E%B7%E5%BE%97%E7%B4%A2%E5%BC%95%E5%92%8C%E5%85%83%E7%B4%A0"><span class="nav-number">3.2.</span> <span class="nav-text">遍历字符串——获得索引和元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86map%E2%80%94%E2%80%94%E8%8E%B7%E5%BE%97map%E7%9A%84%E9%94%AE%E5%92%8C%E5%80%BC"><span class="nav-number">3.3.</span> <span class="nav-text">遍历map——获得map的键和值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E9%80%9A%E9%81%93%EF%BC%88channel%EF%BC%89%E2%80%94%E2%80%94%E6%8E%A5%E6%94%B6%E9%80%9A%E9%81%93%E6%95%B0%E6%8D%AE"><span class="nav-number">3.4.</span> <span class="nav-text">遍历通道（channel）——接收通道数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-case-%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.</span> <span class="nav-text">switch case 语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%86%99%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">基本写法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E5%88%86%E6%94%AF%E5%A4%9A%E5%80%BC"><span class="nav-number">4.1.0.1.</span> <span class="nav-text">一分支多值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.1.0.2.</span> <span class="nav-text">分支表达式</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#goto-%E8%AF%AD%E5%8F%A5%E2%80%94%E2%80%94%E8%B7%B3%E8%BD%AC%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E6%A0%87%E7%AD%BE"><span class="nav-number">5.</span> <span class="nav-text">goto 语句——跳转到指定的标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-goto-%E9%80%80%E5%87%BA%E5%A4%9A%E5%B1%82%E5%BE%AA%E7%8E%AF"><span class="nav-number">5.1.</span> <span class="nav-text">使用 goto 退出多层循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">统一错误处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#break-%E8%B7%B3%E5%87%BA%E5%BE%AA%E7%8E%AF"><span class="nav-number">6.</span> <span class="nav-text">break (跳出循环)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#continue-%E4%B8%AD%E6%96%AD%E6%9C%AC%E6%AC%A1%E5%BE%AA%E7%8E%AF%EF%BC%8C%E7%BB%A7%E7%BB%AD%E4%B8%8B%E4%B8%80%E6%AC%A1%E5%BE%AA%E7%8E%AF"><span class="nav-number">7.</span> <span class="nav-text">continue(中断本次循环，继续下一次循环)</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/03/07/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言学习笔记3-流程控制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-07 14:54:49" itemprop="dateCreated datePublished" datetime="2019-03-07T14:54:49+08:00">2019-03-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:07:36" itemprop="dateModified" datetime="2021-03-23T18:07:36+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<p>Go 语言的常用流程控制有 if 和 for，而 switch 和 goto 主要是为了简化代码、降低重复代码而生的结构，属于扩展类的流程控制。</p>
+<p> Go 语言中的基本流程控制语句，包括分支语句（if 和 switch）、循环（for）和跳转（goto）语句。还有循环控制语句（break 和 continue），前者的功能是中断循环或者跳出 switch 判断，后者的功能是继续 for 的下一个循环。</p>
+<h2 id="if-else-分支结构"><a href="#if-else-分支结构" class="headerlink" title="if else (分支结构)"></a>if else (分支结构)</h2><p>在Go语言中可以通过 if 关键字进行条件判断，格式如下：</p>
+ <span id="more"></span>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> 表达式<span class="number">1</span> &#123;</span><br><span class="line">    分支<span class="number">1</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> 表达式<span class="number">2</span> &#123;</span><br><span class="line">    分支<span class="number">2</span></span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    分支<span class="number">3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> Go 语言规定与 if 匹配的左括号<code>&#123;</code>必须与 if 和表达式放在同一行，如果尝试将<code>&#123;</code>放在其他位置，将会触发编译错误。</p>
+</blockquote>
+<h3 id="特殊写法"><a href="#特殊写法" class="headerlink" title="特殊写法"></a>特殊写法</h3><p>Go 语言规定与 if 匹配的左括号<code>&#123;</code>必须与 if 和表达式放在同一行，如果尝试将<code>&#123;</code>放在其他位置，将会触发编译错误。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err := Connect(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Connect 是一个带有返回值的函数，<code>err:=Connect()</code> 是一个语句，执行 Connect 后，将错误保存到 err 变量中。</p>
+<p><code>err！=nil </code>才是 if 的判断表达式，当 err 不为空时，打印错误并返回。</p>
+<h2 id="循环语句for"><a href="#循环语句for" class="headerlink" title="循环语句for"></a>循环语句for</h2><p>Go语言中所有的循环类型均可以使用for 关键字来完成</p>
+<p>基于语句和表达式的基本for 循环格式如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 初始语句;条件表达式;结束表达式&#123;</span><br><span class="line">    循环体代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>循环体不停地进行循环，直到条件表达式返回 false 时自动退出循环，执行 for 的<code>&#125;</code>之后的语句</p>
+</blockquote>
+<p>for 循环可以通过<code> break</code>、<code>goto</code>、<code>return</code>、<code>panic</code> 语句强制退出循环。for 的初始语句、条件表达式、结束语句的详细介绍如下。</p>
+<h3 id="for-中的初始语句——开始循环时执行的语句"><a href="#for-中的初始语句——开始循环时执行的语句" class="headerlink" title="for 中的初始语句——开始循环时执行的语句"></a>for 中的初始语句——开始循环时执行的语句</h3><p>初始语句是在第一次循环前执行的语句，一般使用初始语句执行变量初始化，如果变量在此处被声明，其**<u>作用域</u>**将被局限在这个for 的范畴内</p>
+<p>注意：初始语句可以被忽略，但是初始语句之后的分号必须填写，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stop := <span class="number">2</span></span><br><span class="line"><span class="keyword">for</span> ; step &gt; <span class="number">0</span>; step-- &#123;</span><br><span class="line">    fmt.Println(step)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码将 step 放在 for 的前面进行初始化，for 中没有初始语句，此时 step 的作用域就比在初始语句中声明 step 要大。</p>
+<h3 id="for-中的条件表达式——控制是否循环的开关"><a href="#for-中的条件表达式——控制是否循环的开关" class="headerlink" title="for 中的条件表达式——控制是否循环的开关"></a>for 中的条件表达式——控制是否循环的开关</h3><p>对每次循环开始前计算的表达式，如果表达式为true ,则循环继续，否则结束循环，条件表达式可以被忽略，被忽律条件的条件表达式默认形成无限循环</p>
+<h4 id="结束循环时带可执行语句的无限循环"><a href="#结束循环时带可执行语句的无限循环" class="headerlink" title="结束循环时带可执行语句的无限循环"></a>结束循环时带可执行语句的无限循环</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line"><span class="keyword">for</span> ; ; i++ &#123;</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">10</span> &#123;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="无线循环"><a href="#无线循环" class="headerlink" title="无线循环"></a>无线循环</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line"><span class="keyword">for</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">10</span> &#123;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    i++</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="只有一个循环条件的循环"><a href="#只有一个循环条件的循环" class="headerlink" title="只有一个循环条件的循环"></a>只有一个循环条件的循环</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line"><span class="keyword">for</span> i &lt;= <span class="number">10</span> &#123;</span><br><span class="line">    i++</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="for-中的结束语句——每次循环结束时执行的语句"><a href="#for-中的结束语句——每次循环结束时执行的语句" class="headerlink" title="for 中的结束语句——每次循环结束时执行的语句"></a>for 中的结束语句——每次循环结束时执行的语句</h3><p>在结束每次循环前执行的语句，如果循环被 break、goto、return、panic 等语句强制退出，结束语句不会被执行。</p>
+<h3 id="Demo-九九乘法表"><a href="#Demo-九九乘法表" class="headerlink" title="Demo 九九乘法表"></a>Demo 九九乘法表</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x := <span class="number">1</span>; x &lt;= <span class="number">9</span>; x++ &#123;</span><br><span class="line">		<span class="keyword">for</span> y := <span class="number">1</span>; y &lt;= x; y++ &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;%d*%d=%d &quot;</span>, x, y, x*y)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1*1&#x3D;1 </span><br><span class="line">2*1&#x3D;2 2*2&#x3D;4 </span><br><span class="line">3*1&#x3D;3 3*2&#x3D;6 3*3&#x3D;9 </span><br><span class="line">4*1&#x3D;4 4*2&#x3D;8 4*3&#x3D;12 4*4&#x3D;16 </span><br><span class="line">5*1&#x3D;5 5*2&#x3D;10 5*3&#x3D;15 5*4&#x3D;20 5*5&#x3D;25 </span><br><span class="line">6*1&#x3D;6 6*2&#x3D;12 6*3&#x3D;18 6*4&#x3D;24 6*5&#x3D;30 6*6&#x3D;36 </span><br><span class="line">7*1&#x3D;7 7*2&#x3D;14 7*3&#x3D;21 7*4&#x3D;28 7*5&#x3D;35 7*6&#x3D;42 7*7&#x3D;49 </span><br><span class="line">8*1&#x3D;8 8*2&#x3D;16 8*3&#x3D;24 8*4&#x3D;32 8*5&#x3D;40 8*6&#x3D;48 8*7&#x3D;56 8*8&#x3D;64 </span><br><span class="line">9*1&#x3D;9 9*2&#x3D;18 9*3&#x3D;27 9*4&#x3D;36 9*5&#x3D;45 9*6&#x3D;54 9*7&#x3D;63 9*8&#x3D;72 9*9&#x3D;81 </span><br></pre></td></tr></table></figure>
+
+<h2 id="for-range-键值循环"><a href="#for-range-键值循环" class="headerlink" title="for range (键值循环)"></a>for range (键值循环)</h2><p>Go 语言可以使用<code>for range</code>遍历<strong>数组</strong>、<strong>切片</strong>、<strong>字符串</strong>、<strong>map</strong> 及<strong>通道（channel）</strong>。通过 <code>for range </code>遍历的返回值有一定的规律：</p>
+<ul>
+<li>数组、切片、字符串返回索引和值。</li>
+<li>map 返回键和值。</li>
+<li>通道（channel）只返回通道内的值。</li>
+</ul>
+<h3 id="遍历数组、切片——获得索引和元素"><a href="#遍历数组、切片——获得索引和元素" class="headerlink" title="遍历数组、切片——获得索引和元素"></a>遍历数组、切片——获得索引和元素</h3><p>在遍历代码中，key 和 value 分别代表切片的下标及下标对应的值。下面的代码展示如何遍历切片，数组也是类似的遍历方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key, value := <span class="keyword">range</span> []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125; &#123;</span><br><span class="line">		fmt.Println(key, <span class="string">&quot;=&gt;&quot;</span>, value)</span><br><span class="line">		<span class="comment">// 0 =&gt; 1</span></span><br><span class="line">		<span class="comment">// 1 =&gt; 2</span></span><br><span class="line">		<span class="comment">// 2 =&gt; 3</span></span><br><span class="line">		<span class="comment">// 3 =&gt; 4</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="遍历字符串——获得索引和元素"><a href="#遍历字符串——获得索引和元素" class="headerlink" title="遍历字符串——获得索引和元素"></a>遍历字符串——获得索引和元素</h3><p>Go 语言和其他语言类似，可以通过 for range 的组合，对字符串进行遍历，遍历时，key 和 value 分别代表字符串的索引（base0）和字符串中的每一个字符。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">str := <span class="string">&quot;你好，zhimma&quot;</span></span><br><span class="line">	<span class="keyword">for</span> key, value := <span class="keyword">range</span> str &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;key:%d value:0x%x\n&quot;</span>, key, value)</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">			key:0 value:0x4f60 type:int32</span></span><br><span class="line"><span class="comment">            key:3 value:0x597d type:int32</span></span><br><span class="line"><span class="comment">            key:6 value:0xff0c type:int32</span></span><br><span class="line"><span class="comment">            key:9 value:0x7a type:int32</span></span><br><span class="line"><span class="comment">            key:10 value:0x68 type:int32</span></span><br><span class="line"><span class="comment">            key:11 value:0x69 type:int32</span></span><br><span class="line"><span class="comment">            key:12 value:0x6d type:int32</span></span><br><span class="line"><span class="comment">            key:13 value:0x6d type:int32</span></span><br><span class="line"><span class="comment">            key:14 value:0x61 type:int32</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码中的 value 变量，实际类型是 rune，实际上就是 int32，以十六进制打印出来就是字符的编码。</p>
+<h3 id="遍历map——获得map的键和值"><a href="#遍历map——获得map的键和值" class="headerlink" title="遍历map——获得map的键和值"></a>遍历map——获得map的键和值</h3><p>对于 map 类型来说，<code>for range</code> 遍历时，key 和 value 分别代表 map 的索引键 key 和索引对应的值，一般被称为 map 的键值对，因为它们总是一对一对的出现。下面的代码演示了如何遍历 map:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">family := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">		<span class="string">&quot;dad&quot;</span>:      <span class="string">&quot;zhimma dad&quot;</span>,</span><br><span class="line">		<span class="string">&quot;mom&quot;</span>:      <span class="string">&quot;zhimma mom&quot;</span>,</span><br><span class="line">		<span class="string">&quot;daughter&quot;</span>: <span class="string">&quot;zhimma&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">for</span> key, value := <span class="keyword">range</span> family &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;hello&quot;</span>, key, value)</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">		hello dad zhimma dad</span></span><br><span class="line"><span class="comment">		hello mom zhimma mom</span></span><br><span class="line"><span class="comment">		hello daughter zhimma</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对 map 遍历时，遍历输出的键值是无序的，如果需要有序的键值对输出，需要对结果进行排序。</p>
+</blockquote>
+<h3 id="遍历通道（channel）——接收通道数据"><a href="#遍历通道（channel）——接收通道数据" class="headerlink" title="遍历通道（channel）——接收通道数据"></a>遍历通道（channel）——接收通道数据</h3><p><code>for range </code>可以遍历通道（channel），但是通道在遍历时，只输出一个值，即管道内的类型对应的数据</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c &lt;- <span class="number">1</span></span><br><span class="line">    c &lt;- <span class="number">2</span></span><br><span class="line">    c &lt;- <span class="number">3</span></span><br><span class="line">    <span class="built_in">close</span>(c)</span><br><span class="line">&#125;()</span><br><span class="line"><span class="keyword">for</span> v := <span class="keyword">range</span> c &#123;</span><br><span class="line">    fmt.Println(v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="switch-case-语句"><a href="#switch-case-语句" class="headerlink" title="switch case 语句"></a>switch case 语句</h2><p>分支选择可以理解为一种批量的if语句，使用 switch 语句可方便地对大量的值进行判断。</p>
+<p>在 Go 语言中的 switch，不仅可以基于常量进行判断，还可以基于表达式进行判断。</p>
+<h3 id="基本写法"><a href="#基本写法" class="headerlink" title="基本写法"></a>基本写法</h3><p>Go 语言改进了 switch 的语法设计，避免人为造成失误。Go 语言的 switch 中的每一个 case 与 case 间是独立的代码块，不需要通过 break 语句跳出当前 case 代码块以避免执行到下一行。示例代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> a &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;hello&quot;</span>:</span><br><span class="line">    fmt.Println(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;other&quot;</span>:</span><br><span class="line">    fmt.Println(<span class="string">&quot;other&quot;</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">    fmt.Println(<span class="string">&quot;default&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中，每个case 均是字符串格式，且使用了default 分支，Go语言规定每个 switch 只能有一个default 分支</p>
+<h5 id="一分支多值"><a href="#一分支多值" class="headerlink" title="一分支多值"></a>一分支多值</h5><p>当出现多个 case 要放在一起的时候，可以像下面代码这样写：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;mum&quot;</span></span><br><span class="line"><span class="keyword">switch</span> a &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;mum&quot;</span> , <span class="string">&quot;dad&quot;</span>:</span><br><span class="line">    	fmt.Println(<span class="string">&quot;family&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>不通的 case 表达式使用逗号分隔</p>
+</blockquote>
+<h5 id="分支表达式"><a href="#分支表达式" class="headerlink" title="分支表达式"></a>分支表达式</h5><p>case 后不仅仅只是常量，还可以和 if 一样添加表达式，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">num := <span class="number">10</span></span><br><span class="line"><span class="keyword">switch</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> num &lt; <span class="number">20</span> || num &gt; <span class="number">20</span>:</span><br><span class="line">		fmt.Println(<span class="string">&quot;num value is &quot;</span>, num)</span><br><span class="line">		<span class="comment">// num value is  10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这种情况的 switch 后面不再跟判断变量，连判断的目标都没有了。</p>
+</blockquote>
+<h2 id="goto-语句——跳转到指定的标签"><a href="#goto-语句——跳转到指定的标签" class="headerlink" title="goto 语句——跳转到指定的标签"></a>goto 语句——跳转到指定的标签</h2><p>goto 语句通过标签进行代码间的无条件跳转。goto 语句可以在快速跳出循环、避免重复退出上有一定帮助，使用 goto 语句能简化一些代码的实现过程。</p>
+<h3 id="使用-goto-退出多层循环"><a href="#使用-goto-退出多层循环" class="headerlink" title="使用 goto 退出多层循环"></a>使用 goto 退出多层循环</h3><p>多层循环中，传统方式退出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> breakAgain <span class="keyword">bool</span></span><br><span class="line">    <span class="comment">// 外循环</span></span><br><span class="line">    <span class="keyword">for</span> x := <span class="number">0</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">        <span class="comment">// 内循环</span></span><br><span class="line">        <span class="keyword">for</span> y := <span class="number">0</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">            <span class="comment">// 满足某个条件时, 退出循环</span></span><br><span class="line">            <span class="keyword">if</span> y == <span class="number">2</span> &#123;</span><br><span class="line">                <span class="comment">// 设置退出标记</span></span><br><span class="line">                breakAgain = <span class="literal">true</span></span><br><span class="line">                <span class="comment">// 退出本次循环</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 根据标记, 还需要退出一次循环</span></span><br><span class="line">        <span class="keyword">if</span> breakAgain &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 goto方式优化</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> x := <span class="number">0</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">        <span class="keyword">for</span> y := <span class="number">0</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">            <span class="keyword">if</span> y == <span class="number">2</span> &#123;</span><br><span class="line">                <span class="comment">// 跳转到标签</span></span><br><span class="line">                <span class="keyword">goto</span> breakHere</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 手动返回, 避免执行进入标签</span></span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">    <span class="comment">// 标签</span></span><br><span class="line">breakHere:</span><br><span class="line">    fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第13行 ：标签只能被 goto 使用，但不影响代码执行流程，此处如果不手动返回，在不满足条件时，也会执行第 16 行代码。</p>
+<p>使用 goto 语句后，无须额外的变量就可以快速退出所有的循环。</p>
+<h3 id="统一错误处理"><a href="#统一错误处理" class="headerlink" title="统一错误处理"></a>统一错误处理</h3><p>多处错误处理存在代码重复时是非常棘手的，例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">err := firstCheckError()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(err)</span><br><span class="line">    exitProcess()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line">err = secondCheckError()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(err)</span><br><span class="line">    exitProcess()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>使用 goto 语句实现上面同样的逻辑：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">err := firstCheckError()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">goto</span> onExit</span><br><span class="line">    &#125;</span><br><span class="line">    err = secondCheckError()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">goto</span> onExit</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">onExit:</span><br><span class="line">    fmt.Println(err)</span><br><span class="line">    exitProcess()</span><br></pre></td></tr></table></figure>
+
+<h2 id="break-跳出循环"><a href="#break-跳出循环" class="headerlink" title="break (跳出循环)"></a>break (跳出循环)</h2><p>break 语句可以结束<code>for</code>、<code>switch</code>和<code>select</code>代码块。break 语句还可以在语句后面添加标签，表示退出摸个标签对应的代码块，标签要求必须定义在对应的<code>for</code>、<code>switch</code>和<code>select</code>的代码块上</p>
+<p>下面看下跳出指定循环</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">OuterLoop:</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">2</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">5</span>; j++ &#123;</span><br><span class="line">			fmt.Println(i , j)</span><br><span class="line">			<span class="keyword">switch</span> j &#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">				fmt.Println(i, j)</span><br><span class="line">				<span class="keyword">break</span> OuterLoop</span><br><span class="line">			<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">				fmt.Println(i, j)</span><br><span class="line">				<span class="keyword">break</span> OuterLoop</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码输出 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 2</span><br></pre></td></tr></table></figure>
+
+<p>代码说明如下：</p>
+<ul>
+<li>第 1 行，外层循环的标签。</li>
+<li>第 2 行和第 3 行，双层循环。</li>
+<li>第 5 行，使用 switch 进行数值分支判断。</li>
+<li>第 8 和第 11 行，退出 OuterLoop 对应的循环之外，也就是跳转到第 1 行。</li>
+</ul>
+<h2 id="continue-中断本次循环，继续下一次循环"><a href="#continue-中断本次循环，继续下一次循环" class="headerlink" title="continue(中断本次循环，继续下一次循环)"></a>continue(中断本次循环，继续下一次循环)</h2><p>continue 语句可以结束当前循环，开始下一次的循环迭代过程，仅限在 for 循环内使用</p>
+<p>在 continue 语句后添加标签时，表示开始标签对应的循环</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">OuterLoops:</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">2</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="number">5</span>; j++ &#123;</span><br><span class="line">			<span class="keyword">switch</span> j &#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">				fmt.Println(i, j)</span><br><span class="line">				<span class="keyword">continue</span> OuterLoops</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码输出 :</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="number">2</span></span><br><span class="line"><span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>第 7 行将结束当前循环，开启下一次的外层循环，而不是第 3 行的循环。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"># Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/06/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E5%AE%B9%E5%99%A8/" rel="prev" title="Go语言学习笔记2-容器">
+                  <i class="fa fa-chevron-left"></i> Go语言学习笔记2-容器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/07/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%87%BD%E6%95%B0/" rel="next" title="Go语言学习笔记4-函数">
+                  Go语言学习笔记4-函数 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

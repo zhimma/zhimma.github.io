@@ -1,37 +1,457 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="计算机基础title: 计算机基础date: 2018-03-18 23:20:16  进程与线程进程和线程都是一个时间段的描述，是CPU工作时间段的描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机基础">
+<meta property="og:url" content="https://blog.zhimma.com/2017/02/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="计算机基础title: 计算机基础date: 2018-03-18 23:20:16  进程与线程进程和线程都是一个时间段的描述，是CPU工作时间段的描述">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-02-27T08:58:28.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:05:59.436Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2017/02/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>计算机基础 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">计算机基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%EF%BC%8C%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%92%8C-IO-%E5%A4%8D%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">异步，非阻塞和 IO 复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5"><span class="nav-number">3.1.</span> <span class="nav-text">同步与异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-number">3.2.</span> <span class="nav-text">阻塞与非阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%A4%8D%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">IO复用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%88%9D%E7%BA%A7%E7%9A%84I-O%E5%A4%8D%E7%94%A8"><span class="nav-number">3.3.1.</span> <span class="nav-text">最初级的I&#x2F;O复用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E7%89%88%E7%9A%84I-O%E5%A4%8D%E7%94%A8"><span class="nav-number">3.3.2.</span> <span class="nav-text">升级版的I&#x2F;O复用</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2017/02/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-02-27 16:58:28" itemprop="dateCreated datePublished" datetime="2017-02-27T16:58:28+08:00">2017-02-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:05:59" itemprop="dateModified" datetime="2021-03-23T18:05:59+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h2><p>title: 计算机基础<br>date: 2018-03-18 23:20:16</p>
+<hr>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p><strong>进程和线程都是一个时间段的描述，是CPU工作时间段的描述</strong></p>
+ <span id="more"></span>
+
+<p><strong>一个最最基础的事实</strong>：CPU太快，太快，太快了，寄存器仅仅能够追的上他的脚步，RAM和别的挂在各总线上的设备完全是望其项背。那当多个任务要执行的时候怎么办呢？轮流着来?或者谁优先级高谁来？不管怎么样的策略，一句话就是在CPU看来就是轮流着来。<br><strong>一个必须知道的事实</strong>：执行一段程序代码，实现一个功能的过程介绍 ，当得到CPU的时候，相关的资源必须也已经就位，就是显卡啊，GPS啊什么的必须就位，然后CPU开始执行。这里除了CPU以外所有的就构成了这个程序的执行环境，也就是我们所定义的<strong>程序上下文</strong>。当这个程序执行完了，或者分配给他的CPU执行时间用完了，那它就要被切换出去，等待下一次CPU的临幸。在被切换出去的最后一步工作就是保存程序上下文，因为这个是下次他被CPU临幸的运行环境，必须保存。<br><strong>串联起来的事实</strong>：前面讲过在CPU看来所有的任务都是一个一个的轮流执行的，具体的轮流方法就是：先加载程序A的上下文，然后开始执行A，保存程序A的上下文，调入下一个要执行的程序B的程序上下文，然后开始执行B,保存程序B的上下文。。。</p>
+<p> <strong>进程就是包换上下文切换的程序执行时间总和</strong> = <strong>CPU加载上下文+CPU执行+CPU保存上下文</strong><br>进程的颗粒度太大，每次都要有上下的调入，保存，调出。如果我们把进程比喻为一个运行在电脑上的软件，那么一个软件的执行不可能是一条逻辑执行的，必定有多个分支和多个程序段，就好比要实现程序A，实际分成 a，b，c等多个块组合而成。那么这里具体的执行就可能变成：</p>
+<p>程序A得到CPU =&gt; CPU加载上下文，开始执行程序A的a小段，然后执行A的b小段，然后再执行A的c小段，最后CPU保存A的上下文。</p>
+<p>这里a，b，c的执行是共享了A的上下文，CPU在执行的时候没有进行上下文切换的。这<strong>里的a，b，c就是线程，也就是说线程是共享了进程的上下文环境，的更为细小的CPU时间段。</strong></p>
+<hr>
+<p>开个QQ，开了一个进程；开了迅雷，开了一个进程。<br>在QQ的这个进程里，传输文字开一个线程、传输语音开了一个线程、弹出对话框又开了一个线程。<br>所以运行某个软件，相当于开了一个进程。在这个软件运行的过程里（在这个进程里），多个工作支撑的完成QQ的运行，那么这“多个工作”分别有一个线程。<br>所以一个进程管着多个线程。<br>通俗的讲：“进程是爹妈，管着众多的线程儿子”…</p>
+<ul>
+<li>一个进程可以包括多个线程</li>
+<li>每个线程可以使用进程的共享内存（互斥锁）</li>
+</ul>
+<hr>
+<p>操作系统的设计，因此可以归结为三点：</p>
+<ol>
+<li>以多进程形式，允许多个任务同时运行；</li>
+<li>以多线程形式，允许单个任务分成不同的部分运行；</li>
+<li>提供协调机制，一方面防止进程之间和线程之间产生冲突，另一方面允许进程之间和线程之间共享资源。</li>
+</ol>
+<h2 id="异步，非阻塞和-IO-复用"><a href="#异步，非阻塞和-IO-复用" class="headerlink" title="异步，非阻塞和 IO 复用"></a>异步，非阻塞和 IO 复用</h2><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000007614502">https://segmentfault.com/a/1190000007614502</a></p>
+<h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><p>同步与异步的重点在消息通知的方式上，也就是调用结果通知的方式。</p>
+<p><code>同步</code>: 当一个同步调用发出去后，调用者要一直等待调用结果的通知后，才能进行后续的执行。<br><code>异步</code>：当一个异步调用发出去后，调用者不能立即得到调用结果的返回。<br>异步调用，要想获得结果，一般有两种方式</p>
+<blockquote>
+<ol>
+<li> 主动轮询异步调用的结果;</li>
+<li> 被调用方通过callback来通知调用方调用结果。</li>
+</ol>
+</blockquote>
+<p>demo：<br><code>同步买奶茶</code>：小明点单交钱，然后等着拿奶茶；异步买奶茶：小明点单交钱，店员给小明一个小票，等小明奶茶做好了，再来取。</p>
+<p><code>异步买奶茶</code>: 小明要想知道奶茶是否做好了，有两种方式：</p>
+<blockquote>
+<ol>
+<li> 小明主动去问店员，一会就去问一下：“奶茶做好了吗？”…直到奶茶做好。这叫轮训。</li>
+<li> 等奶茶做好了，店员喊一声：“小明，奶茶好了！”，然后小明去取奶茶。这叫回调。</li>
+</ol>
+</blockquote>
+<h3 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h3><p>阻塞与非阻塞的重点在于进/线程等待消息时候的行为，也就是在等待消息的时候，当前进/线程是挂起状态，还是非挂起状态。</p>
+<p><code>阻塞调用</code>在发出去后，在消息返回之前，当前进/线程会被挂起，直到有消息返回，当前进/线程才会被激活.<br><code>非阻塞</code>调用在发出去后，不会阻塞当前进/线程，而会立即返回。</p>
+<p>demo：<br><code>阻塞买奶茶</code>：小明点单交钱，干等着拿奶茶，什么事都不做；<br><code>非阻塞买奶茶</code>：小明点单交钱，等着拿奶茶，等的过程中，时不时刷刷微博、朋友圈。</p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>同步与异步，重点在于消息通知的方式;</li>
+<li>阻塞与非阻塞，重点在于等消息时候的行为。</li>
+</ul>
+<p>demo</p>
+<ul>
+<li>同步阻塞：小明在柜台干等着拿奶茶；</li>
+<li>同步非阻塞：小明在柜台边刷微博边等着拿奶茶；</li>
+<li>异步阻塞：小明拿着小票啥都不干，一直等着店员通知他拿奶茶；</li>
+<li>异步非阻塞：小明拿着小票，刷着微博，等着店员通知他拿奶茶。</li>
+</ul>
+<h3 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h3><p>在一个进程处理所有的并发I/O呢?<br>答案是有的，这就是I/O复用技术。</p>
+<h4 id="最初级的I-O复用"><a href="#最初级的I-O复用" class="headerlink" title="最初级的I/O复用"></a>最初级的I/O复用</h4><p>所谓的I/O复用，就是多个I/O可以复用一个进程。<br>当一个连接过来时，我们不阻塞住，这样一个进程可以同时处理多个连接了。<br>比如一个进程接受了10000个连接，这个进程每次从头到尾的问一遍这10000个连接：“<strong>有I/O事件没？有的话就交给我处理，没有的话我一会再来问一遍。</strong>”<br>然后进程就一直从头到尾问这10000个连接，如果这1000个连接都没有I/O事件，就会造成CPU的空转，并且效率也很低</p>
+<h4 id="升级版的I-O复用"><a href="#升级版的I-O复用" class="headerlink" title="升级版的I/O复用"></a>升级版的I/O复用</h4><p>上面虽然实现了基础版的I/O复用，但是效率太低了。于是伟大的程序猿们日思夜想的去解决这个问题…终于！<br>我们能不能引入一个代理，这个代理可以同时观察许多I/O流事件呢？<br>当没有I/O事件的时候，这个进程处于阻塞状态；当有I/O事件的时候，这个代理就去通知进程醒来？<br>于是，早期的程序猿们发明了两个代理—select、poll。<br>select、poll代理的原理是这样的：</p>
+<blockquote>
+<p>当连接有I/O流事件产生的时候，就会去唤醒进程去处理。</p>
+</blockquote>
+<p>但是进程并不知道是哪个连接产生的I/O流事件，于是进程就挨个去问：“请问是你有事要处理吗？”……问了99999遍，哦，原来是第100000个进程有事要处理。那么，前面这99999次就白问了，白白浪费宝贵的CPU时间片了</p>
+<blockquote>
+<p>注:select与poll原理是一样的，只不过select只能观察1024个连接，poll可以观察无限个连接。</p>
+</blockquote>
+<p>上面看了，select、poll因为不知道哪个连接有I/O流事件要处理，性能也挺不好的。</p>
+<p>那么，如果发明一个代理，每次能够知道哪个连接有了I/O流事件，不就可以避免无意义的空转了吗？</p>
+<p><strong>于是，超级无敌、闪闪发光的epoll被伟大的程序员发明出来了。</strong></p>
+<p>epoll代理的原理是这样的：</p>
+<blockquote>
+<p>当连接有I/O流事件产生的时候，epoll就会去告诉进程哪个连接有I/O流事件产生，然后进程就去处理这个进程。</p>
+</blockquote>
+<p>如此，多高效！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/02/27/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%9E%E8%B7%B5/" rel="prev" title="负载均衡实践">
+                  <i class="fa fa-chevron-left"></i> 负载均衡实践
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/05/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC%E5%8F%8A%E5%85%B6%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%EF%BC%881%EF%BC%89/" rel="next" title="设计模式-控制反转及其依赖注入(1)">
+                  设计模式-控制反转及其依赖注入(1) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

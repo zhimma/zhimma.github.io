@@ -1,37 +1,501 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="环境说明：真实机IP：192.168.1.198，其中    服务器 IP 说明    Redis-server 172.17.0.3 nginx服务器1   Project1(logstash) 172.17.0.2 nginx服务器2   Project2(logstash) 172.17.0.3 服务器1   Elk 172.17.0.6 服务器2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk stack实践">
+<meta property="og:url" content="https://blog.zhimma.com/2017/06/12/elk%20stack%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="环境说明：真实机IP：192.168.1.198，其中    服务器 IP 说明    Redis-server 172.17.0.3 nginx服务器1   Project1(logstash) 172.17.0.2 nginx服务器2   Project2(logstash) 172.17.0.3 服务器1   Elk 172.17.0.6 服务器2">
+<meta property="og:locale">
+<meta property="og:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png">
+<meta property="article:published_time" content="2017-06-12T11:37:45.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:07:08.758Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="ELK Stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2017/06/12/elk%20stack%E5%AE%9E%E8%B7%B5/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>elk stack实践 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">环境说明：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-master%E5%AE%89%E8%A3%85logstash"><span class="nav-number">2.</span> <span class="nav-text">redis-master安装logstash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#project%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85logstash"><span class="nav-number">3.</span> <span class="nav-text">project服务器安装logstash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85java%E7%8E%AF%E5%A2%83"><span class="nav-number">3.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AElogstash"><span class="nav-number">3.2.</span> <span class="nav-text">配置logstash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEsupervisor"><span class="nav-number">3.3.</span> <span class="nav-text">安装配置supervisor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">ELK服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85java%E7%8E%AF%E5%A2%83-1"><span class="nav-number">4.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85elk"><span class="nav-number">4.2.</span> <span class="nav-text">安装elk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEelk"><span class="nav-number">4.3.</span> <span class="nav-text">配置elk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAelastic%E7%94%A8%E6%88%B7"><span class="nav-number">4.3.1.</span> <span class="nav-text">创建elastic用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAES%E6%95%B0%E6%8D%AE%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">4.3.2.</span> <span class="nav-text">创建ES数据日志文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E6%95%B0%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E5%8F%AF%E7%94%A8%E8%BF%9B%E7%A8%8B%E6%95%B0"><span class="nav-number">4.3.3.</span> <span class="nav-text">优化文件句柄数以及用户可用进程数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E6%A0%B8%E4%BA%A4%E6%8D%A2"><span class="nav-number">4.3.4.</span> <span class="nav-text">修改内核交换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%97%ADswap%E5%B9%B6%E4%B8%94%E9%87%8D%E5%90%AF"><span class="nav-number">4.3.5.</span> <span class="nav-text">关闭swap并且重启</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Elasticsearch-%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8"><span class="nav-number">4.3.6.</span> <span class="nav-text">配置 Elasticsearch 内存占用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Elasticsearch%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">4.3.7.</span> <span class="nav-text">配置 Elasticsearch配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEsupervisor-1"><span class="nav-number">4.4.</span> <span class="nav-text">安装配置supervisor</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2017/06/12/elk%20stack%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          elk stack实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-06-12 19:37:45" itemprop="dateCreated datePublished" datetime="2017-06-12T19:37:45+08:00">2017-06-12</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:07:08" itemprop="dateModified" datetime="2021-03-23T18:07:08+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ELK/" itemprop="url" rel="index"><span itemprop="name">ELK</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><p>真实机IP：192.168.1.198，其中</p>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>IP</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Redis-server</td>
+<td>172.17.0.3</td>
+<td>nginx服务器1</td>
+</tr>
+<tr>
+<td>Project1(logstash)</td>
+<td>172.17.0.2</td>
+<td>nginx服务器2</td>
+</tr>
+<tr>
+<td>Project2(logstash)</td>
+<td>172.17.0.3</td>
+<td>服务器1</td>
+</tr>
+<tr>
+<td>Elk</td>
+<td>172.17.0.6</td>
+<td>服务器2</td>
+</tr>
+</tbody></table>
+ <span id="more"></span>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d --privileged&#x3D;true --name redis-master -p 63791:6379 -p 221:22 -v &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;www&#x2F;:&#x2F;data&#x2F;www&#x2F; 67793c412ed1 &#x2F;usr&#x2F;sbin&#x2F;init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged&#x3D;true --name project1 -p 50441:5044 -p 8081:80 -p 10241:1024 -p 222:22  -v &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;www&#x2F;:&#x2F;data&#x2F;www&#x2F; 67793c412ed1 &#x2F;usr&#x2F;sbin&#x2F;init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged&#x3D;true --name project2 -p 50442:5044 -p 8082:80 -p 10242:1024 -p 223:22  -v &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;www&#x2F;:&#x2F;data&#x2F;www&#x2F; 67793c412ed1 &#x2F;usr&#x2F;sbin&#x2F;init</span><br><span class="line"></span><br><span class="line">docker run -it -d --privileged&#x3D;true --name elk -p 50443:5044 -p 15602:5601 -p 224:22  -p 8083:80 -p 10243:1024 -v &#x2F;Users&#x2F;zhimma&#x2F;Data&#x2F;www&#x2F;:&#x2F;data&#x2F;www&#x2F; 67793c412ed1 &#x2F;usr&#x2F;sbin&#x2F;init</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line">CONTAINER ID              PORTS                       	NAMES</span><br><span class="line"><span class="number">3</span>f139b00a661              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">224</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8083</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">10243</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">50443</span>-&gt;<span class="number">5044</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">15602</span>-&gt;<span class="number">5601</span>/tcp   </span><br><span class="line">														elk</span><br><span class="line">e08ca55e124d              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">223</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8082</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">10242</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">50442</span>-&gt;<span class="number">5044</span>/tcp                            </span><br><span class="line">														project2</span><br><span class="line"><span class="number">3</span>b670e7a9ad1              <span class="number">3306</span>/tcp, <span class="number">6379</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">222</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8081</span>-&gt;<span class="number">80</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">10241</span>-&gt;<span class="number">1024</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">50441</span>-&gt;<span class="number">5044</span>/tcp                            </span><br><span class="line">														project1</span><br><span class="line">dbefa01b3393              <span class="number">80</span>/tcp, <span class="number">3306</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">221</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">63791</span>-&gt;<span class="number">6379</span>/tcp</span><br><span class="line">														redis-master</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>所有服务器关闭防火墙</p>
+<p>将软件和配置文件放在宿主机目录，各个容器就可以共享使用了</p>
+</blockquote>
+<p><img src="https://zhimma.oss-cn-beijing.aliyuncs.com/md/elk.png" alt="elk-stach"></p>
+<h2 id="redis-master安装logstash"><a href="#redis-master安装logstash" class="headerlink" title="redis-master安装logstash"></a>redis-master安装logstash</h2><p>服务器安装redis,进行配置,开机启动</p>
+<h2 id="project服务器安装logstash"><a href="#project服务器安装logstash" class="headerlink" title="project服务器安装logstash"></a>project服务器安装logstash</h2><h3 id="安装java环境"><a href="#安装java环境" class="headerlink" title="安装java环境"></a>安装java环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java</span><br></pre></td></tr></table></figure>
+
+<p>###下载logstash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;opt&#x2F;downloads</span><br><span class="line">mkdir &#x2F;opt&#x2F;soft</span><br><span class="line">cd &#x2F;opt&#x2F;downloads</span><br><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.4.1.tar.gz</span><br><span class="line">tar -zxvf logstash-6.4.1.tar.gz -C &#x2F;opt&#x2F;soft&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置logstash"><a href="#配置logstash" class="headerlink" title="配置logstash"></a>配置logstash</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;opt&#x2F;soft&#x2F;logstash-6.4.0&#x2F;config&#x2F;jvm.options</span><br><span class="line"></span><br><span class="line">-Xms2g</span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装配置supervisor"><a href="#安装配置supervisor" class="headerlink" title="安装配置supervisor"></a>安装配置supervisor</h3><blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/donggege214/article/details/80264811">https://blog.csdn.net/donggege214/article/details/80264811</a></p>
+</blockquote>
+<ul>
+<li><code>vi /etc/supervisord.conf</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/<span class="keyword">var</span>/run/supervisor/supervisor.sock </span><br><span class="line">chmod=<span class="number">0700</span></span><br><span class="line">chown=root:root</span><br><span class="line">[<span class="keyword">include</span>]</span><br><span class="line">files = supervisord.d<span class="comment">/*.conf</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>vi /etc/supervisord/l.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:elk-l]</span><br><span class="line">command&#x3D;&#x2F;opt&#x2F;soft&#x2F;logstash-6.4.0&#x2F;bin&#x2F;logstash -r -f &#x2F;data&#x2F;www&#x2F;elk&#x2F;conf&#x2F;project&#x2F;*.conf</span><br><span class="line">autostart&#x3D;true</span><br><span class="line">autorestart&#x3D;true</span><br><span class="line">user&#x3D;root</span><br><span class="line">redirect_stderr&#x3D;true</span><br><span class="line">stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;elk&#x2F;l.log</span><br><span class="line">priority&#x3D;10</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>vi /data/www/elk/conf/project/project.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    path &#x3D;&gt; [ &quot;&#x2F;data&#x2F;www&#x2F;project-mdl&#x2F;trunk&#x2F;Common&#x2F;Runtime&#x2F;Apps&#x2F;*.log&quot; ]</span><br><span class="line">    start_position &#x3D;&gt; &quot;beginning&quot;</span><br><span class="line">    ignore_older &#x3D;&gt; 0</span><br><span class="line">    sincedb_path &#x3D;&gt; &quot;&#x2F;dev&#x2F;null&quot;</span><br><span class="line">    type &#x3D;&gt; &quot;Api&quot;</span><br><span class="line">    codec &#x3D;&gt; multiline &#123;</span><br><span class="line">      pattern &#x3D;&gt; &quot;^\[&quot;</span><br><span class="line">      negate &#x3D;&gt; true</span><br><span class="line">      what &#x3D;&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123; </span><br><span class="line">  if [type] &#x3D;&#x3D; &quot;Api&quot; &#123;</span><br><span class="line">    redis &#123;</span><br><span class="line">        host &#x3D;&gt; &#39;192.168.1.198&#39;</span><br><span class="line">        port &#x3D;&gt; &#39;63791&#39;</span><br><span class="line">        db &#x3D;&gt; &#39;1&#39;</span><br><span class="line">        data_type &#x3D;&gt; &quot;list&quot;</span><br><span class="line">        key &#x3D;&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  stdout &#123; codec &#x3D;&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>重启supervisor，如果数据写入redis-master服务器，那么就代表项目日志收集成功</p>
+<h2 id="ELK服务器"><a href="#ELK服务器" class="headerlink" title="ELK服务器"></a>ELK服务器</h2><h3 id="安装java环境-1"><a href="#安装java环境-1" class="headerlink" title="安装java环境"></a>安装java环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装elk"><a href="#安装elk" class="headerlink" title="安装elk"></a>安装elk</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;opt&#x2F;downloads</span><br><span class="line">mkdir &#x2F;opt&#x2F;soft</span><br><span class="line">cd &#x2F;opt&#x2F;downloads</span><br><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-6.4.1.tar.gz</span><br><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.4.1-linux-x86_64.tar.gz</span><br><span class="line">wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.4.1.tar.gz</span><br><span class="line">tar -zxvf logstash-6.4.1.tar.gz -C &#x2F;opt&#x2F;soft&#x2F;</span><br><span class="line">tar -zxvf elasticsearch-6.4.1.tar.gz -C &#x2F;opt&#x2F;soft&#x2F;</span><br><span class="line">tar -zxvf kibana-6.4.1-linux-x86_64.tar.gz -C &#x2F;opt&#x2F;soft&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置elk"><a href="#配置elk" class="headerlink" title="配置elk"></a>配置elk</h3><h4 id="创建elastic用户"><a href="#创建elastic用户" class="headerlink" title="创建elastic用户"></a>创建elastic用户</h4><p>由于 Elasticsearch <code>不允许也不推荐使用 root 用户来运行</code>，因此需要新建一个用户来启动 Elasticsearch。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adduser elastic    #创建elastic用户</span><br><span class="line">passwd elastic     #修改elastic密码</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建ES数据日志文件夹"><a href="#创建ES数据日志文件夹" class="headerlink" title="创建ES数据日志文件夹"></a>创建ES数据日志文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;data&#x2F;www&#x2F;elk</span><br><span class="line">mkdir data          #创建数据目录</span><br><span class="line">mkdir log           #创建日志目录</span><br><span class="line">mkdir bak           #创建备份目录</span><br><span class="line">chown -R elatic &#x2F;data&#x2F;www&#x2F;elk&#x2F;  #修改目录拥有者为 elastic</span><br></pre></td></tr></table></figure>
+
+<h4 id="优化文件句柄数以及用户可用进程数"><a href="#优化文件句柄数以及用户可用进程数" class="headerlink" title="优化文件句柄数以及用户可用进程数"></a>优化文件句柄数以及用户可用进程数</h4><p>新版 Elasticsearch 要求其可用的文件句柄至少为 65536，同时要求其进程数限制至少为 2048，可用按照下面的指令进行修改。</p>
+<p>分别对应以下两个报错信息：</p>
+<ol>
+<li>max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]；</li>
+<li>max number of threads [1024] for user [es] is too low, increase to at least [2048]。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;security&#x2F;limits.conf</span><br><span class="line"></span><br><span class="line">*     soft   nofile  655350</span><br><span class="line">*     hard   nofile  655350</span><br><span class="line">*     soft   nproc   4096</span><br><span class="line">*     hard   nproc   8192</span><br><span class="line">elastic soft memlock unlimited</span><br><span class="line">elastic hard memlock unlimited</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改内核交换"><a href="#修改内核交换" class="headerlink" title="修改内核交换"></a>修改内核交换</h4><p>为了避免不必要的磁盘和内存交换，影响效率，需要将 <code>vm.swappiness</code> 修改为 1。</p>
+<p>此外需要修改最大虚拟内存 <code>vm.max_map_count</code> 防止启动时报错：<code>max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line"></span><br><span class="line">vm.swappiness &#x3D; 1</span><br><span class="line">vm.max_map_count &#x3D; 655360</span><br><span class="line"></span><br><span class="line">sysctl -p   # 立即生效</span><br></pre></td></tr></table></figure>
+
+<h4 id="关闭swap并且重启"><a href="#关闭swap并且重启" class="headerlink" title="关闭swap并且重启"></a>关闭swap并且重启</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Elasticsearch-内存占用"><a href="#配置-Elasticsearch-内存占用" class="headerlink" title="配置 Elasticsearch 内存占用"></a>配置 Elasticsearch 内存占用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;opt&#x2F;soft&#x2F;elasticsearch-6.4.1&#x2F;config&#x2F;</span><br><span class="line">vim jvm.options </span><br><span class="line"></span><br><span class="line">-Xms2g</span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Elasticsearch配置文件"><a href="#配置-Elasticsearch配置文件" class="headerlink" title="配置 Elasticsearch配置文件"></a>配置 Elasticsearch配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@3f139b00a661 ~]# grep -n &#39;^[a-z]&#39; &#x2F;opt&#x2F;soft&#x2F;elasticsearch-6.4.0&#x2F;config&#x2F;elasticsearch.yml</span><br><span class="line"></span><br><span class="line">17:cluster.name: elk-demo</span><br><span class="line">33:path.data: &#x2F;data&#x2F;www&#x2F;elk&#x2F;data</span><br><span class="line">37:path.logs: &#x2F;data&#x2F;www&#x2F;logs</span><br><span class="line">43:bootstrap.memory_lock: false</span><br><span class="line">55:network.host: 0.0.0.0</span><br><span class="line">59:http.port: 9200</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装配置supervisor-1"><a href="#安装配置supervisor-1" class="headerlink" title="安装配置supervisor"></a>安装配置supervisor</h3><ul>
+<li><code>grep -n &#39;^[a-z]&#39; /etc/supervisord.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">4:file&#x3D;&#x2F;var&#x2F;run&#x2F;supervisor&#x2F;supervisor.sock   ; (the path to the socket file)</span><br><span class="line">5:chmod&#x3D;0700                 ; sockef file mode (default 0700)</span><br><span class="line">6:chown&#x3D;root:root            ; socket file uid:gid owner</span><br><span class="line">16:logfile&#x3D;&#x2F;var&#x2F;log&#x2F;supervisor&#x2F;supervisord.log  ; (main log file;default $CWD&#x2F;supervisord.log)</span><br><span class="line">17:logfile_maxbytes&#x3D;50MB       ; (max main logfile bytes b4 rotation;default 50MB)</span><br><span class="line">18:logfile_backups&#x3D;10          ; (num of main logfile rotation backups;default 10)</span><br><span class="line">19:loglevel&#x3D;info               ; (log level;default info; others: debug,warn,trace)</span><br><span class="line">20:pidfile&#x3D;&#x2F;var&#x2F;run&#x2F;supervisord.pid ; (supervisord pidfile;default supervisord.pid)</span><br><span class="line">21:nodaemon&#x3D;false              ; (start in foreground if true;default false)</span><br><span class="line">22:minfds&#x3D;1024                 ; (min. avail startup file descriptors;default 1024)</span><br><span class="line">23:minprocs&#x3D;200                ; (min. avail process descriptors;default 200)</span><br><span class="line">37:supervisor.rpcinterface_factory &#x3D; supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line">40:serverurl&#x3D;unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;supervisor&#x2F;supervisor.sock ; use a unix:&#x2F;&#x2F; URL  for a unix socket</span><br><span class="line">129:files &#x3D; &#x2F;etc&#x2F;supervisord.d&#x2F;elk.conf</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>grep &#39;^[a-z]&#39; /etc/supervisord.d/elk.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">command&#x3D;&#x2F;opt&#x2F;soft&#x2F;elasticsearch-6.4.0&#x2F;bin&#x2F;elasticsearch</span><br><span class="line">autostart&#x3D;true</span><br><span class="line">autorestart&#x3D;true</span><br><span class="line">user&#x3D;elastic</span><br><span class="line">redirect_stderr&#x3D;true</span><br><span class="line">stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;elk&#x2F;e.log</span><br><span class="line">priority&#x3D;1</span><br><span class="line">command&#x3D;&#x2F;opt&#x2F;soft&#x2F;logstash-6.4.0&#x2F;bin&#x2F;logstash -r -f &#x2F;data&#x2F;www&#x2F;elk&#x2F;conf&#x2F;elk&#x2F;*.conf</span><br><span class="line">autostart&#x3D;true</span><br><span class="line">autorestart&#x3D;true</span><br><span class="line">user&#x3D;elastic</span><br><span class="line">redirect_stderr&#x3D;true</span><br><span class="line">stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;elk&#x2F;l.log</span><br><span class="line">priority&#x3D;10</span><br><span class="line">command&#x3D;&#x2F;opt&#x2F;soft&#x2F;kibana-6.4.0-linux-x86_64&#x2F;bin&#x2F;kibana</span><br><span class="line">autostart&#x3D;true</span><br><span class="line">autorestart&#x3D;true</span><br><span class="line">user&#x3D;elastic</span><br><span class="line">redirect_stderr&#x3D;true</span><br><span class="line">stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;elk&#x2F;k.log</span><br><span class="line">priority&#x3D;20</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>cat /data/www/elk/conf/elk/elk.conf</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  redis &#123;</span><br><span class="line">        host &#x3D;&gt; &#39;192.168.1.198&#39;</span><br><span class="line">        port &#x3D;&gt;  63791</span><br><span class="line">        db &#x3D;&gt; 1</span><br><span class="line">        data_type &#x3D;&gt; &quot;list&quot;</span><br><span class="line">        key &#x3D;&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  stdin &#123;</span><br><span class="line">    codec &#x3D;&gt; multiline &#123;</span><br><span class="line">      pattern &#x3D;&gt; &quot;^\[&quot;</span><br><span class="line">      negate &#x3D;&gt; true</span><br><span class="line">      what &#x3D;&gt; &quot;previous&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">output &#123; </span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">      hosts &#x3D;&gt; [ &quot;127.0.0.1:9200&quot; ] </span><br><span class="line">      index &#x3D;&gt; &quot;project&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  stdout &#123; codec &#x3D;&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELK-Stack/" rel="tag"># ELK Stack</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/06/12/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E5%92%8C%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" rel="prev" title="正向代理和反向代理">
+                  <i class="fa fa-chevron-left"></i> 正向代理和反向代理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/MySQL%E4%B8%ADBinlog%E8%AE%B0%E5%BD%95/" rel="next" title="MySQL中binlog文件">
+                  MySQL中binlog文件 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

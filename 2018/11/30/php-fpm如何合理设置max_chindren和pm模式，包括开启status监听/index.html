@@ -1,37 +1,432 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="php-fpm如何合理设置max_chindren和pm模式，包括开启status监听开启status获得执行状态启用php-fpm状态功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP-FPM如何合理设置max_chindren和pm模式，包括开启status监听">
+<meta property="og:url" content="https://blog.zhimma.com/2018/11/30/php-fpm%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEmax_chindren%E5%92%8Cpm%E6%A8%A1%E5%BC%8F%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%BC%80%E5%90%AFstatus%E7%9B%91%E5%90%AC/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="php-fpm如何合理设置max_chindren和pm模式，包括开启status监听开启status获得执行状态启用php-fpm状态功能">
+<meta property="og:locale">
+<meta property="og:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/htop.png">
+<meta property="article:published_time" content="2018-11-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:09:35.366Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="PHP-FPM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/htop.png">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2018/11/30/php-fpm%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEmax_chindren%E5%92%8Cpm%E6%A8%A1%E5%BC%8F%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%BC%80%E5%90%AFstatus%E7%9B%91%E5%90%AC/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>PHP-FPM如何合理设置max_chindren和pm模式，包括开启status监听 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#php-fpm%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEmax-chindren%E5%92%8Cpm%E6%A8%A1%E5%BC%8F%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%BC%80%E5%90%AFstatus%E7%9B%91%E5%90%AC"><span class="nav-number">1.</span> <span class="nav-text">php-fpm如何合理设置max_chindren和pm模式，包括开启status监听</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%90%AFstatus%E8%8E%B7%E5%BE%97%E6%89%A7%E8%A1%8C%E7%8A%B6%E6%80%81"><span class="nav-number">1.1.</span> <span class="nav-text">开启status获得执行状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E7%94%A8php-fpm%E7%8A%B6%E6%80%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.1.</span> <span class="nav-text">启用php-fpm状态功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">nginx配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E5%90%AFnginx%E5%92%8Cphp-fpm"><span class="nav-number">1.1.3.</span> <span class="nav-text">重启nginx和php-fpm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%93%E5%BC%80status%E9%A1%B5%E9%9D%A2"><span class="nav-number">1.1.4.</span> <span class="nav-text">打开status页面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.1.5.</span> <span class="nav-text">参数详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-fpm%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.6.</span> <span class="nav-text">php-fpm其他参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEmax-chindren%E5%92%8Cpm%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">合理设置max_chindren和pm模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP-FPM-%E5%AD%90%E8%BF%9B%E7%A8%8B%E6%95%B0%E9%87%8F%EF%BC%8C%E6%98%AF%E4%B8%8D%E6%98%AF%E8%B6%8A%E5%A4%9A%E8%B6%8A%E5%A5%BD%EF%BC%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">PHP-FPM 子进程数量，是不是越多越好？</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2018/11/30/php-fpm%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEmax_chindren%E5%92%8Cpm%E6%A8%A1%E5%BC%8F%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%BC%80%E5%90%AFstatus%E7%9B%91%E5%90%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP-FPM如何合理设置max_chindren和pm模式，包括开启status监听
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">2018-11-30</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:09:35" itemprop="dateModified" datetime="2021-03-23T18:09:35+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="php-fpm如何合理设置max-chindren和pm模式，包括开启status监听"><a href="#php-fpm如何合理设置max-chindren和pm模式，包括开启status监听" class="headerlink" title="php-fpm如何合理设置max_chindren和pm模式，包括开启status监听"></a>php-fpm如何合理设置max_chindren和pm模式，包括开启status监听</h2><h3 id="开启status获得执行状态"><a href="#开启status获得执行状态" class="headerlink" title="开启status获得执行状态"></a>开启status获得执行状态</h3><h4 id="启用php-fpm状态功能"><a href="#启用php-fpm状态功能" class="headerlink" title="启用php-fpm状态功能"></a>启用php-fpm状态功能</h4> <span id="more"></span>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;php-fpm.d&#x2F;www.conf</span><br><span class="line">修改：</span><br><span class="line">pm.status_path &#x3D; &#x2F;status</span><br></pre></td></tr></table></figure>
+
+<h4 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    <span class="attribute">location</span> <span class="regexp">~ ^/status$</span></span><br><span class="line"><span class="regexp"></span>    &#123;</span><br><span class="line">        <span class="attribute">include</span> fastcgi_params;</span><br><span class="line">        <span class="attribute">fastcgi_pass</span> <span class="number">127.0.0.1:9000</span>;</span><br><span class="line">        <span class="attribute">fastcgi_param</span> SCRIPT_FILENAME $fastcgi_script_name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="重启nginx和php-fpm"><a href="#重启nginx和php-fpm" class="headerlink" title="重启nginx和php-fpm"></a>重启nginx和php-fpm</h4><h4 id="打开status页面"><a href="#打开status页面" class="headerlink" title="打开status页面"></a>打开status页面</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@b04f945297ac ~]<span class="comment"># curl http://visit.ma/status</span></span><br><span class="line">pool:                 www</span><br><span class="line">process manager:      dynamic</span><br><span class="line">start time:           <span class="number">23</span>/Jul/<span class="number">2018</span>:<span class="number">15</span>:<span class="number">32</span>:<span class="number">09</span> +<span class="number">0800</span></span><br><span class="line">start since:          <span class="number">1055</span></span><br><span class="line">accepted conn:        <span class="number">9</span></span><br><span class="line">listen queue:         <span class="number">0</span></span><br><span class="line">max listen queue:     <span class="number">0</span></span><br><span class="line">listen queue len:     <span class="number">128</span></span><br><span class="line">idle processes:       <span class="number">5</span></span><br><span class="line">active processes:     <span class="number">1</span></span><br><span class="line">total processes:      <span class="number">6</span></span><br><span class="line">max active processes: <span class="number">1</span></span><br><span class="line">max children reached: <span class="number">0</span></span><br><span class="line">slow requests:        <span class="number">0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="参数详解"><a href="#参数详解" class="headerlink" title="参数详解"></a>参数详解</h4><p><strong>pool</strong> – fpm池子名称，大多数为www<br><strong>process manager</strong> – 进程管理方式,值：static, dynamic or ondemand. dynamic<br><strong>start time</strong> – 启动日期,如果reload了php-fpm，时间会更新<br><strong>start since</strong> – 运行时长<br><strong>accepted conn</strong> – 当前池子接受的请求数<br><strong>listen queue</strong> – 请求等待队列，如果这个值不为0，那么要增加FPM的进程数量<br><strong>max listen queue</strong> – 请求等待队列最高的数量<br><strong>listen queue len</strong> – socket等待队列长度<br><strong>idle processes</strong> – 空闲进程数量<br><strong>active processes</strong> – 活跃进程数量<br>total processes – 总进程数量<br><strong>max active processes</strong> – 最大的活跃进程数量（FPM启动开始算）<br><strong>max children reached</strong>  - 大道进程最大数量限制的次数，如果这个数量不为0，那说明你的最大进程数量太小了，请改大一点。<br><strong>slow requests</strong> – 启用了php-fpm slow-log，缓慢请求的数量</p>
+<h4 id="php-fpm其他参数"><a href="#php-fpm其他参数" class="headerlink" title="php-fpm其他参数"></a>php-fpm其他参数</h4><p><strong>php-fpm</strong>状态页比较个性化的一个地方是它可以带参数，可以带参数<strong>json</strong>、<strong>xml</strong>、<strong>html</strong>并且前面三个参数可以分别和<strong>full</strong>做一个组合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;visit.ma&#x2F;status?json</span><br><span class="line">curl http:&#x2F;&#x2F;visit.ma&#x2F;status?xml</span><br><span class="line">curl http:&#x2F;&#x2F;visit.ma&#x2F;status?html</span><br><span class="line">curl http:&#x2F;&#x2F;visit.ma&#x2F;status?full</span><br><span class="line"></span><br><span class="line">[root@b04f945297ac ~]# curl http:&#x2F;&#x2F;visit.ma&#x2F;status?full</span><br><span class="line">pool:                 www</span><br><span class="line">process manager:      dynamic</span><br><span class="line">start time:           23&#x2F;Jul&#x2F;2018:15:32:09 +0800</span><br><span class="line">start since:          1240</span><br><span class="line">accepted conn:        10</span><br><span class="line">listen queue:         0</span><br><span class="line">max listen queue:     0</span><br><span class="line">listen queue len:     128</span><br><span class="line">idle processes:       5</span><br><span class="line">active processes:     1</span><br><span class="line">total processes:      6</span><br><span class="line">max active processes: 1</span><br><span class="line">max children reached: 0</span><br><span class="line">slow requests:        0</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  5466</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           23&#x2F;Jul&#x2F;2018:15:32:09 +0800</span><br><span class="line">start since:          1240</span><br><span class="line">requests:             2</span><br><span class="line">request duration:     99</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          &#x2F;status</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  2097152</span><br><span class="line">************************</span><br><span class="line">pid:                  5467</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           23&#x2F;Jul&#x2F;2018:15:32:09 +0800</span><br><span class="line">start since:          1240</span><br><span class="line">requests:             2</span><br><span class="line">request duration:     184</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          &#x2F;status?full</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  2097152</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里重点说下<strong>full</strong>参数详解</p>
+<p><strong>pid</strong> – 进程PID，可以单独kill这个进程. You can use this PID to kill a long running process.<br><strong>state</strong> – 当前进程的状态 (Idle, Running, …)<br><strong>start time</strong> – 进程启动的日期<br><strong>start since</strong> – 当前进程运行时长<br><strong>requests</strong> – 当前进程处理了多少个请求<br><strong>request duration</strong> – 请求时长（微妙）<br>request method – 请求方法 (GET, POST, …)<br><strong>request URI</strong> – 请求URI<br><strong>content length</strong> – 请求内容长度 (仅用于 POST)<br><strong>user</strong> – 用户 (PHP_AUTH_USER) (or ‘-’ 如果没设置)<br><strong>script</strong> – PHP脚本 (or ‘-’ if not set)<br><strong>last request cpu</strong> – 最后一个请求CPU使用率<br><strong>last request memorythe</strong> - 上一个请求使用的内存</p>
+<h3 id="合理设置max-chindren和pm模式"><a href="#合理设置max-chindren和pm模式" class="headerlink" title="合理设置max_chindren和pm模式"></a>合理设置max_chindren和pm模式</h3><p><img src="https://learn-plan.oss-cn-beijing.aliyuncs.com/Nginx%2BPHP/htop.png" alt="htop"></p>
+<p>使用htop命令查看单个php-fpm所申请的VIRT大小，我32G服务器是400左右（实际要除以8=M，就是：50M左右），如果按照每个进程消耗50M*1.5倍=75M左右，如果你的服务器内存是32G，我们假设可用于php-fpm的内存为60%=20G，则：20*1024/75=273，所以，一般我们建议max_chindren最大为273，最好还是设置为：8的倍数，所以我设置为256.</p>
+<p>然后我们可以根据域名/status的结果来合理设置其他参数（<strong>pm.start_servers</strong>和<strong>pm.min_spare_servers</strong>和<strong>pm.max_spare_servers</strong>）</p>
+<p>在php.ini中，我们可以看到<strong>memory_limit</strong>有一句这样的原文，<code>Maximum amount of memory a script may consume (128MB)</code>，就是说单个进程使用的最大内存大小，这个参数吧，当然不能低于刚刚计算的75M了，一般我们可以设置为3倍，则75*3=225M左右（建议：128，256，512，1024…）</p>
+<p>这里假如有攻击的话，max_chindren=256，memory_limit=256，256*256=64G，很明显会导致内存爆满，所以如果想又保持性能，又能一定程度上防止内存爆满，可以将max_chindren设置的低一点，memory_limit可以设置为每个进程消耗的值（一般不建议低于128M吧，如果是独立服务器的话）。</p>
+<h4 id="PHP-FPM-子进程数量，是不是越多越好？"><a href="#PHP-FPM-子进程数量，是不是越多越好？" class="headerlink" title="PHP-FPM 子进程数量，是不是越多越好？"></a>PHP-FPM 子进程数量，是不是越多越好？</h4><p>当然不是，pm.max_chindren，进程多了，增加进程管理的开销以及上下文切换的开销。</p>
+<p>更核心的是，<strong>能并发执行的 php-fpm 进程不会超过 cpu 个数</strong>。</p>
+<p>如何设置，取决于你的代码</p>
+<p>如果代码是 CPU 计算密集型的，pm.max_chindren 不能超过 CPU 的内核数。</p>
+<p>如果不是，那么将 pm.max_chindren 的值大于 CPU 的内核数，是非常明智的。<br>国外技术大拿给出这么个公式：</p>
+<p>在 N + 20% 和 M/m 之间。</p>
+<p>N 是 CPU 内核数量。<br>M 是 PHP 能利用的内存数量。<br>m 是每个 PHP 进程平均使用的内存数量。<br>适用于 <strong>dynamic</strong> 方式。</p>
+<p><strong>static方式：M/(m * 1.2)</strong></p>
+<p>当然，还有一种保险的方式，来配置 max_children。适用于 static 方式。</p>
+<p>先把 max_childnren 设置成一个比较大的值。<br>稳定运行一段时间后，观察 php-fpm 的 status 里的 max<br>active processes 是多少<br>然后把 max_children 配置比它大一些就可以了。<br>pm.max_requests：指的是每个子进程在处理了多少个请求数量之后就重启。</p>
+<p>这个参数，理论上可以随便设置，但是为了预防内存泄漏的风险，还是设置一个合理的数比较好</p>
+<p>所以，我的服务器32G内存设置为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">memory_limit &#x3D; 256M</span><br><span class="line">pm &#x3D; dynamic</span><br><span class="line">pm.max_children &#x3D; 256</span><br><span class="line">pm.start_servers &#x3D; 32</span><br><span class="line">pm.min_spare_servers &#x3D; 16</span><br><span class="line">pm.max_spare_servers &#x3D; 32</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> pm.max_children：静态方式下开启的php-fpm进程数量。</p>
+<p>pm.start_servers：动态方式下的起始php-fpm进程数量。</p>
+<p>pm.min_spare_servers：动态方式下的最小php-fpm进程数量。</p>
+<p>pm.max_spare_servers：动态方式下的最大php-fpm进程数量。</p>
+<p><strong>如果dm设置为static，那么其实只有pm.max_children这个参数生效。系统会开启设置数量的php-fpm进程。</strong></p>
+<p><strong>如果dm设置为static，那么其实只有pm.max_children这个参数生效。系统会开启设置数量的php-fpm进程。</strong></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://www.zhanghongliang.com/article/1300">http://www.zhanghongliang.com/article/1300</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ttlsa.com/php/use-php-fpm-status-page-detail/">http://www.ttlsa.com/php/use-php-fpm-status-page-detail/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+              <a href="/tags/PHP-FPM/" rel="tag"># PHP-FPM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/30/redis%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/" rel="prev" title="Redis安装与配置">
+                  <i class="fa fa-chevron-left"></i> Redis安装与配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/30/mysql%E4%B8%AD%E6%8C%89%E7%85%A7%E5%A7%93%E5%90%8D%E6%88%96%E8%80%85%E4%B8%AD%E6%96%87%E9%A6%96%E5%AD%97%E6%AF%8D%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2%E6%8E%92%E5%BA%8F/" rel="next" title="MySQL中按照姓名或者中文首字母区间查询排序">
+                  MySQL中按照姓名或者中文首字母区间查询排序 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>

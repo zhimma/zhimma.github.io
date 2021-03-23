@@ -1,37 +1,463 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhimma.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="[TOC] 接口本身是调用方和实现方均需要遵守的一种协议，大家按照统一的方法命名参数类型和数量来协调逻辑处理的过程。 Go 语言的接口设计是非侵入式的，接口编写者无须知道接口被哪些类型实现。而接口实现者只需知道实现的是什么样子的接口，但无须指明实现哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现。 非侵入式设计是 Go 语言设计师经过多年的大项目经验总结出来的设计之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言学习笔记6-接口">
+<meta property="og:url" content="https://blog.zhimma.com/2019/03/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="zhimma&#39;s blog">
+<meta property="og:description" content="[TOC] 接口本身是调用方和实现方均需要遵守的一种协议，大家按照统一的方法命名参数类型和数量来协调逻辑处理的过程。 Go 语言的接口设计是非侵入式的，接口编写者无须知道接口被哪些类型实现。而接口实现者只需知道实现的是什么样子的接口，但无须指明实现哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现。 非侵入式设计是 Go 语言设计师经过多年的大项目经验总结出来的设计之">
+<meta property="og:locale">
+<meta property="og:image" content="http://c.biancheng.net/uploads/allimg/180816/1-1PQ6100I14b.jpg">
+<meta property="og:image" content="http://c.biancheng.net/uploads/allimg/180816/1-1PQ61125141Z.jpg">
+<meta property="og:image" content="http://c.biancheng.net/uploads/allimg/180816/1-1PQ6112952232.jpg">
+<meta property="article:published_time" content="2019-03-14T08:03:29.000Z">
+<meta property="article:modified_time" content="2021-03-23T10:07:53.432Z">
+<meta property="article:author" content="zhimma">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://c.biancheng.net/uploads/allimg/180816/1-1PQ6100I14b.jpg">
 
 
-{% block content %}
+<link rel="canonical" href="https://blog.zhimma.com/2019/03/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-%E6%8E%A5%E5%8F%A3/">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Go语言学习笔记6-接口 | zhimma's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zhimma's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">zhimma's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E6%8E%A5%E5%8F%A3%E5%A3%B0%E6%98%8E%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">Go语言接口声明定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%A3%B0%E6%98%8E%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">接口声明的格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E8%A7%81%E6%8E%A5%E5%8F%A3%E5%8F%8A%E5%86%99%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">开发中常见接口及写法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">Go语言实现接口的条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E4%B8%80%EF%BC%9A%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%96%B9%E5%BC%8F%E6%A0%BC%E5%BC%8F%E4%B8%80%E8%87%B4"><span class="nav-number">2.1.</span> <span class="nav-text">条件一：接口的方法与实现接口的类型方式格式一致</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%87%BD%E6%95%B0%E5%90%8D%E4%B8%8D%E4%B8%80%E8%87%B4%E5%AF%BC%E8%87%B4%E7%9A%84%E6%8A%A5%E9%94%99"><span class="nav-number">2.1.1.</span> <span class="nav-text">1) 函数名不一致导致的报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8D%E4%B8%8D%E4%B8%80%E8%87%B4%E5%AF%BC%E8%87%B4%E7%9A%84%E6%8A%A5%E9%94%99"><span class="nav-number">2.1.2.</span> <span class="nav-text">2) 实现接口的方法签名不一致导致的报错</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E4%BA%8C%EF%BC%9A%E6%8E%A5%E5%8F%A3%E4%B8%AD%E6%89%80%E6%9C%89%E6%96%B9%E6%B3%95%E5%9D%87%E8%A2%AB%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">条件二：接口中所有方法均被实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">Go语言类型与接口的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%B8%AA%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.1.</span> <span class="nav-text">一个类型可以实现多个接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E7%B1%BB%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9B%B8%E5%90%8C%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.2.</span> <span class="nav-text">多个类型可以实现相同的接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%B5%8C%E5%A5%97"><span class="nav-number">4.</span> <span class="nav-text">接口嵌套</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%8C%85%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%B5%8C%E5%A5%97%E7%BB%84%E5%90%88"><span class="nav-number">4.1.</span> <span class="nav-text">系统包中的接口嵌套组合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%B5%8C%E5%A5%97%E7%BB%84%E5%90%88"><span class="nav-number">4.2.</span> <span class="nav-text">在代码中使用接口嵌套组合</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhimma</p>
+  <div class="site-description" itemprop="description">zhimma's 技术blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhimma.com/2019/03/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-%E6%8E%A5%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhimma">
+      <meta itemprop="description" content="zhimma's 技术blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhimma's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言学习笔记6-接口
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-14 16:03:29" itemprop="dateCreated datePublished" datetime="2019-03-14T16:03:29+08:00">2019-03-14</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-23 18:07:53" itemprop="dateModified" datetime="2021-03-23T18:07:53+08:00">2021-03-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<p>接口本身是调用方和实现方均需要遵守的一种协议，大家按照统一的方法命名参数类型和数量来协调逻辑处理的过程。</p>
+<p>Go 语言的接口设计是非侵入式的，接口编写者无须知道接口被哪些类型实现。而接口实现者只需知道实现的是什么样子的接口，但无须指明实现哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现。</p>
+<p>非侵入式设计是 Go 语言设计师经过多年的大项目经验总结出来的设计之道。只有让接口和实现者真正解耦，编译速度才能真正提高，项目之间的耦合度也会降低不少。</p>
+ <span id="more"></span>
+
+<h2 id="Go语言接口声明定义"><a href="#Go语言接口声明定义" class="headerlink" title="Go语言接口声明定义"></a>Go语言接口声明定义</h2><p>接口是双方约定的一种合作协议。接口实现者不需要关心接口会被怎样使用，调用者也不需要关心接口的实现细节。接口是一种类型，也是一种抽象结构，不会暴露所含数据的格式、类型及结构。</p>
+<h3 id="接口声明的格式"><a href="#接口声明的格式" class="headerlink" title="接口声明的格式"></a>接口声明的格式</h3><p>每个接口类型由数个方法组成，接口的形式代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> 接口类型名 <span class="keyword">interface</span> &#123;</span><br><span class="line">    方法名<span class="number">1</span>(参数列表<span class="number">1</span>) 返回值列表<span class="number">1</span></span><br><span class="line">    方法名<span class="number">2</span>(参数列表<span class="number">2</span>) 返回值列表<span class="number">2</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对各个部分的说明：</p>
+<ul>
+<li><p>接口类型名： 使用 type 将接口定义为自定义的类型名。Go 语言在接口命名时，一并会在单词后面添加 <strong>er</strong>，如有写操作的接口叫 Writer，有字符串功能的接口叫 Stringer…</p>
+</li>
+<li><p>方法名： 当方法名首字母大写时，且这个接口类型名首字母也是大写时，这个方法可以被接口所在的包（package）之外的代码访问</p>
+</li>
+<li><p>参数列表、返回值列表： 参数列表和返回值列表中的参数变量名可以被忽略，如</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> write <span class="keyword">interface</span> &#123;</span><br><span class="line">    Write([]<span class="keyword">byte</span>) error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="开发中常见接口及写法"><a href="#开发中常见接口及写法" class="headerlink" title="开发中常见接口及写法"></a>开发中常见接口及写法</h3><p>Go 语言提供的很多包中都有接口，例如 io 包中提供的Writer 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Writer <span class="keyword">interface</span> &#123;</span><br><span class="line">    Write(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个接口可以调用 Write() 方法写入一个字节数组([]byte)，返回值告知写入字节数（n int）和可能发生的错误（err error）</p>
+<h2 id="Go语言实现接口的条件"><a href="#Go语言实现接口的条件" class="headerlink" title="Go语言实现接口的条件"></a>Go语言实现接口的条件</h2><p>接口定义后，需要实现接口，调用方才能正确编译通过并使用接口。接口的实现需要遵循两条规则才能让接口可用</p>
+<h3 id="条件一：接口的方法与实现接口的类型方式格式一致"><a href="#条件一：接口的方法与实现接口的类型方式格式一致" class="headerlink" title="条件一：接口的方法与实现接口的类型方式格式一致"></a>条件一：接口的方法与实现接口的类型方式格式一致</h3><p>在类型中添加与接口签名一致的方法就可以实现该接口。签名包括方法中的名称、参数列表、返回参数列表。也就是说，只要实现接口类型中的方法的名称、参数列表、返回参数列表中的任意一项与接口要实现的方法不一致，那么接口的这个方法就不会被实现。</p>
+<p>数据写入器的抽象：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个数据写入器</span></span><br><span class="line"><span class="keyword">type</span> DataWriter <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// 定义 DataWriter 接口。这个接口只有一个方法，即 WriteData()，入参接收interface&#123;&#125; 类型的 data，返回一个 error 结构表示可能发生的错误</span></span><br><span class="line">	WriteData(data <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定文件结构，用于实现DataWriter</span></span><br><span class="line"><span class="keyword">type</span> file <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现DataWriter接口的WriteData方法</span></span><br><span class="line"><span class="comment">// file 的 WriteData() 方法使用指针接收器。输入一个 interface&#123;&#125; 类型的 data，返回 error。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f *file)</span> <span class="title">WriteData</span><span class="params">(data <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;实现了DataWriter接口的WriteData方法&quot;</span> , data)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 实例化结构file</span></span><br><span class="line">	<span class="comment">// 实例化 file 赋值给 f，f 的类型为 *file。</span></span><br><span class="line">	f := <span class="built_in">new</span>(file)</span><br><span class="line">	<span class="comment">// 声明一个DataWriter类型的writer接口变量</span></span><br><span class="line">	<span class="keyword">var</span> writer DataWriter</span><br><span class="line">	<span class="comment">// 将接口复赋值给f，也就是*file类型</span></span><br><span class="line">    <span class="comment">// 将 *file 类型的 f 赋值给 DataWriter 接口的 writer，虽然两个变量类型不一致。但是 writer 是一个接口，且 f 已经完全实现了 DataWriter() 的所有方法，因此赋值是成功的。</span></span><br><span class="line">	writer = f</span><br><span class="line">	<span class="comment">// 使用DataWriter接口进行数据写入</span></span><br><span class="line">	writer.WriteData(<span class="string">&quot;data&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当类型无法实现接口时，编译器会报错，下面列出常见的几种接口无法实现的错误。</p>
+<h4 id="1-函数名不一致导致的报错"><a href="#1-函数名不一致导致的报错" class="headerlink" title="1) 函数名不一致导致的报错"></a>1) 函数名不一致导致的报错</h4><h4 id="2-实现接口的方法签名不一致导致的报错"><a href="#2-实现接口的方法签名不一致导致的报错" class="headerlink" title="2) 实现接口的方法签名不一致导致的报错"></a>2) 实现接口的方法签名不一致导致的报错</h4><h3 id="条件二：接口中所有方法均被实现"><a href="#条件二：接口中所有方法均被实现" class="headerlink" title="条件二：接口中所有方法均被实现"></a>条件二：接口中所有方法均被实现</h3><p>当一个接口中有多个方法时，只有这些方法都被实现了，接口才能被正确编译并使用。</p>
+<p>在本节开头的代码中，为 DataWriter中 添加一个方法，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个数据写入器</span></span><br><span class="line"><span class="keyword">type</span> DataWriter <span class="keyword">interface</span> &#123;</span><br><span class="line">    WriteData(data <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">    <span class="comment">// 能否写入</span></span><br><span class="line">    CanWrite() <span class="keyword">bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新增 CanWrite() 方法，返回 bool。此时再次编译代码，报错：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cannot use f (<span class="keyword">type</span> *file) as <span class="keyword">type</span> DataWriter in assignment:</span><br><span class="line">        *file does not implement DataWriter (missing CanWrite method)</span><br></pre></td></tr></table></figure>
+
+<p>需要在 file 中实现 CanWrite() 方法才能正常使用 DataWriter()。</p>
+<p>Go 语言的接口实现是隐式的，无须让实现接口的类型写出实现了哪些接口。这个设计被称为非侵入式设计。</p>
+<p>实现者在编写方法时，无法预测未来哪些方法会变为接口。一旦某个接口创建出来，要求旧的代码来实现这个接口时，就需要修改旧的代码的派生部分，这一般会造成雪崩式的重新编译。</p>
+<h2 id="Go语言类型与接口的关系"><a href="#Go语言类型与接口的关系" class="headerlink" title="Go语言类型与接口的关系"></a>Go语言类型与接口的关系</h2><p>类型和接口之间有一对多和多对一的关系，下面将列举出这些常见的概念，以方便读者理解接口与类型在复杂环境下的实现关系。</p>
+<h3 id="一个类型可以实现多个接口"><a href="#一个类型可以实现多个接口" class="headerlink" title="一个类型可以实现多个接口"></a>一个类型可以实现多个接口</h3><p>一个类型可以同时实现多个接口，而接口见彼此独立，不知道对方的实现</p>
+<p>网络上的两个程序通过一个双向的通信连接实现数据的交换，连接的一端称为一个 Socket。Socket 能够同时读取和写入数据，这个特性与文件类似。因此，开发中把文件和 Socket 都具备的读写特性抽象为独立的读写器概念。</p>
+<p>Socket 和文件一样，在使用完毕后，也需要对资源进行释放。</p>
+<p>把 Socket 能够写入数据和需要关闭的特性使用接口来描述，请参考下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Socket <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Socket 结构的Write方法实现了io.Writer接口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Socket)</span> <span class="title">Write</span><span class="params">(p []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 同时，Socket 结构也实现了 io.Close 接口：</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Socket)</span> <span class="title">Close</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 Socket 实现的 Writer 接口的代码，无须了解 Writer 接口的实现者是否具备 Closer 接口的特性。同样，使用 Closer 接口的代码也并不知道 Socket 已经实现了 Writer 接口，如下图所示。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/180816/1-1PQ6100I14b.jpg"></p>
+<p>在代码中使用Socket结构实现的Writer接口和Closer接口代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Socket <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Socket)</span> <span class="title">Write</span><span class="params">(p []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Socket)</span> <span class="title">Close</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">usingWriter</span><span class="params">(writer io.Writer)</span></span> &#123;</span><br><span class="line">	writer.Write(<span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">usingCloser</span><span class="params">(closer io.Closer)</span></span> &#123;</span><br><span class="line">	closer.Close()</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="built_in">new</span>(Socket)</span><br><span class="line">	usingWriter(s)</span><br><span class="line">	usingCloser(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多个类型可以实现相同的接口"><a href="#多个类型可以实现相同的接口" class="headerlink" title="多个类型可以实现相同的接口"></a>多个类型可以实现相同的接口</h3><p>一个接口的方法，不一定需要由一个类型完全实现，接口的方法可以通过在类型中嵌入其他类型或者结构体来实现。也就是说，使用者并不关心某个接口的方法是通过一个类型完全实现的，还是通过多个结构嵌入到一个结构体中拼凑起来共同实现的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个服务需要满足能够开启和写日志的功能</span></span><br><span class="line"><span class="keyword">type</span> Service <span class="keyword">interface</span> &#123;</span><br><span class="line">    Start()  <span class="comment">// 开启服务</span></span><br><span class="line">    Log(<span class="keyword">string</span>)  <span class="comment">// 日志输出</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 日志器 定义能输出日志的日志器结构。</span></span><br><span class="line"><span class="keyword">type</span> Logger <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 为 Logger 添加 Log() 方法，同时实现 Service 的 Log() 方法。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(g *Logger)</span> <span class="title">Log</span><span class="params">(l <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 定义 GameService 结构。</span></span><br><span class="line"><span class="keyword">type</span> GameService <span class="keyword">struct</span> &#123;</span><br><span class="line">    Logger  <span class="comment">// 在 GameService 中嵌入 Logger 日志器，以实现日志功能。</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 实现Service的Start()方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(g *GameService)</span> <span class="title">Start</span><span class="params">()</span></span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，实例化 GameService，并将实例赋给 Service，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s Service = <span class="built_in">new</span>(GameService)</span><br><span class="line">s.Start()</span><br><span class="line">s.Log(“hello”)</span><br></pre></td></tr></table></figure>
+
+<p>s 就可以使用 Start() 方法和 Log() 方法，其中，Start() 由 GameService 实现，Log() 方法由 Logger 实现。</p>
+<h2 id="接口嵌套"><a href="#接口嵌套" class="headerlink" title="接口嵌套"></a>接口嵌套</h2><p>Go语言中不同结构体与结构体之间可以嵌套，接口与接口间也可以通过嵌套创造出新的接口</p>
+<p>接口与接口嵌套组合而成了新接口，只要接口的所有方法被实现，则这个接口中的所有嵌套接口的方法均可以被调用</p>
+<h3 id="系统包中的接口嵌套组合"><a href="#系统包中的接口嵌套组合" class="headerlink" title="系统包中的接口嵌套组合"></a>系统包中的接口嵌套组合</h3><p>Go 语言的io 包中定义写入器（Writer）、关闭器（Closer）和写入关闭器（WriteClose）3个接口，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Writer <span class="keyword">interface</span> &#123;</span><br><span class="line">	Write(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Closer <span class="keyword">interface</span> &#123;</span><br><span class="line">	Close() error</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> WriterCloser <span class="keyword">interface</span> &#123;</span><br><span class="line">	Writer</span><br><span class="line">	Closer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在代码中使用接口嵌套组合"><a href="#在代码中使用接口嵌套组合" class="headerlink" title="在代码中使用接口嵌套组合"></a>在代码中使用接口嵌套组合</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> device <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *device)</span> <span class="title">Write</span><span class="params">(p []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *device)</span> <span class="title">Close</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 对 device 实例化，由于 device 实现了 io.WriteCloser 的所有嵌入接口，因此 device 指针就会被隐式转换为 io.WriteCloser 接口。</span></span><br><span class="line">	<span class="keyword">var</span> wc io.WriteCloser = <span class="built_in">new</span>(device)</span><br><span class="line">	<span class="comment">// 写入数据</span></span><br><span class="line">	wc.Write(<span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> writeOnly io.Writer = <span class="built_in">new</span>(device)</span><br><span class="line"></span><br><span class="line">	writeOnly.Write(<span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>io.WriteCloser的实现及调用过程如图 1 所示。</li>
+</ol>
+<p><img src="http://c.biancheng.net/uploads/allimg/180816/1-1PQ61125141Z.jpg" alt="img"></p>
+<ol start="2">
+<li>io.Writer 的实现调用过程如图 2 所示。</li>
+</ol>
+<p><img src="http://c.biancheng.net/uploads/allimg/180816/1-1PQ6112952232.jpg" alt="img"></p>
+<p>给 io.WriteCloser 或 io.Writer 更换不同的实现者，可以动态地切换实现代码。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"># Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/12/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-%E7%BB%93%E6%9E%84%E4%BD%93/" rel="prev" title="Go语言学习笔记5-结构体">
+                  <i class="fa fa-chevron-left"></i> Go语言学习笔记5-结构体
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/20/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-%E5%8C%85-package/" rel="next" title="Go语言学习笔记7-包(package)">
+                  Go语言学习笔记7-包(package) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhimma</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":100,"height":175,"position":"left","hOffset":0,"vOffset":0},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body>
+</html>
