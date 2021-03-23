@@ -1818,41 +1818,6 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
       </tags>
   </entry>
   <entry>
-    <title>Laravel开发前期准备</title>
-    <url>/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/</url>
-    <content><![CDATA[<p>环境 ： windows10</p>
-<p>本地开发环境 ：<a href="https://github.com/salamander-mh/SalamanderWnmp">SalamanderWnmp</a></p>
-<p>Phpstrom版本：Phpstrom 2017.1 </p>
-<p>Laravel版本：Laravel5.4</p>
-<span id="more"></span>
-
-<h1 id="编辑器插件"><a href="#编辑器插件" class="headerlink" title="编辑器插件"></a>编辑器插件</h1><h2 id="Laravel-Plugin"><a href="#Laravel-Plugin" class="headerlink" title="Laravel Plugin"></a>Laravel Plugin</h2><hr>
-<p>ctrl+alt+s打开PHPStrom设置页面，按如下操作</p>
-<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/laravel/laravel_plugin.png" alt="image"></p>
-<p>安装完成后，启用插件，如下图所示</p>
-<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/laravel/laravel_enable_plugins.png" alt="image"></p>
-<p>然后再去写代码的时候就会提供controllers,views, routes, configuration, translations等的代码提示功能。</p>
-<h2 id="Laravel-IDE-Helper"><a href="#Laravel-IDE-Helper" class="headerlink" title="Laravel IDE Helper"></a>Laravel IDE Helper</h2><hr>
-<p>有时候你会发现Route::之类的没有代码提示或者自动补全，这时候我们需要安装 Laravel IDE Helper</p>
-<p>项目地址<a href="https://github.com/barryvdh/laravel-ide-helper">：GitHub</a></p>
-<p>使用composer命令安装:<code>composer require barryvdh/laravel-ide-helper</code></p>
-<p>安装之后你需要把Laravel IDE Helper以服务的形式注册到应用中。</p>
-<p>修改<strong>app/config/app.php</strong>,添加<code>Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class</code>, 到<strong>providers</strong>元素下。</p>
-<p>执行下面的命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php artisan clear-compiled</span><br><span class="line">php artisan ide-helper:generate</span><br><span class="line">php artisan optimize</span><br></pre></td></tr></table></figure>
-
-
-
-<p>[参考资料]：<br><a href="https://confluence.jetbrains.com/display/PhpStorm/Laravel+Development+using+PhpStorm">https://confluence.jetbrains.com/display/PhpStorm/Laravel+Development+using+PhpStorm</a></p>
-]]></content>
-      <categories>
-        <category>Laravel</category>
-      </categories>
-      <tags>
-        <tag>Laravel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Jenkins初始化及常见问题整理</title>
     <url>/2019/06/19/Jenkins%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -2003,6 +1968,41 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
       </categories>
       <tags>
         <tag>Azure</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Laravel开发前期准备</title>
+    <url>/2018/11/30/Laravel%E5%BC%80%E5%8F%91-%E5%B7%A5%E5%85%B7%E7%B1%BB/</url>
+    <content><![CDATA[<p>环境 ： windows10</p>
+<p>本地开发环境 ：<a href="https://github.com/salamander-mh/SalamanderWnmp">SalamanderWnmp</a></p>
+<p>Phpstrom版本：Phpstrom 2017.1 </p>
+<p>Laravel版本：Laravel5.4</p>
+<span id="more"></span>
+
+<h1 id="编辑器插件"><a href="#编辑器插件" class="headerlink" title="编辑器插件"></a>编辑器插件</h1><h2 id="Laravel-Plugin"><a href="#Laravel-Plugin" class="headerlink" title="Laravel Plugin"></a>Laravel Plugin</h2><hr>
+<p>ctrl+alt+s打开PHPStrom设置页面，按如下操作</p>
+<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/laravel/laravel_plugin.png" alt="image"></p>
+<p>安装完成后，启用插件，如下图所示</p>
+<p><img src="http://mafuntoo-blog.oss-cn-qingdao.aliyuncs.com/laravel/laravel_enable_plugins.png" alt="image"></p>
+<p>然后再去写代码的时候就会提供controllers,views, routes, configuration, translations等的代码提示功能。</p>
+<h2 id="Laravel-IDE-Helper"><a href="#Laravel-IDE-Helper" class="headerlink" title="Laravel IDE Helper"></a>Laravel IDE Helper</h2><hr>
+<p>有时候你会发现Route::之类的没有代码提示或者自动补全，这时候我们需要安装 Laravel IDE Helper</p>
+<p>项目地址<a href="https://github.com/barryvdh/laravel-ide-helper">：GitHub</a></p>
+<p>使用composer命令安装:<code>composer require barryvdh/laravel-ide-helper</code></p>
+<p>安装之后你需要把Laravel IDE Helper以服务的形式注册到应用中。</p>
+<p>修改<strong>app/config/app.php</strong>,添加<code>Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class</code>, 到<strong>providers</strong>元素下。</p>
+<p>执行下面的命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php artisan clear-compiled</span><br><span class="line">php artisan ide-helper:generate</span><br><span class="line">php artisan optimize</span><br></pre></td></tr></table></figure>
+
+
+
+<p>[参考资料]：<br><a href="https://confluence.jetbrains.com/display/PhpStorm/Laravel+Development+using+PhpStorm">https://confluence.jetbrains.com/display/PhpStorm/Laravel+Development+using+PhpStorm</a></p>
+]]></content>
+      <categories>
+        <category>Laravel</category>
+      </categories>
+      <tags>
+        <tag>Laravel</tag>
       </tags>
   </entry>
   <entry>
@@ -3954,76 +3954,6 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
       </tags>
   </entry>
   <entry>
-    <title>基于Docker容器的MySQL主从配置</title>
-    <url>/2018/11/30/%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="基于Docker容器的MySQL主从配置"><a href="#基于Docker容器的MySQL主从配置" class="headerlink" title="基于Docker容器的MySQL主从配置"></a>基于Docker容器的MySQL主从配置</h1><p>我本机的镜像</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line"></span><br><span class="line">REPOSITORY                                     TAG                 IMAGE ID           </span><br><span class="line">ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da5efb40932</span><br></pre></td></tr></table></figure>
-
-<p>环境搭建及MySQL安装步骤省略，根据已有的镜像创建容器</p>
-<ol>
-<li><p>master数据库</p>
-<p><code>docker run -it -d --privileged=true --name master -p 33060:3306 -p 220:22 -p 8080:80 -p 1024:1024 -p 16379:6379 -p 9001:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-</li>
-<li><p>slave1数据库</p>
-<p><code>docker run -it -d --privileged=true --name slave1 -p 33061:3306 -p 221:22 -p 8081:80 -p 2024:1024 -p 26379:6379 -p 9002:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-</li>
-<li><p>slave2数据库</p>
-<p><code>docker run -it -d --privileged=true --name slave2 -p 33062:3306 -p 222:22 -p 8082:80 -p 3024:1024 -p 36379:6379 -p 9003:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
-<p>……  slaveN</p>
- <span id="more"></span></li>
-</ol>
-<h2 id="binlog方式"><a href="#binlog方式" class="headerlink" title="binlog方式"></a>binlog方式</h2><h3 id="master数据库"><a href="#master数据库" class="headerlink" title="master数据库"></a>master数据库</h3><p>真实机IP：192.168.2.107   容器IP:172.17.0.2</p>
-<h4 id="修改MySQL配置文件-my-cnf"><a href="#修改MySQL配置文件-my-cnf" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;1			 #服务器ID</span><br></pre></td></tr></table></figure>
-
-<p>附一份全一点的配置,指定需要同步的数据库和不需要同步的数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server-id&#x3D;1</span><br><span class="line">log-bin&#x3D;mysql-bin</span><br><span class="line">log-bin-index&#x3D;master-bin.index</span><br><span class="line">binlog_format&#x3D;mixed  &#x2F;&#x2F; binlog 日志文件格式</span><br><span class="line">sync-binlog&#x3D;1		&#x2F;&#x2F;</span><br><span class="line">binlog-ignore-db&#x3D;mysql</span><br><span class="line">binlog-ignore-db&#x3D;product</span><br><span class="line">binlog-do-db&#x3D;test</span><br><span class="line">binlog-do-db&#x3D;local</span><br></pre></td></tr></table></figure>
-
-
-
-<p>重启MySQL；</p>
-<h4 id="创建复制用户"><a href="#创建复制用户" class="headerlink" title="创建复制用户"></a>创建复制用户</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span>	<span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">	<span class="keyword">GRANT</span> REPLICATION SLAVE <span class="keyword">ON</span> . <span class="keyword">TO</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">	或者</span><br><span class="line"><span class="number">2.</span>  <span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> MASTER STATUS;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="查看MySQL"><a href="#查看MySQL" class="headerlink" title="查看MySQL"></a>查看MySQL</h4><p><code>show master status</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show master status;</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000001 |      998 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如果是项目中途使用主从复制，可以使用下面方法迁移数据</p>
-<ol>
-<li><p>锁定所有表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; FLUSH TABLES WITH READ LOCK;</span><br><span class="line">Query OK, 0 rows affected (2.59 sec)</span><br></pre></td></tr></table></figure></li>
-<li><p>备份表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@b04f945297ac ~]# mysqldump -uroot -p123456 --all-databases -l -F &gt;&#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure></li>
-<li><p>解锁</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; UNLOCK TABLES; </span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></li>
-<li><p>传输数据到从库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 221&#x2F;222 &#x2F;tmp&#x2F;all_db.sql root@192.168.2.107:&#x2F;tmp </span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="slave数据库"><a href="#slave数据库" class="headerlink" title="slave数据库"></a>slave数据库</h3><h4 id="修改server-uuid"><a href="#修改server-uuid" class="headerlink" title="修改server-uuid"></a>修改server-uuid</h4><p>将<code>/var/lib/mysql/auto.conf</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[auto]</span><br><span class="line">server-uuid&#x3D;f781e2b4-28e1-11e8-a1c0-0242ac110001</span><br></pre></td></tr></table></figure>
-
-<h4 id="修改MySQL配置文件-my-cnf-1"><a href="#修改MySQL配置文件-my-cnf-1" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;101			 #服务器ID</span><br></pre></td></tr></table></figure>
-
-<p>重启MySQL；</p>
-<h4 id="导入主备份文件"><a href="#导入主备份文件" class="headerlink" title="导入主备份文件"></a>导入主备份文件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@9ae039d46474 tmp]# mysql -uroot -p123456 &lt; &#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure>
-
-<h4 id="开启slave同步"><a href="#开启slave同步" class="headerlink" title="开启slave同步"></a>开启slave同步</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;192.168.2.107&#39;,MASTER_PORT&#x3D;33060, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;172.17.0.2&#39;, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">start slave</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看是否同步成功slave连接master成功"><a href="#查看是否同步成功slave连接master成功" class="headerlink" title="查看是否同步成功slave连接master成功"></a>查看是否同步成功slave连接master成功</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start slave;</span><br><span class="line"></span><br><span class="line">Query OK, 0 rows affected (0.43 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show slave status\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Queueing master event to the relay log</span><br><span class="line">                  Master_Host: 192.168.2.107</span><br><span class="line">                  Master_User: zhimma</span><br><span class="line">                  Master_Port: 33060</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: mysql-bin.000003</span><br><span class="line">          Read_Master_Log_Pos: 4</span><br><span class="line">               Relay_Log_File: 06e5a050e74b-relay-bin.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: mysql-bin.000001</span><br><span class="line">              Slave_IO_Running: Yes</span><br><span class="line">              Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 998</span><br><span class="line">              Relay_Log_Space: 1483</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">                  Master_UUID: f781e2b4-28e1-11e8-a1c0-0242ac110002</span><br><span class="line">             Master_Info_File: &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;master.info</span><br><span class="line">                    SQL_Delay: 0</span><br><span class="line">          SQL_Remaining_Delay: NULL</span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates</span><br><span class="line">           Master_Retry_Count: 86400</span><br><span class="line">                  Master_Bind: </span><br><span class="line">      Last_IO_Error_Timestamp: </span><br><span class="line">     Last_SQL_Error_Timestamp: </span><br><span class="line">               Master_SSL_Crl: </span><br><span class="line">           Master_SSL_Crlpath: </span><br><span class="line">           Retrieved_Gtid_Set: </span><br><span class="line">            Executed_Gtid_Set: </span><br><span class="line">                Auto_Position: 0</span><br><span class="line">         Replicate_Rewrite_DB: </span><br><span class="line">                 Channel_Name: </span><br><span class="line">           Master_TLS_Version: </span><br><span class="line">1 row in set (0.20 sec)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Slave_IO_Running: Yes</span><br><span class="line">Slave_SQL_Running: Yes</span><br></pre></td></tr></table></figure>
-
-<p>同步成功</p>
-<p><a href="http://www.cnblogs.com/clsn/p/8150036.html">http://www.cnblogs.com/clsn/p/8150036.html</a></p>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用的Git</title>
     <url>/2018/11/30/%E5%B8%B8%E7%94%A8%E7%9A%84git/</url>
     <content><![CDATA[<h3 id="Git的概念"><a href="#Git的概念" class="headerlink" title="Git的概念"></a>Git的概念</h3><p>Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理。</p>
@@ -4139,6 +4069,76 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
       <tags>
         <tag>PHP</tag>
         <tag>面向对象</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于Docker容器的MySQL主从配置</title>
+    <url>/2018/11/30/%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E7%9A%84MySQL%E4%B8%BB%E4%BB%8E%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="基于Docker容器的MySQL主从配置"><a href="#基于Docker容器的MySQL主从配置" class="headerlink" title="基于Docker容器的MySQL主从配置"></a>基于Docker容器的MySQL主从配置</h1><p>我本机的镜像</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line"></span><br><span class="line">REPOSITORY                                     TAG                 IMAGE ID           </span><br><span class="line">ssh_network_vim_lnmp_redis_swoole_supervisor   latest              6da5efb40932</span><br></pre></td></tr></table></figure>
+
+<p>环境搭建及MySQL安装步骤省略，根据已有的镜像创建容器</p>
+<ol>
+<li><p>master数据库</p>
+<p><code>docker run -it -d --privileged=true --name master -p 33060:3306 -p 220:22 -p 8080:80 -p 1024:1024 -p 16379:6379 -p 9001:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+</li>
+<li><p>slave1数据库</p>
+<p><code>docker run -it -d --privileged=true --name slave1 -p 33061:3306 -p 221:22 -p 8081:80 -p 2024:1024 -p 26379:6379 -p 9002:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+</li>
+<li><p>slave2数据库</p>
+<p><code>docker run -it -d --privileged=true --name slave2 -p 33062:3306 -p 222:22 -p 8082:80 -p 3024:1024 -p 36379:6379 -p 9003:9001 -v   E:\www\:/home/www ssh_network_vim_lnmp_redis_swoole_supervisor /usr/sbin/init</code></p>
+<p>……  slaveN</p>
+ <span id="more"></span></li>
+</ol>
+<h2 id="binlog方式"><a href="#binlog方式" class="headerlink" title="binlog方式"></a>binlog方式</h2><h3 id="master数据库"><a href="#master数据库" class="headerlink" title="master数据库"></a>master数据库</h3><p>真实机IP：192.168.2.107   容器IP:172.17.0.2</p>
+<h4 id="修改MySQL配置文件-my-cnf"><a href="#修改MySQL配置文件-my-cnf" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;1			 #服务器ID</span><br></pre></td></tr></table></figure>
+
+<p>附一份全一点的配置,指定需要同步的数据库和不需要同步的数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server-id&#x3D;1</span><br><span class="line">log-bin&#x3D;mysql-bin</span><br><span class="line">log-bin-index&#x3D;master-bin.index</span><br><span class="line">binlog_format&#x3D;mixed  &#x2F;&#x2F; binlog 日志文件格式</span><br><span class="line">sync-binlog&#x3D;1		&#x2F;&#x2F;</span><br><span class="line">binlog-ignore-db&#x3D;mysql</span><br><span class="line">binlog-ignore-db&#x3D;product</span><br><span class="line">binlog-do-db&#x3D;test</span><br><span class="line">binlog-do-db&#x3D;local</span><br></pre></td></tr></table></figure>
+
+
+
+<p>重启MySQL；</p>
+<h4 id="创建复制用户"><a href="#创建复制用户" class="headerlink" title="创建复制用户"></a>创建复制用户</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span>	<span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">	<span class="keyword">GRANT</span> REPLICATION SLAVE <span class="keyword">ON</span> . <span class="keyword">TO</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">	或者</span><br><span class="line"><span class="number">2.</span>  <span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;zhimma&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> MASTER STATUS;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="查看MySQL"><a href="#查看MySQL" class="headerlink" title="查看MySQL"></a>查看MySQL</h4><p><code>show master status</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show master status;</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000001 |      998 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果是项目中途使用主从复制，可以使用下面方法迁移数据</p>
+<ol>
+<li><p>锁定所有表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; FLUSH TABLES WITH READ LOCK;</span><br><span class="line">Query OK, 0 rows affected (2.59 sec)</span><br></pre></td></tr></table></figure></li>
+<li><p>备份表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@b04f945297ac ~]# mysqldump -uroot -p123456 --all-databases -l -F &gt;&#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure></li>
+<li><p>解锁</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; UNLOCK TABLES; </span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></li>
+<li><p>传输数据到从库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scp -P 221&#x2F;222 &#x2F;tmp&#x2F;all_db.sql root@192.168.2.107:&#x2F;tmp </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="slave数据库"><a href="#slave数据库" class="headerlink" title="slave数据库"></a>slave数据库</h3><h4 id="修改server-uuid"><a href="#修改server-uuid" class="headerlink" title="修改server-uuid"></a>修改server-uuid</h4><p>将<code>/var/lib/mysql/auto.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[auto]</span><br><span class="line">server-uuid&#x3D;f781e2b4-28e1-11e8-a1c0-0242ac110001</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改MySQL配置文件-my-cnf-1"><a href="#修改MySQL配置文件-my-cnf-1" class="headerlink" title="修改MySQL配置文件(my.cnf)"></a>修改MySQL配置文件(my.cnf)</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log-bin&#x3D;mysql-bin	 #启动二进制文件 </span><br><span class="line">server_id&#x3D;101			 #服务器ID</span><br></pre></td></tr></table></figure>
+
+<p>重启MySQL；</p>
+<h4 id="导入主备份文件"><a href="#导入主备份文件" class="headerlink" title="导入主备份文件"></a>导入主备份文件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@9ae039d46474 tmp]# mysql -uroot -p123456 &lt; &#x2F;tmp&#x2F;all_db.sql</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启slave同步"><a href="#开启slave同步" class="headerlink" title="开启slave同步"></a>开启slave同步</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;192.168.2.107&#39;,MASTER_PORT&#x3D;33060, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;172.17.0.2&#39;, MASTER_USER&#x3D;&#39;zhimma&#39;, MASTER_PASSWORD&#x3D;&#39;123456&#39;, MASTER_LOG_FILE&#x3D;&#39;mysql-bin.000001&#39;, MASTER_LOG_POS&#x3D;998;</span><br><span class="line"></span><br><span class="line">start slave</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看是否同步成功slave连接master成功"><a href="#查看是否同步成功slave连接master成功" class="headerlink" title="查看是否同步成功slave连接master成功"></a>查看是否同步成功slave连接master成功</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start slave;</span><br><span class="line"></span><br><span class="line">Query OK, 0 rows affected (0.43 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show slave status\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Queueing master event to the relay log</span><br><span class="line">                  Master_Host: 192.168.2.107</span><br><span class="line">                  Master_User: zhimma</span><br><span class="line">                  Master_Port: 33060</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: mysql-bin.000003</span><br><span class="line">          Read_Master_Log_Pos: 4</span><br><span class="line">               Relay_Log_File: 06e5a050e74b-relay-bin.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: mysql-bin.000001</span><br><span class="line">              Slave_IO_Running: Yes</span><br><span class="line">              Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 998</span><br><span class="line">              Relay_Log_Space: 1483</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">                  Master_UUID: f781e2b4-28e1-11e8-a1c0-0242ac110002</span><br><span class="line">             Master_Info_File: &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;master.info</span><br><span class="line">                    SQL_Delay: 0</span><br><span class="line">          SQL_Remaining_Delay: NULL</span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates</span><br><span class="line">           Master_Retry_Count: 86400</span><br><span class="line">                  Master_Bind: </span><br><span class="line">      Last_IO_Error_Timestamp: </span><br><span class="line">     Last_SQL_Error_Timestamp: </span><br><span class="line">               Master_SSL_Crl: </span><br><span class="line">           Master_SSL_Crlpath: </span><br><span class="line">           Retrieved_Gtid_Set: </span><br><span class="line">            Executed_Gtid_Set: </span><br><span class="line">                Auto_Position: 0</span><br><span class="line">         Replicate_Rewrite_DB: </span><br><span class="line">                 Channel_Name: </span><br><span class="line">           Master_TLS_Version: </span><br><span class="line">1 row in set (0.20 sec)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Slave_IO_Running: Yes</span><br><span class="line">Slave_SQL_Running: Yes</span><br></pre></td></tr></table></figure>
+
+<p>同步成功</p>
+<p><a href="http://www.cnblogs.com/clsn/p/8150036.html">http://www.cnblogs.com/clsn/p/8150036.html</a></p>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
