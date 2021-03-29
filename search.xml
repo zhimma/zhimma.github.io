@@ -617,7 +617,9 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 <li>当Docker主机的文件或目录结构保证与容器所需的绑定安装一致时</li>
 </ul>
 <h2 id="适合tmpfs-mounts的场景"><a href="#适合tmpfs-mounts的场景" class="headerlink" title="适合tmpfs mounts的场景"></a>适合tmpfs mounts的场景</h2><p><code>tmpfs mounts</code>主要用在你既不想在容器内，又不想在宿主机文件系统保存数据的时候。这可能是出于安全原因，也可能是你的应用需要写非常多的非持久化数据，<code>tmpfs mounts</code>这时候可以保证容器性能。    </p>
-<p>##本文转自<a href="https://michaelyou.github.io/2017/09/17/Docker%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-Volume%EF%BC%8C-bind-mount%E5%92%8Ctmpfs-mount/">这里</a></p>
+<blockquote>
+<p> 本文转自<a href="https://michaelyou.github.io/2017/09/17/Docker%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-Volume%EF%BC%8C-bind-mount%E5%92%8Ctmpfs-mount/">这里</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>容器化服务</category>
