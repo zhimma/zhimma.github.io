@@ -30,7 +30,7 @@
 <meta property="og:description" content="[toc] Gitlab CI&#x2F;CD 管道配置参考在每个项目中，使用名为.gitlab-ci.yml 的 yaml 文件配置 Gitlab CI&#x2F;CD 管道。 .gitlab-ci.yml 文件定义了管道的结构和顺序，并确定： 使用 Gitlab Runner 执行什么。 遇到特殊情况时要做什么决定？例如，当一个进程成功或失败时。 本主题介绍 CI&#x2F;CD 管道配置。有关其他 CI&#x2F;CD 配置信息，">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-08-12T10:07:59.000Z">
-<meta property="article:modified_time" content="2021-08-12T10:09:36.033Z">
+<meta property="article:modified_time" content="2021-08-12T10:11:17.413Z">
 <meta property="article:author" content="zhimma">
 <meta property="article:tag" content="Gitlab">
 <meta property="article:tag" content="DevOps">
@@ -239,7 +239,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-08-12 18:07:59 / Modified: 18:09:36" itemprop="dateCreated datePublished" datetime="2021-08-12T18:07:59+08:00">2021-08-12</time>
+      <time title="Created: 2021-08-12 18:07:59 / Modified: 18:11:17" itemprop="dateCreated datePublished" datetime="2021-08-12T18:07:59+08:00">2021-08-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,6 +280,8 @@
 <blockquote>
 <p>如果你有一个镜像存储库，其中有 gitlab，你可能需要在项目的 Settings &gt; Repository &gt; Pull from a remote repository &gt; Trigger 镜像更新管道。</p>
 </blockquote>
+<span id="more"></span>
+
 <h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><p>管道配置从 job 开始。jobs 是.gitlab-ci.yml 文件最基本的元素。</p>
 <p>工作包括：</p>
 <p>定义了在什么条件下应该执行它们的约束。</p>
